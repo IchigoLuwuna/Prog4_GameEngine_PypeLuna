@@ -1,5 +1,7 @@
+#include <ratio>
 #include <stdexcept>
 #include <iostream>
+#include <thread>
 #include "Timer.h"
 
 #if WIN32
@@ -94,9 +96,15 @@ void dae::Minigin::Run( const std::function<void()>& load )
 #ifndef __EMSCRIPTEN__
 	while ( !m_Quit )
 	{
+		const float frameStartTimePoint{ Timer::GetInstance().GetTotalElapsed() };
 		Timer::GetInstance().Lap();
 
 		RunOneFrame();
+
+		constexpr float framerate{ 60.f };
+		const float remainingSleepTime{ frameStartTimePoint + ( 1.f / framerate ) -
+										Timer::GetInstance().GetTotalElapsed() };
+		std::this_thread::sleep_for( std::chrono::duration<float, std::ratio<1>>( remainingSleepTime ) );
 	}
 #else
 	emscripten_set_main_loop_arg( &LoopCallback, this, 0, true );

@@ -1,6 +1,5 @@
 #ifndef MINIGIN_H
 #define MINIGIN_H
-#include <string>
 #include <functional>
 #include <filesystem>
 
