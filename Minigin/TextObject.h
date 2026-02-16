@@ -22,16 +22,16 @@ public:
 	TextObject( const std::string& text, std::shared_ptr<Font> font, const SDL_Color& color = { 255, 255, 255, 255 } );
 	virtual ~TextObject() = default;
 	TextObject( const TextObject& other ) = delete;
-	TextObject( TextObject&& other ) = delete;
+	TextObject( TextObject&& other );
 	TextObject& operator=( const TextObject& other ) = delete;
-	TextObject& operator=( TextObject&& other ) = delete;
+	TextObject& operator=( TextObject&& other );
 
 private:
-	bool m_needsUpdate{};
-	std::string m_text{};
-	SDL_Color m_color{ 255, 255, 255, 255 };
-	Transform m_transform{};
-	std::shared_ptr<Font> m_font{};
-	std::shared_ptr<Texture2D> m_textTexture{};
+	bool m_NeedsUpdate{};
+	std::string m_Text{};
+	SDL_Color m_Color{ 255, 255, 255, 255 };
+	Transform m_Transform{};
+	std::shared_ptr<Font> m_Font{};
+	std::shared_ptr<Texture2D> m_TextTexture{};
 };
 } // namespace dae
