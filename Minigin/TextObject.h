@@ -12,6 +12,8 @@ class Texture2D;
 class TextObject final : public GameObject
 {
 public:
+	TextObject() = default;
+
 	void Update() override;
 	void Render() const override;
 
