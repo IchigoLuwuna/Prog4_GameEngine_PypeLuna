@@ -1,5 +1,4 @@
 #include <format>
-#include <iostream>
 #include "FpsDisplay.h"
 #include "Timer.h"
 
@@ -9,7 +8,7 @@ FpsDisplay::FpsDisplay()
 {
 	auto font{ ResourceManager::GetInstance().LoadFont( "Lingua.otf", 36 ) };
 	const std::string fpsDisplayString{ std::format( "{:.1f} FPS", m_Fps ) };
-	m_Text = std::move( TextObject( fpsDisplayString, font ) );
+	m_Text = TextObject( fpsDisplayString, font );
 }
 
 void FpsDisplay::Render() const
@@ -29,7 +28,6 @@ void FpsDisplay::Update()
 
 		// TODO:figure out a way to do this w/o doing a lot of dynamic allocation @runtime
 		const std::string fpsDisplayString{ std::format( "{:.1f} FPS", m_Fps ) };
-		std::cout << fpsDisplayString << "\n";
 
 		m_Text.SetText( fpsDisplayString );
 		m_Text.SetPosition( 0.f, 0.f );
