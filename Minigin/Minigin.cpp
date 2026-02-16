@@ -96,7 +96,6 @@ void dae::Minigin::Run( const std::function<void()>& load )
 	{
 		Timer::GetInstance().Lap();
 
-		std::cout << 1.f / Timer::GetInstance().GetElapsed() << " FPS\n";
 		RunOneFrame();
 	}
 #else

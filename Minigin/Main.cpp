@@ -1,5 +1,6 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
+#include "FpsDisplay.h"
 
 #if _DEBUG && __has_include( <vld.h>)
 #	include <vld.h>
@@ -32,6 +33,9 @@ static void load()
 	textObject->SetColor( { 255, 255, 0, 255 } );
 	textObject->SetPosition( 292, 20 );
 	scene.Add( std::move( textObject ) );
+
+	auto fpsDisplay{ std::make_unique<dae::FpsDisplay>() };
+	scene.Add( std::move( fpsDisplay ) );
 }
 
 int main( int, char*[] )

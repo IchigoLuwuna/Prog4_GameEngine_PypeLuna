@@ -1,5 +1,9 @@
 cmake_minimum_required(VERSION 3.26)
 project(Minigin)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if(EMSCRIPTEN)
     message("Using Emscripten!")
@@ -28,6 +32,7 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   Minigin/Texture2D.cpp
   Minigin/Transform.cpp
   Minigin/Timer.cpp
+  Minigin/FpsDisplay.cpp
 )
 
 # enable c++20 features
