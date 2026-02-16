@@ -15,7 +15,7 @@ public:
 	virtual void Update() override;
 
 private:
-	std::unique_ptr<TextObject> m_upText{};
+	TextObject m_Text;
 	float m_Fps{};
 
 	float m_LastUpdate{};

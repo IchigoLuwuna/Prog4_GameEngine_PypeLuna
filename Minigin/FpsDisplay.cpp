@@ -9,12 +9,12 @@ FpsDisplay::FpsDisplay()
 {
 	auto font{ ResourceManager::GetInstance().LoadFont( "Lingua.otf", 36 ) };
 	const std::string fpsDisplayString{ std::format( "{:.1f} FPS", m_Fps ) };
-	m_upText = std::make_unique<TextObject>( fpsDisplayString, font ); // Text object doesn't have move semantics
+	m_Text = std::move( TextObject( fpsDisplayString, font ) );
 }
 
 void FpsDisplay::Render() const
 {
-	m_upText->Render();
+	m_Text.Render();
 }
 
 void FpsDisplay::Update()
@@ -31,9 +31,9 @@ void FpsDisplay::Update()
 		const std::string fpsDisplayString{ std::format( "{:.1f} FPS", m_Fps ) };
 		std::cout << fpsDisplayString << "\n";
 
-		m_upText->SetText( fpsDisplayString );
-		m_upText->SetPosition( 0.f, 0.f );
+		m_Text.SetText( fpsDisplayString );
+		m_Text.SetPosition( 0.f, 0.f );
 
-		m_upText->Update();
+		m_Text.Update();
 	}
 }
