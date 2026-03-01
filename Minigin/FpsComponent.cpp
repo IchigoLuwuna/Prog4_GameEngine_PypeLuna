@@ -14,6 +14,6 @@ void dae::FpsComponent::Update()
 
 		const std::string fpsDisplayString{ std::format( "{:.1f} FPS", m_Fps ) };
 
-		GetParent()->GetComponent<dae::TextComponent>()->SetText( fpsDisplayString );
+		GetParent()->GetComponent<TextComponent>()->SetText( fpsDisplayString );
 	}
 }
