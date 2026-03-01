@@ -1,6 +1,5 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
-#include "FpsDisplay.h"
 
 #if _DEBUG && __has_include( <vld.h>)
 #	include <vld.h>
@@ -9,8 +8,7 @@
 #include "Minigin.h"
 #include "SceneManager.h"
 #include "ResourceManager.h"
-#include "TextObject.h"
-#include "Scene.h"
+#include "Components.h"
 
 #include <filesystem>
 namespace fs = std::filesystem;
@@ -19,23 +17,32 @@ static void load()
 {
 	auto& scene{ dae::SceneManager::GetInstance().CreateScene() };
 
-	auto gameObject{ std::make_unique<dae::GameObject>() };
-	gameObject->SetTexture( "background.png" );
-	scene.Add( std::move( gameObject ) );
-
-	gameObject = std::make_unique<dae::GameObject>();
-	gameObject->SetTexture( "logo.png" );
-	gameObject->SetPosition( 358, 180 );
-	scene.Add( std::move( gameObject ) );
-
-	auto font = dae::ResourceManager::GetInstance().LoadFont( "Lingua.otf", 36 );
-	auto textObject = std::make_unique<dae::TextObject>( "Programming 4 Assignment", font );
-	textObject->SetColor( { 255, 255, 0, 255 } );
-	textObject->SetPosition( 292, 20 );
-	scene.Add( std::move( textObject ) );
-
+	/*
 	auto fpsDisplay{ std::make_unique<dae::FpsDisplay>() };
 	scene.Add( std::move( fpsDisplay ) );
+	*/
+
+	auto background{ std::make_unique<dae::GameObject>() };
+	background->AddComponent<dae::TransformComponent>();
+	background->AddComponent<dae::TextureComponent>( "./background.png" );
+	scene.Add( std::move( background ) );
+
+	auto logo{ std::make_unique<dae::GameObject>() };
+	logo->AddComponent<dae::TransformComponent>( 358, 180 );
+	logo->AddComponent<dae::TextureComponent>( "./logo.png" );
+	scene.Add( std::move( logo ) );
+
+	auto text{ std::make_unique<dae::GameObject>() };
+	text->AddComponent<dae::TransformComponent>( 292, 20 );
+	auto font{ dae::ResourceManager::GetInstance().LoadFont( "Lingua.otf", 36 ) };
+	text->AddComponent<dae::TextComponent>( "Programming 4 Assignment", font, SDL_Color{ 255, 255, 0, 255 } );
+	scene.Add( std::move( text ) );
+
+	auto fps{ std::make_unique<dae::GameObject>() };
+	fps->AddComponent<dae::TransformComponent>();
+	fps->AddComponent<dae::TextComponent>( ".", font );
+	fps->AddComponent<dae::FpsComponent>();
+	scene.Add( std::move( fps ) );
 }
 
 int main( int, char*[] )
