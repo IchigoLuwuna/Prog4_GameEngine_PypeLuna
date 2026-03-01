@@ -25,6 +25,7 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   Minigin/InputManager.cpp
   Minigin/Main.cpp
   Minigin/Minigin.cpp
+  Minigin/MovementComponents.cpp
   Minigin/Renderer.cpp
   Minigin/ResourceManager.cpp
   Minigin/Scene.cpp
