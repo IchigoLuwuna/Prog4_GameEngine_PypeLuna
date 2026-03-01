@@ -22,11 +22,11 @@ static void load()
 	background->AddComponent<dae::TextureComponent>( "./background.png" );
 
 	auto logo{ std::make_unique<dae::GameObject>() };
-	logo->GetComponent<dae::TransformComponent>()->MoveTo( 358, 180 );
+	logo->GetComponent<dae::TransformComponent>()->MoveTo( 358.f, 180.f );
 	logo->AddComponent<dae::TextureComponent>( "./logo.png" );
 
 	auto text{ std::make_unique<dae::GameObject>() };
-	text->GetComponent<dae::TransformComponent>()->MoveTo( 292, 20 );
+	text->GetComponent<dae::TransformComponent>()->MoveTo( 292.f, 20.f );
 	auto font{ dae::ResourceManager::GetInstance().LoadFont( "Lingua.otf", 36 ) };
 	text->AddComponent<dae::TextComponent>( "Programming 4 Assignment", font, SDL_Color{ 255, 255, 0, 255 } );
 
@@ -34,13 +34,29 @@ static void load()
 	fps->AddComponent<dae::TextComponent>( ".", font );
 	fps->AddComponent<dae::FpsComponent>();
 
+	auto orbitCenter{ std::make_unique<dae::GameObject>() };
+	orbitCenter->GetComponent<dae::TransformComponent>()->MoveTo( 350.f, 250.f );
+
+	auto dotoSheep{ std::make_unique<dae::GameObject>() };
+	dotoSheep->AddComponent<dae::TextureComponent>( "./doto-sheep.png" );
+	dotoSheep->AddComponent<dae::OrbitMovementComponent>( 50.f, -std::numbers::pi );
+
+	auto operaBird{ std::make_unique<dae::GameObject>() };
+	operaBird->AddComponent<dae::TextureComponent>( "./opera-bird.png" );
+	operaBird->AddComponent<dae::OrbitMovementComponent>( 25.f, 1.5f * std::numbers::pi );
+
 	// Create SceneGraph
+	dotoSheep->SetParent( orbitCenter.get() );
+	operaBird->SetParent( dotoSheep.get() );
 
 	// Add to scene
 	scene.Add( std::move( background ) );
 	scene.Add( std::move( logo ) );
 	scene.Add( std::move( text ) );
 	scene.Add( std::move( fps ) );
+	scene.Add( std::move( orbitCenter ) );
+	scene.Add( std::move( dotoSheep ) );
+	scene.Add( std::move( operaBird ) );
 }
 
 int main( int, char*[] )
