@@ -38,7 +38,7 @@ void dae::TextComponent::Update()
 
 void dae::TextComponent::Render() const
 {
-	TransformComponent* position{ GetParent()->GetComponent<TransformComponent>() };
+	auto position{ GetParent()->GetComponent<TransformComponent>() };
 	Renderer::GetInstance().RenderTexture( *m_TextTexture, position->GetPosition().x, position->GetPosition().y );
 }
 
