@@ -93,7 +93,6 @@ dae::Minigin::~Minigin()
 void dae::Minigin::Run( const std::function<void()>& load )
 {
 	load();
-#ifndef __EMSCRIPTEN__
 	while ( !m_Quit )
 	{
 		const float frameStartTimePoint{ Timer::GetInstance().GetTotalElapsed() };
@@ -106,7 +105,7 @@ void dae::Minigin::Run( const std::function<void()>& load )
 										Timer::GetInstance().GetTotalElapsed() };
 		std::this_thread::sleep_for( std::chrono::duration<float, std::ratio<1>>( remainingSleepTime ) );
 	}
-#else
+#ifdef __EMSCRIPTEN__
 	emscripten_set_main_loop_arg( &LoopCallback, this, 0, true );
 #endif
 }
