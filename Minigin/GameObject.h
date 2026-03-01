@@ -10,8 +10,23 @@ class Texture2D;
 class GameObject final
 {
 public:
-	virtual void Update();
-	virtual void Render() const;
+	GameObject();
+	~GameObject() = default;
+	GameObject( const GameObject& other ) = delete;
+	GameObject( GameObject&& other ) = default;
+	GameObject& operator=( const GameObject& other ) = delete;
+	GameObject& operator=( GameObject&& other ) = default;
+
+	void Update();
+	void Render() const;
+
+	int GetChildCount() const;
+	GameObject* GetChildAt( int index );
+	void SetParent( GameObject* pParent );
+	GameObject* GetParent()
+	{
+		return m_pParent;
+	}
 
 	template <typename T, typename... Types>
 		requires std::derived_from<T, Component>
@@ -35,15 +50,16 @@ public:
 		return nullptr;
 	}
 
-	GameObject() = default;
-	~GameObject();
-	GameObject( const GameObject& other ) = delete;
-	GameObject( GameObject&& other ) = default;
-	GameObject& operator=( const GameObject& other ) = delete;
-	GameObject& operator=( GameObject&& other ) = default;
-
 private:
+	GameObject* m_pParent{};
+	std::vector<GameObject*> m_Children{};
+
 	std::vector<std::unique_ptr<Component>> m_Components{};
+
+	void AddChild( GameObject* pChild );
+	void RemoveChild( GameObject* pChild );
+
+	void UpdateTransform();
 };
 } // namespace dae
 #endif

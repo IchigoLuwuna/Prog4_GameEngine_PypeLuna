@@ -15,13 +15,13 @@ public:
 
 	TransformComponent( GameObject* pParent, const glm::vec3& pos )
 		: Component( pParent )
-		, m_Position( pos )
+		, m_WorldTransform( pos )
 	{
 	}
 
 	TransformComponent( GameObject* pParent, float x, float y, float z = 0 )
 		: Component( pParent )
-		, m_Position( x, y, z )
+		, m_WorldTransform( x, y, z )
 	{
 	}
 
@@ -29,15 +29,20 @@ public:
 	{
 	}
 
-	const glm::vec3& GetPosition() const
-	{
-		return m_Position;
-	}
-	void SetPosition( float x, float y, float z = 0 );
-	void SetPosition( const glm::vec3& position );
+	const glm::vec3& GetPosition();
+
+	void MoveTo( float x, float y, float z = 0 );
+	void MoveTo( const glm::vec3& position );
+	void Move( float x, float y, float z = 0 );
+	void Move( const glm::vec3& movement );
+
+	void MarkForUpdate();
 
 private:
-	glm::vec3 m_Position{};
+	glm::vec3 m_WorldTransform{};
+	glm::vec3 m_LocalTransform{};
+
+	mutable bool m_WorldDirty{ true };
 };
 } // namespace dae
 

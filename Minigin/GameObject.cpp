@@ -1,8 +1,12 @@
+#include <algorithm>
 #include "GameObject.h"
+#include "TransformComponent.h"
 #include "RenderComponent.h"
-#include "ResourceManager.h"
 
-dae::GameObject::~GameObject() = default;
+dae::GameObject::GameObject()
+{
+	AddComponent<TransformComponent>(); // All GameObjects require a transform
+}
 
 void dae::GameObject::Update()
 {
@@ -22,4 +26,52 @@ void dae::GameObject::Render() const
 			pRenderComponent->Render();
 		}
 	}
+}
+
+int dae::GameObject::GetChildCount() const
+{
+	return m_Children.size();
+}
+
+dae::GameObject* dae::GameObject::GetChildAt( int index )
+{
+	return m_Children[index];
+}
+
+void dae::GameObject::SetParent( GameObject* pParent )
+{
+	if ( !pParent || pParent == this )
+	{
+		return;
+	}
+
+	if ( m_pParent )
+	{
+		m_pParent->RemoveChild( this );
+	}
+	m_pParent = pParent;
+	pParent->AddChild( this );
+	GetComponent<dae::TransformComponent>()->MarkForUpdate();
+}
+
+void dae::GameObject::AddChild( GameObject* pChild )
+{
+	if ( !pChild || pChild == this )
+	{
+		return;
+	}
+
+	m_Children.push_back( pChild );
+}
+
+void dae::GameObject::RemoveChild( GameObject* pChild )
+{
+	if ( !pChild || pChild == this )
+	{
+		return;
+	}
+
+	auto child{ std::find( m_Children.begin(), m_Children.end(), pChild ) };
+	( *child.base() )->m_pParent = nullptr;
+	m_Children.erase( child );
 }

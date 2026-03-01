@@ -17,31 +17,29 @@ static void load()
 {
 	auto& scene{ dae::SceneManager::GetInstance().CreateScene() };
 
-	/*
-	auto fpsDisplay{ std::make_unique<dae::FpsDisplay>() };
-	scene.Add( std::move( fpsDisplay ) );
-	*/
-
+	// Initialize objects
 	auto background{ std::make_unique<dae::GameObject>() };
-	background->AddComponent<dae::TransformComponent>();
 	background->AddComponent<dae::TextureComponent>( "./background.png" );
-	scene.Add( std::move( background ) );
 
 	auto logo{ std::make_unique<dae::GameObject>() };
-	logo->AddComponent<dae::TransformComponent>( 358, 180 );
+	logo->GetComponent<dae::TransformComponent>()->MoveTo( 358, 180 );
 	logo->AddComponent<dae::TextureComponent>( "./logo.png" );
-	scene.Add( std::move( logo ) );
 
 	auto text{ std::make_unique<dae::GameObject>() };
-	text->AddComponent<dae::TransformComponent>( 292, 20 );
+	text->GetComponent<dae::TransformComponent>()->MoveTo( 292, 20 );
 	auto font{ dae::ResourceManager::GetInstance().LoadFont( "Lingua.otf", 36 ) };
 	text->AddComponent<dae::TextComponent>( "Programming 4 Assignment", font, SDL_Color{ 255, 255, 0, 255 } );
-	scene.Add( std::move( text ) );
 
 	auto fps{ std::make_unique<dae::GameObject>() };
-	fps->AddComponent<dae::TransformComponent>();
 	fps->AddComponent<dae::TextComponent>( ".", font );
 	fps->AddComponent<dae::FpsComponent>();
+
+	// Create SceneGraph
+
+	// Add to scene
+	scene.Add( std::move( background ) );
+	scene.Add( std::move( logo ) );
+	scene.Add( std::move( text ) );
 	scene.Add( std::move( fps ) );
 }
 
