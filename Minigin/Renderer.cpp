@@ -6,6 +6,7 @@
 #include <backends/imgui_impl_sdlrenderer3.h>
 #include "SceneManager.h"
 #include "Texture2D.h"
+#include "ImGuiWindows.h"
 
 void dae::Renderer::Init( SDL_Window* window )
 {
@@ -44,7 +45,7 @@ void dae::Renderer::Render() const
 	ImGui_ImplSDL3_NewFrame();
 	ImGui::NewFrame();
 
-	ImGui::ShowDemoWindow();
+	dae::ImGuiWindows::Exercise1();
 	ImGui::Render();
 
 	const auto& color = GetBackgroundColor();

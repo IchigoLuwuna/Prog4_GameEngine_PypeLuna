@@ -22,6 +22,7 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   Minigin/Font.cpp
   Minigin/FpsComponent.cpp
   Minigin/GameObject.cpp
+  Minigin/ImGuiWindows.cpp
   Minigin/InputManager.cpp
   Minigin/Main.cpp
   Minigin/Minigin.cpp
@@ -35,6 +36,7 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   Minigin/TextureComponent.cpp
   Minigin/Timer.cpp
   Minigin/TransformComponent.cpp
+  Minigin/imgui_plot.cpp
 )
 
 # enable c++20 features
