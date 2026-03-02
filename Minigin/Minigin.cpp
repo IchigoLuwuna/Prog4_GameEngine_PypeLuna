@@ -36,7 +36,15 @@ void LogSDLVersion( const std::string& message, int major, int minor, int patch 
 
 void LoopCallback( void* arg )
 {
-	static_cast<dae::Minigin*>( arg )->RunOneFrame();
+	const float frameStartTimePoint{ dae::Timer::GetInstance().GetTotalElapsed() };
+	dae::Timer::GetInstance().Lap();
+
+	reinterpret_cast<dae::Minigin*>( arg )->RunOneFrame();
+
+	constexpr float framerate{ 60.f };
+	const float remainingSleepTime{ frameStartTimePoint + ( 1.f / framerate ) -
+									dae::Timer::GetInstance().GetTotalElapsed() };
+	std::this_thread::sleep_for( std::chrono::duration<float, std::ratio<1>>( remainingSleepTime ) );
 }
 #endif
 
