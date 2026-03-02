@@ -16,6 +16,12 @@ public:
 	float GetElapsed() const;
 	float GetTotalElapsed() const;
 
+	template <typename T = float>
+	T GetElapsed() const
+	{
+		return std::chrono::duration<T>( m_T2 - m_T1 ).count();
+	}
+
 private:
 	std::chrono::time_point<std::chrono::steady_clock> m_Start{};
 	std::chrono::time_point<std::chrono::steady_clock> m_T1{};
