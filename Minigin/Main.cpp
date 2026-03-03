@@ -10,6 +10,7 @@
 #include "SceneManager.h"
 #include "ResourceManager.h"
 #include "Components.h"
+#include "Timer.h"
 
 #include <filesystem>
 namespace fs = std::filesystem;
@@ -36,15 +37,15 @@ static void load()
 	fps->AddComponent<dae::FpsComponent>();
 
 	auto orbitCenter{ std::make_unique<dae::GameObject>() };
-	orbitCenter->GetComponent<dae::TransformComponent>()->MoveTo( 350.f, 250.f );
+	orbitCenter->GetComponent<dae::TransformComponent>()->MoveTo( 350.f, 200.f );
 
 	auto dotoSheep{ std::make_unique<dae::GameObject>() };
 	dotoSheep->AddComponent<dae::TextureComponent>( "./doto-sheep.png" );
-	dotoSheep->AddComponent<dae::OrbitMovementComponent>( 50.f, -std::numbers::pi );
+	dotoSheep->AddComponent<dae::OrbitMovementComponent>( 200.f, -std::numbers::pi * 0.5f );
 
 	auto operaBird{ std::make_unique<dae::GameObject>() };
 	operaBird->AddComponent<dae::TextureComponent>( "./opera-bird.png" );
-	operaBird->AddComponent<dae::OrbitMovementComponent>( 25.f, 1.5f * std::numbers::pi );
+	operaBird->AddComponent<dae::OrbitMovementComponent>( 75.f, 1.75f * std::numbers::pi );
 
 	// Create SceneGraph
 	dotoSheep->SetParent( orbitCenter.get() );
