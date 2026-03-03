@@ -15,7 +15,7 @@ void dae::Renderer::Init( SDL_Window* window )
 	SDL_SetHint( SDL_HINT_RENDER_VSYNC, "1" );
 
 #if defined( __EMSCRIPTEN__ )
-	m_renderer = SDL_CreateRenderer( window, nullptr );
+	m_Renderer = SDL_CreateRenderer( window, nullptr );
 #else
 	m_Renderer = SDL_CreateRenderer( window, nullptr );
 #endif
@@ -45,7 +45,9 @@ void dae::Renderer::Render() const
 	ImGui_ImplSDL3_NewFrame();
 	ImGui::NewFrame();
 
+	// dae::ImGuiWindows::Exercise1();
 	dae::ImGuiWindows::Exercise1();
+	dae::ImGuiWindows::Exercise2();
 	ImGui::Render();
 
 	const auto& color = GetBackgroundColor();
