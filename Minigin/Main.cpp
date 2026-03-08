@@ -1,5 +1,6 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
+#include "ImGuiComponents.h"
 #include <numbers>
 
 #if _DEBUG && __has_include( <vld.h>)
@@ -10,7 +11,6 @@
 #include "SceneManager.h"
 #include "ResourceManager.h"
 #include "Components.h"
-#include "Timer.h"
 
 #include <filesystem>
 namespace fs = std::filesystem;
@@ -47,6 +47,10 @@ static void load()
 	operaBird->AddComponent<dae::TextureComponent>( "./opera-bird.png" );
 	operaBird->AddComponent<dae::OrbitMovementComponent>( 75.f, 1.75f * std::numbers::pi );
 
+	auto cacheExercises{ std::make_unique<dae::GameObject>() };
+	cacheExercises->AddComponent<dae::ImGuiComponents::Exercise1Component>();
+	cacheExercises->AddComponent<dae::ImGuiComponents::Exercise2Component>();
+
 	// Create SceneGraph
 	dotoSheep->SetParent( orbitCenter.get() );
 	operaBird->SetParent( dotoSheep.get() );
@@ -59,6 +63,7 @@ static void load()
 	scene.Add( std::move( orbitCenter ) );
 	scene.Add( std::move( dotoSheep ) );
 	scene.Add( std::move( operaBird ) );
+	scene.Add( std::move( cacheExercises ) );
 }
 
 int main( int, char*[] )

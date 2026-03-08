@@ -22,7 +22,7 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   Minigin/Font.cpp
   Minigin/FpsComponent.cpp
   Minigin/GameObject.cpp
-  Minigin/ImGuiWindows.cpp
+  Minigin/ImGuiComponents.cpp
   Minigin/InputManager.cpp
   Minigin/Main.cpp
   Minigin/Minigin.cpp
