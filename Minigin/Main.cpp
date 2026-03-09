@@ -1,7 +1,7 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
-#include "ImGuiComponents.h"
-#include <numbers>
+#include "Commands.h"
+#include "InputManager.h"
 
 #if _DEBUG && __has_include( <vld.h>)
 #	include <vld.h>
@@ -36,34 +36,41 @@ static void load()
 	fps->AddComponent<dae::TextComponent>( ".", font );
 	fps->AddComponent<dae::FpsComponent>();
 
-	auto orbitCenter{ std::make_unique<dae::GameObject>() };
-	orbitCenter->GetComponent<dae::TransformComponent>()->MoveTo( 350.f, 200.f );
-
 	auto dotoSheep{ std::make_unique<dae::GameObject>() };
 	dotoSheep->AddComponent<dae::TextureComponent>( "./doto-sheep.png" );
-	dotoSheep->AddComponent<dae::OrbitMovementComponent>( 200.f, -std::numbers::pi * 0.5f );
 
 	auto operaBird{ std::make_unique<dae::GameObject>() };
 	operaBird->AddComponent<dae::TextureComponent>( "./opera-bird.png" );
-	operaBird->AddComponent<dae::OrbitMovementComponent>( 75.f, 1.75f * std::numbers::pi );
-
-	auto cacheExercises{ std::make_unique<dae::GameObject>() };
-	cacheExercises->AddComponent<dae::ImGuiComponents::Exercise1Component>();
-	cacheExercises->AddComponent<dae::ImGuiComponents::Exercise2Component>();
 
 	// Create SceneGraph
-	dotoSheep->SetParent( orbitCenter.get() );
-	operaBird->SetParent( dotoSheep.get() );
+
+	// Create bindings
+	constexpr float moveSpeed{ 200.f };
+	dae::InputManager::GetInstance().BindCommandToKey<dae::MoveCommand, SDL_SCANCODE_W>(
+		operaBird->GetComponent<dae::TransformComponent>(), glm::vec2{ 0.f, -moveSpeed } );
+	dae::InputManager::GetInstance().BindCommandToKey<dae::MoveCommand, SDL_SCANCODE_S>(
+		operaBird->GetComponent<dae::TransformComponent>(), glm::vec2{ 0.f, moveSpeed } );
+	dae::InputManager::GetInstance().BindCommandToKey<dae::MoveCommand, SDL_SCANCODE_A>(
+		operaBird->GetComponent<dae::TransformComponent>(), glm::vec2{ -moveSpeed, 0.f } );
+	dae::InputManager::GetInstance().BindCommandToKey<dae::MoveCommand, SDL_SCANCODE_D>(
+		operaBird->GetComponent<dae::TransformComponent>(), glm::vec2{ moveSpeed, 0.f } );
+
+	dae::InputManager::GetInstance().BindCommandToKey<dae::MoveCommand, SDL_SCANCODE_UP>(
+		dotoSheep->GetComponent<dae::TransformComponent>(), glm::vec2{ 0.f, -moveSpeed } );
+	dae::InputManager::GetInstance().BindCommandToKey<dae::MoveCommand, SDL_SCANCODE_DOWN>(
+		dotoSheep->GetComponent<dae::TransformComponent>(), glm::vec2{ 0.f, moveSpeed } );
+	dae::InputManager::GetInstance().BindCommandToKey<dae::MoveCommand, SDL_SCANCODE_LEFT>(
+		dotoSheep->GetComponent<dae::TransformComponent>(), glm::vec2{ -moveSpeed, 0.f } );
+	dae::InputManager::GetInstance().BindCommandToKey<dae::MoveCommand, SDL_SCANCODE_RIGHT>(
+		dotoSheep->GetComponent<dae::TransformComponent>(), glm::vec2{ moveSpeed, 0.f } );
 
 	// Add to scene
 	scene.Add( std::move( background ) );
 	scene.Add( std::move( logo ) );
 	scene.Add( std::move( text ) );
-	scene.Add( std::move( fps ) );
-	scene.Add( std::move( orbitCenter ) );
 	scene.Add( std::move( dotoSheep ) );
 	scene.Add( std::move( operaBird ) );
-	scene.Add( std::move( cacheExercises ) );
+	scene.Add( std::move( fps ) );
 }
 
 int main( int, char*[] )
