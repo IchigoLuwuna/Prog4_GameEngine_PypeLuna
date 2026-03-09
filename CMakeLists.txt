@@ -55,9 +55,11 @@ if(NOT glm_FOUND)
     FetchContent_MakeAvailable(glm)
 endif()
 
-# Add SDL3
-find_package(SDL3 3.4 CONFIG QUIET)
-if(NOT SDL3_FOUND)
+if (NOT WIN32)
+    find_package(SDL3 3.4 CONFIG QUIET)
+    find_package(SDL3_ttf 3.2.2 CONFIG QUIET)
+else()
+    # Add SDL3
     if (WIN32)
         FetchContent_Declare(
       SDL3
@@ -78,11 +80,8 @@ if(NOT SDL3_FOUND)
     )
         FetchContent_MakeAvailable(SDL3)
     endif()
-endif()
 
-# Add SDL3_ttf
-find_package(SDL3_ttf 3.2.2 CONFIG QUIET)
-if(NOT SDL3_ttf_FOUND)
+    # Add SDL3_ttf
     if (WIN32)
         FetchContent_Declare(
       SDL3_ttf
@@ -224,6 +223,7 @@ elseif(WIN32)
     add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
     COMMAND "${CMAKE_COMMAND}" -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/Data" "$<TARGET_FILE_DIR:${TARGET_NAME}>/Data"
   )
+#[[
 elseif(APPLE)
     set_target_properties(${TARGET_NAME} PROPERTIES
     MACOSX_BUNDLE TRUE
@@ -254,6 +254,7 @@ elseif(APPLE)
     add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
     COMMAND "${CMAKE_COMMAND}" -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/Data" "$<TARGET_FILE_DIR:${TARGET_NAME}>/Data"
   )
+]]
 else()
     if(Steamworks_FOUND)
         target_link_libraries("${TARGET_NAME}" PUBLIC Steamworks::Steamworks)
