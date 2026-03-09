@@ -1,7 +1,7 @@
 #include "TransformComponent.h"
 #include "GameObject.h"
 
-const glm::vec3& dae::TransformComponent::GetPosition()
+const glm::vec2& dae::TransformComponent::GetPosition()
 {
 	if ( !m_WorldDirty )
 	{
@@ -9,7 +9,7 @@ const glm::vec3& dae::TransformComponent::GetPosition()
 	}
 
 	GameObject* pParentGameObject{ GetParent()->GetParent() };
-	glm::vec3 parentPos{};
+	glm::vec2 parentPos{};
 	if ( pParentGameObject )
 	{
 		// Recurse up the scene graph
@@ -22,27 +22,26 @@ const glm::vec3& dae::TransformComponent::GetPosition()
 	return m_WorldTransform;
 }
 
-void dae::TransformComponent::MoveTo( const float x, const float y, const float z )
+void dae::TransformComponent::MoveTo( const float x, const float y )
 {
 	m_LocalTransform.x = x;
 	m_LocalTransform.y = y;
-	m_LocalTransform.z = z;
 	MarkForUpdate();
 }
 
-void dae::TransformComponent::MoveTo( const glm::vec3& position )
+void dae::TransformComponent::MoveTo( const glm::vec2& position )
 {
 	m_LocalTransform = position;
 	MarkForUpdate();
 }
 
-void dae::TransformComponent::Move( float x, float y, float z )
+void dae::TransformComponent::Move( float x, float y )
 {
-	m_LocalTransform += glm::vec3{ x, y, z };
+	m_LocalTransform += glm::vec2{ x, y };
 	MarkForUpdate();
 }
 
-void dae::TransformComponent::Move( const glm::vec3& movement )
+void dae::TransformComponent::Move( const glm::vec2& movement )
 {
 	m_LocalTransform += movement;
 	MarkForUpdate();
