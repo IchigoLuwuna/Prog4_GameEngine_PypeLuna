@@ -19,6 +19,7 @@ endif()
 
 # list source files here
 add_executable(${TARGET_NAME} ${TARGET_PARAM}
+  Minigin/Commands.cpp
   Minigin/Font.cpp
   Minigin/FpsComponent.cpp
   Minigin/GameObject.cpp
