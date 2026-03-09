@@ -72,6 +72,6 @@ void dae::GameObject::RemoveChild( GameObject* pChild )
 	}
 
 	auto child{ std::find( m_Children.begin(), m_Children.end(), pChild ) };
-	( *child.base() )->m_pParent = nullptr;
+	( *child )->m_pParent = nullptr;
 	m_Children.erase( child );
 }

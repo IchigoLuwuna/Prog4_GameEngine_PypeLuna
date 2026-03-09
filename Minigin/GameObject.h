@@ -28,11 +28,11 @@ public:
 		return m_pParent;
 	}
 
-	template <typename T, typename... Types>
-		requires std::derived_from<T, Component>
+	template <typename ComponentType, typename... Types>
+		requires std::derived_from<ComponentType, Component>
 	void AddComponent( const Types&... args )
 	{
-		m_Components.push_back( std::make_unique<T>( this, args... ) );
+		m_Components.push_back( std::make_unique<ComponentType>( this, args... ) );
 	}
 
 	template <typename T>
@@ -58,8 +58,6 @@ private:
 
 	void AddChild( GameObject* pChild );
 	void RemoveChild( GameObject* pChild );
-
-	void UpdateTransform();
 };
 } // namespace dae
 #endif
