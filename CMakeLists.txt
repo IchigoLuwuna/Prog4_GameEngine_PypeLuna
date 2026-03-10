@@ -23,6 +23,7 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   Minigin/Font.cpp
   Minigin/FpsComponent.cpp
   Minigin/GameObject.cpp
+  Minigin/Gamepad.cpp
   Minigin/ImGuiComponents.cpp
   Minigin/InputManager.cpp
   Minigin/Main.cpp
@@ -133,10 +134,10 @@ add_library(imgui STATIC
   ${imgui_SOURCE_DIR}/backends/imgui_impl_sdlrenderer3.cpp
 )
 
-target_include_directories(imgui PUBLIC ${imgui_SOURCE_DIR})
-target_link_libraries(imgui PUBLIC SDL3::SDL3)
 # enable c++20 features
 target_compile_features(imgui PUBLIC cxx_std_20)
+target_include_directories(imgui PUBLIC ${imgui_SOURCE_DIR})
+target_link_libraries(imgui PUBLIC SDL3::SDL3)
 
 if (WIN32)
     # Add VLD (Visual Leak Detector) for memory leak detection on Windows
@@ -224,7 +225,6 @@ elseif(WIN32)
     add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
     COMMAND "${CMAKE_COMMAND}" -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/Data" "$<TARGET_FILE_DIR:${TARGET_NAME}>/Data"
   )
-#[[
 elseif(APPLE)
     set_target_properties(${TARGET_NAME} PROPERTIES
     MACOSX_BUNDLE TRUE
@@ -255,7 +255,6 @@ elseif(APPLE)
     add_custom_command(TARGET ${TARGET_NAME} POST_BUILD
     COMMAND "${CMAKE_COMMAND}" -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/Data" "$<TARGET_FILE_DIR:${TARGET_NAME}>/Data"
   )
-]]
 else()
     if(Steamworks_FOUND)
         target_link_libraries("${TARGET_NAME}" PUBLIC Steamworks::Steamworks)

@@ -1,10 +1,11 @@
 #ifndef INPUTMANAGER_H
 #define INPUTMANAGER_H
-#include "Singleton.h"
-#include <unordered_map>
 #include <SDL3/SDL_scancode.h>
 #include <bitset>
 #include <memory>
+#include <unordered_map>
+#include "Gamepad.h"
+#include "Singleton.h"
 #include "Command.h"
 
 namespace dae
@@ -38,6 +39,7 @@ private:
 
 	std::bitset<SDL_SCANCODE_COUNT> m_PreviousKeyStates{};
 	std::unordered_map<SDL_Scancode, std::unique_ptr<Command>> m_CommandBindings{};
+	Gamepad m_Gamepad{};
 
 	void UpdatePreviousKeyStates();
 	void ProcessKeyboard();

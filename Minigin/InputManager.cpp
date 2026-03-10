@@ -7,6 +7,7 @@ bool dae::InputManager::ProcessInput()
 {
 	UpdatePreviousKeyStates();
 	ProcessKeyboard();
+	m_Gamepad.UpdateGamepad();
 
 	SDL_Event e{};
 	while ( SDL_PollEvent( &e ) )
