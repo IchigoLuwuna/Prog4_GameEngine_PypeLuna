@@ -8,9 +8,6 @@ namespace dae
 {
 namespace ImGuiComponents
 {
-void Exercise1Old();
-void Exercise2Old();
-
 class Exercise1Component : public RenderComponent
 {
 public:

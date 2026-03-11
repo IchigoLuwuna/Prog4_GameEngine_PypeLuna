@@ -1,140 +1,164 @@
 [
 {
-  "directory": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build",
-  "command": "/usr/sbin/c++  -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build/_deps/imgui-src -std=gnu++20 -o CMakeFiles/imgui.dir/_deps/imgui-src/imgui.cpp.o -c /home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build/_deps/imgui-src/imgui.cpp",
-  "file": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build/_deps/imgui-src/imgui.cpp",
+  "directory": "/home/luna/Gamedev/Prog4/minigin/build",
+  "command": "/usr/bin/c++  -I/home/luna/Gamedev/Prog4/minigin/build/_deps/imgui-src -std=gnu++20 -o CMakeFiles/imgui.dir/_deps/imgui-src/imgui.cpp.o -c /home/luna/Gamedev/Prog4/minigin/build/_deps/imgui-src/imgui.cpp",
+  "file": "/home/luna/Gamedev/Prog4/minigin/build/_deps/imgui-src/imgui.cpp",
   "output": "CMakeFiles/imgui.dir/_deps/imgui-src/imgui.cpp.o"
 },
 {
-  "directory": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build",
-  "command": "/usr/sbin/c++  -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build/_deps/imgui-src -std=gnu++20 -o CMakeFiles/imgui.dir/_deps/imgui-src/imgui_draw.cpp.o -c /home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build/_deps/imgui-src/imgui_draw.cpp",
-  "file": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build/_deps/imgui-src/imgui_draw.cpp",
+  "directory": "/home/luna/Gamedev/Prog4/minigin/build",
+  "command": "/usr/bin/c++  -I/home/luna/Gamedev/Prog4/minigin/build/_deps/imgui-src -std=gnu++20 -o CMakeFiles/imgui.dir/_deps/imgui-src/imgui_draw.cpp.o -c /home/luna/Gamedev/Prog4/minigin/build/_deps/imgui-src/imgui_draw.cpp",
+  "file": "/home/luna/Gamedev/Prog4/minigin/build/_deps/imgui-src/imgui_draw.cpp",
   "output": "CMakeFiles/imgui.dir/_deps/imgui-src/imgui_draw.cpp.o"
 },
 {
-  "directory": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build",
-  "command": "/usr/sbin/c++  -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build/_deps/imgui-src -std=gnu++20 -o CMakeFiles/imgui.dir/_deps/imgui-src/imgui_tables.cpp.o -c /home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build/_deps/imgui-src/imgui_tables.cpp",
-  "file": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build/_deps/imgui-src/imgui_tables.cpp",
+  "directory": "/home/luna/Gamedev/Prog4/minigin/build",
+  "command": "/usr/bin/c++  -I/home/luna/Gamedev/Prog4/minigin/build/_deps/imgui-src -std=gnu++20 -o CMakeFiles/imgui.dir/_deps/imgui-src/imgui_tables.cpp.o -c /home/luna/Gamedev/Prog4/minigin/build/_deps/imgui-src/imgui_tables.cpp",
+  "file": "/home/luna/Gamedev/Prog4/minigin/build/_deps/imgui-src/imgui_tables.cpp",
   "output": "CMakeFiles/imgui.dir/_deps/imgui-src/imgui_tables.cpp.o"
 },
 {
-  "directory": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build",
-  "command": "/usr/sbin/c++  -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build/_deps/imgui-src -std=gnu++20 -o CMakeFiles/imgui.dir/_deps/imgui-src/imgui_widgets.cpp.o -c /home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build/_deps/imgui-src/imgui_widgets.cpp",
-  "file": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build/_deps/imgui-src/imgui_widgets.cpp",
+  "directory": "/home/luna/Gamedev/Prog4/minigin/build",
+  "command": "/usr/bin/c++  -I/home/luna/Gamedev/Prog4/minigin/build/_deps/imgui-src -std=gnu++20 -o CMakeFiles/imgui.dir/_deps/imgui-src/imgui_widgets.cpp.o -c /home/luna/Gamedev/Prog4/minigin/build/_deps/imgui-src/imgui_widgets.cpp",
+  "file": "/home/luna/Gamedev/Prog4/minigin/build/_deps/imgui-src/imgui_widgets.cpp",
   "output": "CMakeFiles/imgui.dir/_deps/imgui-src/imgui_widgets.cpp.o"
 },
 {
-  "directory": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build",
-  "command": "/usr/sbin/c++  -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build/_deps/imgui-src -std=gnu++20 -o CMakeFiles/imgui.dir/_deps/imgui-src/imgui_demo.cpp.o -c /home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build/_deps/imgui-src/imgui_demo.cpp",
-  "file": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build/_deps/imgui-src/imgui_demo.cpp",
+  "directory": "/home/luna/Gamedev/Prog4/minigin/build",
+  "command": "/usr/bin/c++  -I/home/luna/Gamedev/Prog4/minigin/build/_deps/imgui-src -std=gnu++20 -o CMakeFiles/imgui.dir/_deps/imgui-src/imgui_demo.cpp.o -c /home/luna/Gamedev/Prog4/minigin/build/_deps/imgui-src/imgui_demo.cpp",
+  "file": "/home/luna/Gamedev/Prog4/minigin/build/_deps/imgui-src/imgui_demo.cpp",
   "output": "CMakeFiles/imgui.dir/_deps/imgui-src/imgui_demo.cpp.o"
 },
 {
-  "directory": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build",
-  "command": "/usr/sbin/c++  -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build/_deps/imgui-src -std=gnu++20 -o CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_sdl3.cpp.o -c /home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build/_deps/imgui-src/backends/imgui_impl_sdl3.cpp",
-  "file": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build/_deps/imgui-src/backends/imgui_impl_sdl3.cpp",
+  "directory": "/home/luna/Gamedev/Prog4/minigin/build",
+  "command": "/usr/bin/c++  -I/home/luna/Gamedev/Prog4/minigin/build/_deps/imgui-src -std=gnu++20 -o CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_sdl3.cpp.o -c /home/luna/Gamedev/Prog4/minigin/build/_deps/imgui-src/backends/imgui_impl_sdl3.cpp",
+  "file": "/home/luna/Gamedev/Prog4/minigin/build/_deps/imgui-src/backends/imgui_impl_sdl3.cpp",
   "output": "CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_sdl3.cpp.o"
 },
 {
-  "directory": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build",
-  "command": "/usr/sbin/c++  -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build/_deps/imgui-src -std=gnu++20 -o CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_sdlrenderer3.cpp.o -c /home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build/_deps/imgui-src/backends/imgui_impl_sdlrenderer3.cpp",
-  "file": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build/_deps/imgui-src/backends/imgui_impl_sdlrenderer3.cpp",
+  "directory": "/home/luna/Gamedev/Prog4/minigin/build",
+  "command": "/usr/bin/c++  -I/home/luna/Gamedev/Prog4/minigin/build/_deps/imgui-src -std=gnu++20 -o CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_sdlrenderer3.cpp.o -c /home/luna/Gamedev/Prog4/minigin/build/_deps/imgui-src/backends/imgui_impl_sdlrenderer3.cpp",
+  "file": "/home/luna/Gamedev/Prog4/minigin/build/_deps/imgui-src/backends/imgui_impl_sdlrenderer3.cpp",
   "output": "CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_sdlrenderer3.cpp.o"
 },
 {
-  "directory": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build",
-  "command": "/usr/sbin/c++  -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build/_deps/imgui-src -std=gnu++20 -Wall -Wextra -Werror -o CMakeFiles/minigin.dir/Minigin/Font.cpp.o -c /home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin/Font.cpp",
-  "file": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin/Font.cpp",
+  "directory": "/home/luna/Gamedev/Prog4/minigin/build",
+  "command": "/usr/bin/c++  -I/home/luna/Gamedev/Prog4/minigin/Minigin -I/home/luna/Gamedev/Prog4/minigin/build/_deps/imgui-src -std=gnu++20 -Wall -Wextra -Werror -o CMakeFiles/minigin.dir/Minigin/Commands.cpp.o -c /home/luna/Gamedev/Prog4/minigin/Minigin/Commands.cpp",
+  "file": "/home/luna/Gamedev/Prog4/minigin/Minigin/Commands.cpp",
+  "output": "CMakeFiles/minigin.dir/Minigin/Commands.cpp.o"
+},
+{
+  "directory": "/home/luna/Gamedev/Prog4/minigin/build",
+  "command": "/usr/bin/c++  -I/home/luna/Gamedev/Prog4/minigin/Minigin -I/home/luna/Gamedev/Prog4/minigin/build/_deps/imgui-src -std=gnu++20 -Wall -Wextra -Werror -o CMakeFiles/minigin.dir/Minigin/Font.cpp.o -c /home/luna/Gamedev/Prog4/minigin/Minigin/Font.cpp",
+  "file": "/home/luna/Gamedev/Prog4/minigin/Minigin/Font.cpp",
   "output": "CMakeFiles/minigin.dir/Minigin/Font.cpp.o"
 },
 {
-  "directory": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build",
-  "command": "/usr/sbin/c++  -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build/_deps/imgui-src -std=gnu++20 -Wall -Wextra -Werror -o CMakeFiles/minigin.dir/Minigin/FpsComponent.cpp.o -c /home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin/FpsComponent.cpp",
-  "file": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin/FpsComponent.cpp",
+  "directory": "/home/luna/Gamedev/Prog4/minigin/build",
+  "command": "/usr/bin/c++  -I/home/luna/Gamedev/Prog4/minigin/Minigin -I/home/luna/Gamedev/Prog4/minigin/build/_deps/imgui-src -std=gnu++20 -Wall -Wextra -Werror -o CMakeFiles/minigin.dir/Minigin/FpsComponent.cpp.o -c /home/luna/Gamedev/Prog4/minigin/Minigin/FpsComponent.cpp",
+  "file": "/home/luna/Gamedev/Prog4/minigin/Minigin/FpsComponent.cpp",
   "output": "CMakeFiles/minigin.dir/Minigin/FpsComponent.cpp.o"
 },
 {
-  "directory": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build",
-  "command": "/usr/sbin/c++  -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build/_deps/imgui-src -std=gnu++20 -Wall -Wextra -Werror -o CMakeFiles/minigin.dir/Minigin/GameObject.cpp.o -c /home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin/GameObject.cpp",
-  "file": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin/GameObject.cpp",
+  "directory": "/home/luna/Gamedev/Prog4/minigin/build",
+  "command": "/usr/bin/c++  -I/home/luna/Gamedev/Prog4/minigin/Minigin -I/home/luna/Gamedev/Prog4/minigin/build/_deps/imgui-src -std=gnu++20 -Wall -Wextra -Werror -o CMakeFiles/minigin.dir/Minigin/GameObject.cpp.o -c /home/luna/Gamedev/Prog4/minigin/Minigin/GameObject.cpp",
+  "file": "/home/luna/Gamedev/Prog4/minigin/Minigin/GameObject.cpp",
   "output": "CMakeFiles/minigin.dir/Minigin/GameObject.cpp.o"
 },
 {
-  "directory": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build",
-  "command": "/usr/sbin/c++  -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build/_deps/imgui-src -std=gnu++20 -Wall -Wextra -Werror -o CMakeFiles/minigin.dir/Minigin/InputManager.cpp.o -c /home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin/InputManager.cpp",
-  "file": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin/InputManager.cpp",
+  "directory": "/home/luna/Gamedev/Prog4/minigin/build",
+  "command": "/usr/bin/c++  -I/home/luna/Gamedev/Prog4/minigin/Minigin -I/home/luna/Gamedev/Prog4/minigin/build/_deps/imgui-src -std=gnu++20 -Wall -Wextra -Werror -o CMakeFiles/minigin.dir/Minigin/Gamepad.cpp.o -c /home/luna/Gamedev/Prog4/minigin/Minigin/Gamepad.cpp",
+  "file": "/home/luna/Gamedev/Prog4/minigin/Minigin/Gamepad.cpp",
+  "output": "CMakeFiles/minigin.dir/Minigin/Gamepad.cpp.o"
+},
+{
+  "directory": "/home/luna/Gamedev/Prog4/minigin/build",
+  "command": "/usr/bin/c++  -I/home/luna/Gamedev/Prog4/minigin/Minigin -I/home/luna/Gamedev/Prog4/minigin/build/_deps/imgui-src -std=gnu++20 -Wall -Wextra -Werror -o CMakeFiles/minigin.dir/Minigin/ImGuiComponents.cpp.o -c /home/luna/Gamedev/Prog4/minigin/Minigin/ImGuiComponents.cpp",
+  "file": "/home/luna/Gamedev/Prog4/minigin/Minigin/ImGuiComponents.cpp",
+  "output": "CMakeFiles/minigin.dir/Minigin/ImGuiComponents.cpp.o"
+},
+{
+  "directory": "/home/luna/Gamedev/Prog4/minigin/build",
+  "command": "/usr/bin/c++  -I/home/luna/Gamedev/Prog4/minigin/Minigin -I/home/luna/Gamedev/Prog4/minigin/build/_deps/imgui-src -std=gnu++20 -Wall -Wextra -Werror -o CMakeFiles/minigin.dir/Minigin/InputManager.cpp.o -c /home/luna/Gamedev/Prog4/minigin/Minigin/InputManager.cpp",
+  "file": "/home/luna/Gamedev/Prog4/minigin/Minigin/InputManager.cpp",
   "output": "CMakeFiles/minigin.dir/Minigin/InputManager.cpp.o"
 },
 {
-  "directory": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build",
-  "command": "/usr/sbin/c++  -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build/_deps/imgui-src -std=gnu++20 -Wall -Wextra -Werror -o CMakeFiles/minigin.dir/Minigin/Main.cpp.o -c /home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin/Main.cpp",
-  "file": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin/Main.cpp",
+  "directory": "/home/luna/Gamedev/Prog4/minigin/build",
+  "command": "/usr/bin/c++  -I/home/luna/Gamedev/Prog4/minigin/Minigin -I/home/luna/Gamedev/Prog4/minigin/build/_deps/imgui-src -std=gnu++20 -Wall -Wextra -Werror -o CMakeFiles/minigin.dir/Minigin/Main.cpp.o -c /home/luna/Gamedev/Prog4/minigin/Minigin/Main.cpp",
+  "file": "/home/luna/Gamedev/Prog4/minigin/Minigin/Main.cpp",
   "output": "CMakeFiles/minigin.dir/Minigin/Main.cpp.o"
 },
 {
-  "directory": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build",
-  "command": "/usr/sbin/c++  -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build/_deps/imgui-src -std=gnu++20 -Wall -Wextra -Werror -o CMakeFiles/minigin.dir/Minigin/Minigin.cpp.o -c /home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin/Minigin.cpp",
-  "file": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin/Minigin.cpp",
+  "directory": "/home/luna/Gamedev/Prog4/minigin/build",
+  "command": "/usr/bin/c++  -I/home/luna/Gamedev/Prog4/minigin/Minigin -I/home/luna/Gamedev/Prog4/minigin/build/_deps/imgui-src -std=gnu++20 -Wall -Wextra -Werror -o CMakeFiles/minigin.dir/Minigin/Minigin.cpp.o -c /home/luna/Gamedev/Prog4/minigin/Minigin/Minigin.cpp",
+  "file": "/home/luna/Gamedev/Prog4/minigin/Minigin/Minigin.cpp",
   "output": "CMakeFiles/minigin.dir/Minigin/Minigin.cpp.o"
 },
 {
-  "directory": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build",
-  "command": "/usr/sbin/c++  -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build/_deps/imgui-src -std=gnu++20 -Wall -Wextra -Werror -o CMakeFiles/minigin.dir/Minigin/MovementComponents.cpp.o -c /home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin/MovementComponents.cpp",
-  "file": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin/MovementComponents.cpp",
+  "directory": "/home/luna/Gamedev/Prog4/minigin/build",
+  "command": "/usr/bin/c++  -I/home/luna/Gamedev/Prog4/minigin/Minigin -I/home/luna/Gamedev/Prog4/minigin/build/_deps/imgui-src -std=gnu++20 -Wall -Wextra -Werror -o CMakeFiles/minigin.dir/Minigin/MovementComponents.cpp.o -c /home/luna/Gamedev/Prog4/minigin/Minigin/MovementComponents.cpp",
+  "file": "/home/luna/Gamedev/Prog4/minigin/Minigin/MovementComponents.cpp",
   "output": "CMakeFiles/minigin.dir/Minigin/MovementComponents.cpp.o"
 },
 {
-  "directory": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build",
-  "command": "/usr/sbin/c++  -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build/_deps/imgui-src -std=gnu++20 -Wall -Wextra -Werror -o CMakeFiles/minigin.dir/Minigin/Renderer.cpp.o -c /home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin/Renderer.cpp",
-  "file": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin/Renderer.cpp",
+  "directory": "/home/luna/Gamedev/Prog4/minigin/build",
+  "command": "/usr/bin/c++  -I/home/luna/Gamedev/Prog4/minigin/Minigin -I/home/luna/Gamedev/Prog4/minigin/build/_deps/imgui-src -std=gnu++20 -Wall -Wextra -Werror -o CMakeFiles/minigin.dir/Minigin/Renderer.cpp.o -c /home/luna/Gamedev/Prog4/minigin/Minigin/Renderer.cpp",
+  "file": "/home/luna/Gamedev/Prog4/minigin/Minigin/Renderer.cpp",
   "output": "CMakeFiles/minigin.dir/Minigin/Renderer.cpp.o"
 },
 {
-  "directory": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build",
-  "command": "/usr/sbin/c++  -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build/_deps/imgui-src -std=gnu++20 -Wall -Wextra -Werror -o CMakeFiles/minigin.dir/Minigin/ResourceManager.cpp.o -c /home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin/ResourceManager.cpp",
-  "file": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin/ResourceManager.cpp",
+  "directory": "/home/luna/Gamedev/Prog4/minigin/build",
+  "command": "/usr/bin/c++  -I/home/luna/Gamedev/Prog4/minigin/Minigin -I/home/luna/Gamedev/Prog4/minigin/build/_deps/imgui-src -std=gnu++20 -Wall -Wextra -Werror -o CMakeFiles/minigin.dir/Minigin/ResourceManager.cpp.o -c /home/luna/Gamedev/Prog4/minigin/Minigin/ResourceManager.cpp",
+  "file": "/home/luna/Gamedev/Prog4/minigin/Minigin/ResourceManager.cpp",
   "output": "CMakeFiles/minigin.dir/Minigin/ResourceManager.cpp.o"
 },
 {
-  "directory": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build",
-  "command": "/usr/sbin/c++  -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build/_deps/imgui-src -std=gnu++20 -Wall -Wextra -Werror -o CMakeFiles/minigin.dir/Minigin/Scene.cpp.o -c /home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin/Scene.cpp",
-  "file": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin/Scene.cpp",
+  "directory": "/home/luna/Gamedev/Prog4/minigin/build",
+  "command": "/usr/bin/c++  -I/home/luna/Gamedev/Prog4/minigin/Minigin -I/home/luna/Gamedev/Prog4/minigin/build/_deps/imgui-src -std=gnu++20 -Wall -Wextra -Werror -o CMakeFiles/minigin.dir/Minigin/Scene.cpp.o -c /home/luna/Gamedev/Prog4/minigin/Minigin/Scene.cpp",
+  "file": "/home/luna/Gamedev/Prog4/minigin/Minigin/Scene.cpp",
   "output": "CMakeFiles/minigin.dir/Minigin/Scene.cpp.o"
 },
 {
-  "directory": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build",
-  "command": "/usr/sbin/c++  -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build/_deps/imgui-src -std=gnu++20 -Wall -Wextra -Werror -o CMakeFiles/minigin.dir/Minigin/SceneManager.cpp.o -c /home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin/SceneManager.cpp",
-  "file": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin/SceneManager.cpp",
+  "directory": "/home/luna/Gamedev/Prog4/minigin/build",
+  "command": "/usr/bin/c++  -I/home/luna/Gamedev/Prog4/minigin/Minigin -I/home/luna/Gamedev/Prog4/minigin/build/_deps/imgui-src -std=gnu++20 -Wall -Wextra -Werror -o CMakeFiles/minigin.dir/Minigin/SceneManager.cpp.o -c /home/luna/Gamedev/Prog4/minigin/Minigin/SceneManager.cpp",
+  "file": "/home/luna/Gamedev/Prog4/minigin/Minigin/SceneManager.cpp",
   "output": "CMakeFiles/minigin.dir/Minigin/SceneManager.cpp.o"
 },
 {
-  "directory": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build",
-  "command": "/usr/sbin/c++  -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build/_deps/imgui-src -std=gnu++20 -Wall -Wextra -Werror -o CMakeFiles/minigin.dir/Minigin/TextComponent.cpp.o -c /home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin/TextComponent.cpp",
-  "file": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin/TextComponent.cpp",
+  "directory": "/home/luna/Gamedev/Prog4/minigin/build",
+  "command": "/usr/bin/c++  -I/home/luna/Gamedev/Prog4/minigin/Minigin -I/home/luna/Gamedev/Prog4/minigin/build/_deps/imgui-src -std=gnu++20 -Wall -Wextra -Werror -o CMakeFiles/minigin.dir/Minigin/TextComponent.cpp.o -c /home/luna/Gamedev/Prog4/minigin/Minigin/TextComponent.cpp",
+  "file": "/home/luna/Gamedev/Prog4/minigin/Minigin/TextComponent.cpp",
   "output": "CMakeFiles/minigin.dir/Minigin/TextComponent.cpp.o"
 },
 {
-  "directory": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build",
-  "command": "/usr/sbin/c++  -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build/_deps/imgui-src -std=gnu++20 -Wall -Wextra -Werror -o CMakeFiles/minigin.dir/Minigin/Texture2D.cpp.o -c /home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin/Texture2D.cpp",
-  "file": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin/Texture2D.cpp",
+  "directory": "/home/luna/Gamedev/Prog4/minigin/build",
+  "command": "/usr/bin/c++  -I/home/luna/Gamedev/Prog4/minigin/Minigin -I/home/luna/Gamedev/Prog4/minigin/build/_deps/imgui-src -std=gnu++20 -Wall -Wextra -Werror -o CMakeFiles/minigin.dir/Minigin/Texture2D.cpp.o -c /home/luna/Gamedev/Prog4/minigin/Minigin/Texture2D.cpp",
+  "file": "/home/luna/Gamedev/Prog4/minigin/Minigin/Texture2D.cpp",
   "output": "CMakeFiles/minigin.dir/Minigin/Texture2D.cpp.o"
 },
 {
-  "directory": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build",
-  "command": "/usr/sbin/c++  -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build/_deps/imgui-src -std=gnu++20 -Wall -Wextra -Werror -o CMakeFiles/minigin.dir/Minigin/TextureComponent.cpp.o -c /home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin/TextureComponent.cpp",
-  "file": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin/TextureComponent.cpp",
+  "directory": "/home/luna/Gamedev/Prog4/minigin/build",
+  "command": "/usr/bin/c++  -I/home/luna/Gamedev/Prog4/minigin/Minigin -I/home/luna/Gamedev/Prog4/minigin/build/_deps/imgui-src -std=gnu++20 -Wall -Wextra -Werror -o CMakeFiles/minigin.dir/Minigin/TextureComponent.cpp.o -c /home/luna/Gamedev/Prog4/minigin/Minigin/TextureComponent.cpp",
+  "file": "/home/luna/Gamedev/Prog4/minigin/Minigin/TextureComponent.cpp",
   "output": "CMakeFiles/minigin.dir/Minigin/TextureComponent.cpp.o"
 },
 {
-  "directory": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build",
-  "command": "/usr/sbin/c++  -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build/_deps/imgui-src -std=gnu++20 -Wall -Wextra -Werror -o CMakeFiles/minigin.dir/Minigin/Timer.cpp.o -c /home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin/Timer.cpp",
-  "file": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin/Timer.cpp",
+  "directory": "/home/luna/Gamedev/Prog4/minigin/build",
+  "command": "/usr/bin/c++  -I/home/luna/Gamedev/Prog4/minigin/Minigin -I/home/luna/Gamedev/Prog4/minigin/build/_deps/imgui-src -std=gnu++20 -Wall -Wextra -Werror -o CMakeFiles/minigin.dir/Minigin/Timer.cpp.o -c /home/luna/Gamedev/Prog4/minigin/Minigin/Timer.cpp",
+  "file": "/home/luna/Gamedev/Prog4/minigin/Minigin/Timer.cpp",
   "output": "CMakeFiles/minigin.dir/Minigin/Timer.cpp.o"
 },
 {
-  "directory": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build",
-  "command": "/usr/sbin/c++  -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build/_deps/imgui-src -std=gnu++20 -Wall -Wextra -Werror -o CMakeFiles/minigin.dir/Minigin/TransformComponent.cpp.o -c /home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin/TransformComponent.cpp",
-  "file": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin/TransformComponent.cpp",
+  "directory": "/home/luna/Gamedev/Prog4/minigin/build",
+  "command": "/usr/bin/c++  -I/home/luna/Gamedev/Prog4/minigin/Minigin -I/home/luna/Gamedev/Prog4/minigin/build/_deps/imgui-src -std=gnu++20 -Wall -Wextra -Werror -o CMakeFiles/minigin.dir/Minigin/TransformComponent.cpp.o -c /home/luna/Gamedev/Prog4/minigin/Minigin/TransformComponent.cpp",
+  "file": "/home/luna/Gamedev/Prog4/minigin/Minigin/TransformComponent.cpp",
   "output": "CMakeFiles/minigin.dir/Minigin/TransformComponent.cpp.o"
+},
+{
+  "directory": "/home/luna/Gamedev/Prog4/minigin/build",
+  "command": "/usr/bin/c++  -I/home/luna/Gamedev/Prog4/minigin/Minigin -I/home/luna/Gamedev/Prog4/minigin/build/_deps/imgui-src -std=gnu++20 -Wall -Wextra -Werror -o CMakeFiles/minigin.dir/Minigin/imgui_plot.cpp.o -c /home/luna/Gamedev/Prog4/minigin/Minigin/imgui_plot.cpp",
+  "file": "/home/luna/Gamedev/Prog4/minigin/Minigin/imgui_plot.cpp",
+  "output": "CMakeFiles/minigin.dir/Minigin/imgui_plot.cpp.o"
 }
 ]

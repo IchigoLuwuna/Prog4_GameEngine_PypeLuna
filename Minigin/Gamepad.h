@@ -1,41 +1,53 @@
 #ifndef GAMEPAD_H
 #define GAMEPAD_H
-#include <cstdint>
 #include <memory>
+#include <bitset>
 
 namespace dae
 {
 class Gamepad final
 {
 public:
-	enum class Button : uint16_t
+	enum class Button : int16_t
 	{
-		invalid = 0,
-		up = 1 << 0,
-		down = 1 << 1,
-		left = 1 << 2,
-		right = 1 << 3,
-		start = 1 << 4,
-		select = 1 << 5,
-		l3 = 1 << 6,
-		r3 = 1 << 7,
-		l1 = 1 << 8,
-		r1 = 1 << 9,
+		invalid = -1,
+		up,
+		down,
+		left,
+		right,
+		start,
+		select,
+		l3,
+		r3,
+		l1,
+		r1,
 		// Platform agnostic face buttons
-		south = 1 << 10, // (XBox A; Nintendo B; PS Cross)
-		east = 1 << 11,	 // (XBox B; Nintendo A; PS Circle)
-		west = 1 << 12,	 // (XBox X; Nintendo Y; PS Square)
-		north = 1 << 13, // (XBox Y; Nintendo X; PS Triangle)
-		count = 14,
+		south, // (XBox A; Nintendo B; PS Cross)
+		east,  // (XBox B; Nintendo A; PS Circle)
+		west,  // (XBox X; Nintendo Y; PS Square)
+		north, // (XBox Y; Nintendo X; PS Triangle)
+		count,
 	};
+	static constexpr int maskBits{ static_cast<int>( Gamepad::Button::count ) }; // a bit easier to read than constantly
+	// casting
 
 	Gamepad();
 	~Gamepad();
 
+	void AddGamepad();
+	void RemoveGamepad();
+
 	void UpdateGamepad();
+	std::bitset<maskBits> GetMask();
+	std::bitset<maskBits> GetPreviousMask();
+
+	static int RemapButtonToKey( Button in );
+	static std::bitset<maskBits> GetMaskFromButtonID( Gamepad::Button in );
 
 private:
 	class GamepadImpl;
+	class SDLImpl;
+	class XInputImpl;
 	std::unique_ptr<GamepadImpl> m_pImpl{};
 };
 } // namespace dae

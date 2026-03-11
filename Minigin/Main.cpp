@@ -1,6 +1,8 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
 #include "Commands.h"
+#include "Gamepad.h"
+#include "ImGuiComponents.h"
 #include "InputManager.h"
 
 #if _DEBUG && __has_include( <vld.h>)
@@ -45,24 +47,47 @@ static void load()
 	// Create SceneGraph
 
 	// Create bindings
-	constexpr float moveSpeed{ 200.f };
-	dae::InputManager::GetInstance().BindCommandToKey<dae::MoveCommand, SDL_SCANCODE_W>(
-		operaBird->GetComponent<dae::TransformComponent>(), glm::vec2{ 0.f, -moveSpeed } );
-	dae::InputManager::GetInstance().BindCommandToKey<dae::MoveCommand, SDL_SCANCODE_S>(
-		operaBird->GetComponent<dae::TransformComponent>(), glm::vec2{ 0.f, moveSpeed } );
-	dae::InputManager::GetInstance().BindCommandToKey<dae::MoveCommand, SDL_SCANCODE_A>(
-		operaBird->GetComponent<dae::TransformComponent>(), glm::vec2{ -moveSpeed, 0.f } );
-	dae::InputManager::GetInstance().BindCommandToKey<dae::MoveCommand, SDL_SCANCODE_D>(
-		operaBird->GetComponent<dae::TransformComponent>(), glm::vec2{ moveSpeed, 0.f } );
+	// Doto Sheep using keyboard
+	constexpr float moveSpeed{ 150.f };
+	auto pDotoSheepTransform{ dotoSheep->GetComponent<dae::TransformComponent>() };
+	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
+		SDL_SCANCODE_W, dae::InputManager::KeyState::held, pDotoSheepTransform, glm::vec2{ 0.f, -moveSpeed } );
+	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
+		SDL_SCANCODE_S, dae::InputManager::KeyState::held, pDotoSheepTransform, glm::vec2{ 0.f, moveSpeed } );
+	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
+		SDL_SCANCODE_A, dae::InputManager::KeyState::held, pDotoSheepTransform, glm::vec2{ -moveSpeed, 0.f } );
+	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
+		SDL_SCANCODE_D, dae::InputManager::KeyState::held, pDotoSheepTransform, glm::vec2{ moveSpeed, 0.f } );
+	//
 
-	dae::InputManager::GetInstance().BindCommandToKey<dae::MoveCommand, SDL_SCANCODE_UP>(
-		dotoSheep->GetComponent<dae::TransformComponent>(), glm::vec2{ 0.f, -moveSpeed } );
-	dae::InputManager::GetInstance().BindCommandToKey<dae::MoveCommand, SDL_SCANCODE_DOWN>(
-		dotoSheep->GetComponent<dae::TransformComponent>(), glm::vec2{ 0.f, moveSpeed } );
-	dae::InputManager::GetInstance().BindCommandToKey<dae::MoveCommand, SDL_SCANCODE_LEFT>(
-		dotoSheep->GetComponent<dae::TransformComponent>(), glm::vec2{ -moveSpeed, 0.f } );
-	dae::InputManager::GetInstance().BindCommandToKey<dae::MoveCommand, SDL_SCANCODE_RIGHT>(
-		dotoSheep->GetComponent<dae::TransformComponent>(), glm::vec2{ moveSpeed, 0.f } );
+	// Opera Bird using controller
+	const auto dUpKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::up ) };
+	const auto dDownKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::down ) };
+	const auto dLeftKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::left ) };
+	const auto dRightKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::right ) };
+	auto pOperaBirdTransform{ operaBird->GetComponent<dae::TransformComponent>() };
+	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
+		dUpKey, dae::InputManager::KeyState::held, pOperaBirdTransform, glm::vec2{ 0.f, -moveSpeed * 2.f } );
+	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
+		dDownKey, dae::InputManager::KeyState::held, pOperaBirdTransform, glm::vec2{ 0.f, moveSpeed * 2.f } );
+	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
+		dLeftKey, dae::InputManager::KeyState::held, pOperaBirdTransform, glm::vec2{ -moveSpeed * 2.f, 0.f } );
+	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
+		dRightKey, dae::InputManager::KeyState::held, pOperaBirdTransform, glm::vec2{ moveSpeed * 2.f, 0.f } );
+	//
+
+	// Test/Showcase down/up bindings
+	dae::InputManager::GetInstance().BindCommand<dae::LogCommand>(
+		SDL_SCANCODE_RETURN, dae::InputManager::KeyState::down, "Enter Pressed" );
+	dae::InputManager::GetInstance().BindCommand<dae::LogCommand>(
+		SDL_SCANCODE_BACKSPACE, dae::InputManager::KeyState::up, "Backspace Released" );
+
+	const auto startKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::start ) };
+	const auto selectKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::select ) };
+	dae::InputManager::GetInstance().BindCommand<dae::LogCommand>(
+		startKey, dae::InputManager::KeyState::down, "Start Pressed" );
+	dae::InputManager::GetInstance().BindCommand<dae::LogCommand>(
+		selectKey, dae::InputManager::KeyState::up, "Select Released" );
 
 	// Add to scene
 	scene.Add( std::move( background ) );

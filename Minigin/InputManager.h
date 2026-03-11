@@ -3,7 +3,7 @@
 #include <SDL3/SDL_scancode.h>
 #include <bitset>
 #include <memory>
-#include <unordered_map>
+#include <array>
 #include "Gamepad.h"
 #include "Singleton.h"
 #include "Command.h"
@@ -13,36 +13,35 @@ namespace dae
 class InputManager final : public Singleton<InputManager>
 {
 public:
-	bool ProcessInput();
-
-	template <typename CommandType, SDL_Scancode key, typename... Types>
-		requires std::derived_from<CommandType, Command>
-	void BindCommandToKey( const Types&... args )
-	{
-		m_CommandBindings.insert( { key, std::make_unique<CommandType>( args... ) } );
-	}
-
-private:
 	enum class KeyState : uint8_t
 	{
-		none,
 		held,
 		down,
 		up,
+		count,
 	};
+	static constexpr int KeyStateCount{ static_cast<int>( KeyState::count ) };
 
-	struct KeyBind
+	bool ProcessInput();
+
+	template <typename CommandType, typename... Types>
+		requires std::derived_from<CommandType, Command>
+	void BindCommand( int key, KeyState state, const Types&... args )
 	{
-		SDL_Scancode key{};
-		KeyState state{};
-	};
+		m_CommandBindings[key][static_cast<int>( state )] = std::make_unique<CommandType>( args... );
+	}
+	void ClearBinding( int key, KeyState state );
 
+private:
+	std::bitset<SDL_SCANCODE_COUNT> m_KeyStates{};
 	std::bitset<SDL_SCANCODE_COUNT> m_PreviousKeyStates{};
-	std::unordered_map<SDL_Scancode, std::unique_ptr<Command>> m_CommandBindings{};
+	// std::unordered_map<int, std::unique_ptr<Command>> m_CommandBindings{};
+	std::array<std::array<std::unique_ptr<Command>, KeyStateCount>, SDL_SCANCODE_COUNT> m_CommandBindings{};
 	Gamepad m_Gamepad{};
 
-	void UpdatePreviousKeyStates();
+	void UpdateKeyStates();
 	void ProcessKeyboard();
+	void ProcessGamepad();
 };
 } // namespace dae
 #endif
