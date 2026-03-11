@@ -28,8 +28,8 @@ public:
 		north, // (XBox Y; Nintendo X; PS Triangle)
 		count,
 	};
-	static constexpr int maskBits{ static_cast<int>( Gamepad::Button::count ) }; // a bit easier to read than constantly
-	// casting
+	// a bit easier to read & work with than constantly having to static cast
+	static constexpr int maskBits{ static_cast<int>( Gamepad::Button::count ) };
 
 	Gamepad();
 	~Gamepad();
