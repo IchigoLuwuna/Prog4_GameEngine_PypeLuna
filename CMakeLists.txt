@@ -162,6 +162,12 @@ target_link_libraries("${TARGET_NAME}" PUBLIC
   ${VLD_LIBRARIES}
 )
 
+if (WIN32)
+target_link_libraries("${TARGET_NAME}" PUBLIC
+    xinput
+)
+endif()
+
 if(MSVC)
     # compile at warning level 4 + treat warnings as errors
     target_compile_options(${TARGET_NAME} PRIVATE /W4 /WX)

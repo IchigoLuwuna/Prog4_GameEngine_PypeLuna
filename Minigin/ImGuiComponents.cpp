@@ -1,6 +1,7 @@
 #include "ImGuiComponents.h"
 #include <cmath>
 #include <numeric>
+#include <algorithm>
 #include "Timer.h"
 #include "imgui_plot.h"
 
@@ -33,7 +34,7 @@ void dae::ImGuiComponents::Exercise1Component::Render() const
 			ImGui::PlotConfig conf{};
 			conf.values.xs = xValues;
 			conf.values.ys = m_Results.data();
-			conf.values.count = m_Results.size();
+			conf.values.count = static_cast<int>( m_Results.size() );
 			conf.values.color = 0xFF'00'7F'FF;
 			conf.scale.min = 0;
 			conf.scale.max = *std::max_element( m_Results.begin(), m_Results.end() );
@@ -54,7 +55,7 @@ void dae::ImGuiComponents::Exercise1Component::Measure()
 {
 	m_Results.clear();
 
-	std::vector<int> bigBuffer( std::pow( 2, 26 ) );
+	std::vector<int> bigBuffer( static_cast<int>( std::pow( 2, 26 ) ) );
 	std::vector<float> sampledMeasurements( m_SampleCount );
 
 	for ( auto& element : bigBuffer )
@@ -76,7 +77,7 @@ void dae::ImGuiComponents::Exercise1Component::Measure()
 		for ( int sample{}; sample < m_SampleCount; ++sample )
 		{
 			dae::Timer::GetInstance().Lap();
-			iterateOverBuffer( std::pow( 2, iteration ) );
+			iterateOverBuffer( static_cast<int>( std::pow( 2, iteration ) ) );
 			dae::Timer::GetInstance().Lap();
 			sampledMeasurements.push_back( dae::Timer::GetInstance().GetElapsed() );
 		}
@@ -142,7 +143,7 @@ void dae::ImGuiComponents::Exercise2Component::Render() const
 			ImGui::PlotConfig conf{};
 			conf.values.xs = xValues;
 			conf.values.ys = m_Results[0].data();
-			conf.values.count = m_Results[0].size();
+			conf.values.count = static_cast<int>( m_Results[0].size() );
 			conf.values.color = 0xFF'FF'7F'00;
 			conf.scale.min = 0;
 			conf.scale.max = *std::max_element( m_Results[0].begin(), m_Results[0].end() );
@@ -163,7 +164,7 @@ void dae::ImGuiComponents::Exercise2Component::Render() const
 			ImGui::PlotConfig conf{};
 			conf.values.xs = xValues;
 			conf.values.ys = m_Results[1].data();
-			conf.values.count = m_Results[1].size();
+			conf.values.count = static_cast<int>( m_Results[1].size() );
 			conf.values.color = 0xFF'7F'FF'00;
 			conf.scale.min = 0;
 			conf.scale.max = *std::max_element( m_Results[1].begin(), m_Results[1].end() );
@@ -186,7 +187,7 @@ void dae::ImGuiComponents::Exercise2Component::Render() const
 
 			ImGui::PlotConfig conf{};
 			conf.values.xs = xValues;
-			conf.values.count = m_Results[0].size();
+			conf.values.count = static_cast<int>( m_Results[0].size() );
 			conf.values.ys_list = combinedData;
 			conf.values.ys_count = 2;
 			conf.values.colors = colors;
@@ -252,7 +253,7 @@ void dae::ImGuiComponents::Exercise2Component::Measure()
 	{
 		m_Results[0].clear();
 
-		std::vector<GameObject3D> bigBuffer( std::pow( 2, bigBufferSize ) );
+		std::vector<GameObject3D> bigBuffer( static_cast<int>( std::pow( 2, bigBufferSize ) ) );
 		std::vector<float> sampledMeasurements( m_SampleCount );
 
 		for ( auto& element : bigBuffer )
@@ -276,7 +277,7 @@ void dae::ImGuiComponents::Exercise2Component::Measure()
 			for ( int sample{}; sample < m_SampleCount; ++sample )
 			{
 				dae::Timer::GetInstance().Lap();
-				iterateOverBuffer( std::pow( 2, iteration ) );
+				iterateOverBuffer( static_cast<int>( std::pow( 2, iteration ) ) );
 				dae::Timer::GetInstance().Lap();
 				sampledMeasurements.push_back( dae::Timer::GetInstance().GetElapsed() );
 			}
@@ -301,7 +302,7 @@ void dae::ImGuiComponents::Exercise2Component::Measure()
 	{
 		m_Results[1].clear();
 
-		std::vector<GameObject3DAlt> bigBuffer( std::pow( 2, bigBufferSize ) );
+		std::vector<GameObject3DAlt> bigBuffer( static_cast<int>( std::pow( 2, bigBufferSize ) ) );
 		std::vector<float> sampledMeasurements( m_SampleCount );
 
 		for ( auto& element : bigBuffer )
@@ -325,7 +326,7 @@ void dae::ImGuiComponents::Exercise2Component::Measure()
 			for ( int sample{}; sample < m_SampleCount; ++sample )
 			{
 				dae::Timer::GetInstance().Lap();
-				iterateOverBuffer( std::pow( 2, iteration ) );
+				iterateOverBuffer( static_cast<int>( std::pow( 2, iteration ) ) );
 				dae::Timer::GetInstance().Lap();
 				sampledMeasurements.push_back( dae::Timer::GetInstance().GetElapsed() );
 			}

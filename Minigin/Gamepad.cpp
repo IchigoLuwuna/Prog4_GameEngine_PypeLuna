@@ -2,6 +2,11 @@
 #include <SDL3/SDL_gamepad.h>
 #include <SDL3/SDL_scancode.h>
 #include <iostream>
+#ifdef _WIN32
+#	define WIN32_LEAN_AND_MEAN
+#	include <windows.h>
+#	include <XInput.h>
+#endif
 
 class dae::Gamepad::GamepadImpl
 {
@@ -17,10 +22,9 @@ public:
 protected:
 	std::bitset<maskBits> m_ButtonMask{};
 	std::bitset<maskBits> m_PreviousMask{};
-
-	dae::Gamepad::Button RemapButtonFromSDL( SDL_GamepadButton in );
 };
 
+#ifndef _WIN32
 class dae::Gamepad::SDLImpl : public GamepadImpl
 {
 public:
@@ -38,19 +42,33 @@ public:
 
 private:
 	SDL_Gamepad* m_pGamepad{};
-};
 
-#ifdef __WINDOWS__
+	dae::Gamepad::Button RemapButtonFromSDL( SDL_GamepadButton in );
+};
+#else
 class dae::Gamepad::XInputImpl : public GamepadImpl
 {
 public:
+	virtual ~XInputImpl() = default;
+
+	virtual void AddGamepad() override
+	{
+	} // XInput doesn't need manual gamepad management
+	virtual void RemoveGamepad() override
+	{
+	}
+	virtual void UpdateGamepad() override;
+
 private:
+	int m_ControllerIndex{};
+
+	dae::Gamepad::Button RemapButtonFromXInput( WORD in );
 };
 #endif
 
 dae::Gamepad::Gamepad()
-#if __WINDOWS__
-	: m_pImpl{} // do this later
+#ifdef _WIN32
+	: m_pImpl{ std::make_unique<XInputImpl>() }
 #else
 	: m_pImpl{ std::make_unique<SDLImpl>() }
 #endif
@@ -59,6 +77,50 @@ dae::Gamepad::Gamepad()
 
 dae::Gamepad::~Gamepad() = default;
 
+int dae::Gamepad::RemapButtonToKey( Button in )
+{
+	return static_cast<int>( in ) + SDL_SCANCODE_ENDCALL + 1;
+}
+
+void dae::Gamepad::AddGamepad()
+{
+	m_pImpl->AddGamepad();
+}
+void dae::Gamepad::RemoveGamepad()
+{
+	return m_pImpl->RemoveGamepad();
+}
+
+void dae::Gamepad::UpdateGamepad()
+{
+	m_pImpl->UpdateGamepad();
+}
+
+std::bitset<dae::Gamepad::maskBits> dae::Gamepad::GetMask()
+{
+	return m_pImpl->GetMask();
+}
+std::bitset<dae::Gamepad::maskBits> dae::Gamepad::GamepadImpl::GetMask()
+{
+	return m_ButtonMask;
+}
+
+std::bitset<dae::Gamepad::maskBits> dae::Gamepad::GetPreviousMask()
+{
+	return m_pImpl->GetPreviousMask();
+}
+std::bitset<dae::Gamepad::maskBits> dae::Gamepad::GamepadImpl::GetPreviousMask()
+{
+	return m_PreviousMask;
+}
+
+std::bitset<dae::Gamepad::maskBits> dae::Gamepad::GetMaskFromButtonID( Gamepad::Button in )
+{
+	return static_cast<std::bitset<maskBits>>( 1ll << ( static_cast<uint64_t>( in ) ) );
+}
+
+#ifndef _WIN32
+// SDL
 dae::Gamepad::SDLImpl::SDLImpl()
 {
 	AddGamepad();
@@ -99,15 +161,6 @@ dae::Gamepad::SDLImpl& dae::Gamepad::SDLImpl::operator=( SDLImpl&& other )
 	return *this;
 }
 
-int dae::Gamepad::RemapButtonToKey( Button in )
-{
-	return static_cast<int>( in ) + SDL_SCANCODE_ENDCALL + 1;
-}
-
-void dae::Gamepad::AddGamepad()
-{
-	m_pImpl->AddGamepad();
-}
 void dae::Gamepad::SDLImpl::AddGamepad()
 {
 	if ( m_pGamepad ) // If gamepad is already connected and open
@@ -128,10 +181,6 @@ void dae::Gamepad::SDLImpl::AddGamepad()
 	std::cout << "Connected with Gamepad: " << SDL_GetGamepadName( m_pGamepad ) << "\n";
 }
 
-void dae::Gamepad::RemoveGamepad()
-{
-	return m_pImpl->RemoveGamepad();
-}
 void dae::Gamepad::SDLImpl::RemoveGamepad()
 {
 	std::cout << "Removed Gamepad: " << SDL_GetGamepadName( m_pGamepad ) << "\n";
@@ -139,10 +188,6 @@ void dae::Gamepad::SDLImpl::RemoveGamepad()
 	m_pGamepad = nullptr;
 }
 
-void dae::Gamepad::UpdateGamepad()
-{
-	m_pImpl->UpdateGamepad();
-}
 void dae::Gamepad::SDLImpl::UpdateGamepad()
 {
 	if ( !m_pGamepad )
@@ -169,67 +214,103 @@ void dae::Gamepad::SDLImpl::UpdateGamepad()
 	}
 }
 
-std::bitset<dae::Gamepad::maskBits> dae::Gamepad::GetMask()
-{
-	return m_pImpl->GetMask();
-}
-std::bitset<dae::Gamepad::maskBits> dae::Gamepad::GamepadImpl::GetMask()
-{
-	return m_ButtonMask;
-}
-
-std::bitset<dae::Gamepad::maskBits> dae::Gamepad::GetPreviousMask()
-{
-	return m_pImpl->GetPreviousMask();
-}
-std::bitset<dae::Gamepad::maskBits> dae::Gamepad::GamepadImpl::GetPreviousMask()
-{
-	return m_PreviousMask;
-}
-
-dae::Gamepad::Button dae::Gamepad::GamepadImpl::RemapButtonFromSDL( SDL_GamepadButton in )
+dae::Gamepad::Button dae::Gamepad::SDLImpl::RemapButtonFromSDL( SDL_GamepadButton in )
 {
 	switch ( in )
 	{
 	case SDL_GAMEPAD_BUTTON_DPAD_UP:
-		return Gamepad::Button::up;
+		return Button::up;
 	case SDL_GAMEPAD_BUTTON_DPAD_DOWN:
-		return Gamepad::Button::down;
+		return Button::down;
 	case SDL_GAMEPAD_BUTTON_DPAD_LEFT:
-		return Gamepad::Button::left;
+		return Button::left;
 	case SDL_GAMEPAD_BUTTON_DPAD_RIGHT:
-		return Gamepad::Button::right;
+		return Button::right;
 
 	case SDL_GAMEPAD_BUTTON_START:
-		return Gamepad::Button::start;
+		return Button::start;
 	case SDL_GAMEPAD_BUTTON_BACK:
-		return Gamepad::Button::select;
+		return Button::select;
 
 	case SDL_GAMEPAD_BUTTON_LEFT_STICK:
-		return Gamepad::Button::l3;
+		return Button::l3;
 	case SDL_GAMEPAD_BUTTON_RIGHT_STICK:
-		return Gamepad::Button::r3;
+		return Button::r3;
 
 	case SDL_GAMEPAD_BUTTON_LEFT_SHOULDER:
-		return Gamepad::Button::l1;
+		return Button::l1;
 	case SDL_GAMEPAD_BUTTON_RIGHT_SHOULDER:
-		return Gamepad::Button::r1;
+		return Button::r1;
 
 	case SDL_GAMEPAD_BUTTON_SOUTH:
-		return Gamepad::Button::south;
+		return Button::south;
 	case SDL_GAMEPAD_BUTTON_EAST:
-		return Gamepad::Button::east;
+		return Button::east;
 	case SDL_GAMEPAD_BUTTON_WEST:
-		return Gamepad::Button::west;
+		return Button::west;
 	case SDL_GAMEPAD_BUTTON_NORTH:
-		return Gamepad::Button::north;
+		return Button::north;
 
 	default:
-		return Gamepad::Button::invalid;
+		return Button::invalid;
 	}
 }
 
-std::bitset<dae::Gamepad::maskBits> dae::Gamepad::GetMaskFromButtonID( Gamepad::Button in )
+#else
+// XInput
+// I only have a DualSense controller so I have absolutely no way of verifying if this works :3
+// Formatting might also look different because I don't have my auto formatter on windows D:
+void dae::Gamepad::XInputImpl::UpdateGamepad()
 {
-	return 1 << ( static_cast<uint16_t>( in ) );
+	XINPUT_STATE state{};
+	ZeroMemory( &state, sizeof( XINPUT_STATE ) );
+	XInputGetState( static_cast<DWORD>( m_ControllerIndex ), &state );
+
+	m_PreviousMask = m_ButtonMask;
+	m_ButtonMask = state.Gamepad.wButtons;
 }
+
+dae::Gamepad::Button dae::Gamepad::XInputImpl::RemapButtonFromXInput( WORD in )
+{
+	// Unused because XInput's button mask layout alligns with the generic mask layout :D
+	// Still implemented for the sake of completeness
+	switch ( in )
+	{
+	case XINPUT_GAMEPAD_DPAD_UP:
+		return Button::up;
+	case XINPUT_GAMEPAD_DPAD_DOWN:
+		return Button::down;
+	case XINPUT_GAMEPAD_DPAD_LEFT:
+		return Button::left;
+	case XINPUT_GAMEPAD_DPAD_RIGHT:
+		return Button::right;
+
+	case XINPUT_GAMEPAD_START:
+		return Button::start;
+	case XINPUT_GAMEPAD_BACK:
+		return Button::select;
+
+	case XINPUT_GAMEPAD_LEFT_THUMB:
+		return Button::l3;
+	case XINPUT_GAMEPAD_RIGHT_THUMB:
+		return Button::r3;
+
+	case XINPUT_GAMEPAD_LEFT_SHOULDER:
+		return Button::l1;
+	case XINPUT_GAMEPAD_RIGHT_SHOULDER:
+		return Button::r1;
+
+	case XINPUT_GAMEPAD_A:
+		return Button::south;
+	case XINPUT_GAMEPAD_B:
+		return Button::east;
+	case XINPUT_GAMEPAD_X:
+		return Button::west;
+	case XINPUT_GAMEPAD_Y:
+		return Button::north;
+
+	default:
+		return Button::invalid;
+	}
+}
+#endif

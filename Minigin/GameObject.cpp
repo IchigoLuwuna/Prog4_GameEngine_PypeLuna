@@ -30,7 +30,7 @@ void dae::GameObject::Render() const
 
 int dae::GameObject::GetChildCount() const
 {
-	return m_Children.size();
+	return static_cast<int>( m_Children.size() );
 }
 
 dae::GameObject* dae::GameObject::GetChildAt( int index )
