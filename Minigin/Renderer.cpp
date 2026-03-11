@@ -6,7 +6,6 @@
 #include <backends/imgui_impl_sdlrenderer3.h>
 #include "SceneManager.h"
 #include "Texture2D.h"
-#include "ImGuiWindows.h"
 
 void dae::Renderer::Init( SDL_Window* window )
 {
@@ -45,17 +44,13 @@ void dae::Renderer::Render() const
 	ImGui_ImplSDL3_NewFrame();
 	ImGui::NewFrame();
 
-	// dae::ImGuiWindows::Exercise1();
-	dae::ImGuiWindows::Exercise1();
-	dae::ImGuiWindows::Exercise2();
-	ImGui::Render();
-
 	const auto& color = GetBackgroundColor();
 	SDL_SetRenderDrawColor( m_Renderer, color.r, color.g, color.b, color.a );
 	SDL_RenderClear( m_Renderer );
 
 	SceneManager::GetInstance().Render();
 
+	ImGui::Render();
 	ImGui_ImplSDLRenderer3_RenderDrawData( ImGui::GetDrawData(), m_Renderer );
 
 	SDL_RenderPresent( m_Renderer );

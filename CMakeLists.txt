@@ -19,10 +19,12 @@ endif()
 
 # list source files here
 add_executable(${TARGET_NAME} ${TARGET_PARAM}
+  Minigin/Commands.cpp
   Minigin/Font.cpp
   Minigin/FpsComponent.cpp
   Minigin/GameObject.cpp
-  Minigin/ImGuiWindows.cpp
+  Minigin/Gamepad.cpp
+  Minigin/ImGuiComponents.cpp
   Minigin/InputManager.cpp
   Minigin/Main.cpp
   Minigin/Minigin.cpp
@@ -55,9 +57,11 @@ if(NOT glm_FOUND)
     FetchContent_MakeAvailable(glm)
 endif()
 
-# Add SDL3
-find_package(SDL3 3.4 CONFIG QUIET)
-if(NOT SDL3_FOUND)
+if (NOT WIN32)
+    find_package(SDL3 3.4 CONFIG QUIET)
+    find_package(SDL3_ttf 3.2.2 CONFIG QUIET)
+else()
+    # Add SDL3
     if (WIN32)
         FetchContent_Declare(
       SDL3
@@ -78,11 +82,8 @@ if(NOT SDL3_FOUND)
     )
         FetchContent_MakeAvailable(SDL3)
     endif()
-endif()
 
-# Add SDL3_ttf
-find_package(SDL3_ttf 3.2.2 CONFIG QUIET)
-if(NOT SDL3_ttf_FOUND)
+    # Add SDL3_ttf
     if (WIN32)
         FetchContent_Declare(
       SDL3_ttf
@@ -133,10 +134,10 @@ add_library(imgui STATIC
   ${imgui_SOURCE_DIR}/backends/imgui_impl_sdlrenderer3.cpp
 )
 
-target_include_directories(imgui PUBLIC ${imgui_SOURCE_DIR})
-target_link_libraries(imgui PUBLIC SDL3::SDL3)
 # enable c++20 features
 target_compile_features(imgui PUBLIC cxx_std_20)
+target_include_directories(imgui PUBLIC ${imgui_SOURCE_DIR})
+target_link_libraries(imgui PUBLIC SDL3::SDL3)
 
 if (WIN32)
     # Add VLD (Visual Leak Detector) for memory leak detection on Windows
@@ -160,6 +161,12 @@ target_link_libraries("${TARGET_NAME}" PUBLIC
   imgui
   ${VLD_LIBRARIES}
 )
+
+if (WIN32)
+target_link_libraries("${TARGET_NAME}" PUBLIC
+    xinput
+)
+endif()
 
 if(MSVC)
     # compile at warning level 4 + treat warnings as errors

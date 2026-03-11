@@ -30,7 +30,7 @@ void dae::GameObject::Render() const
 
 int dae::GameObject::GetChildCount() const
 {
-	return m_Children.size();
+	return static_cast<int>( m_Children.size() );
 }
 
 dae::GameObject* dae::GameObject::GetChildAt( int index )
@@ -72,6 +72,6 @@ void dae::GameObject::RemoveChild( GameObject* pChild )
 	}
 
 	auto child{ std::find( m_Children.begin(), m_Children.end(), pChild ) };
-	( *child.base() )->m_pParent = nullptr;
+	( *child )->m_pParent = nullptr;
 	m_Children.erase( child );
 }
