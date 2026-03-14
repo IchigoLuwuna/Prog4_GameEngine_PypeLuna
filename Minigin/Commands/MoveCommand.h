@@ -1,25 +1,10 @@
-#ifndef COMMANDS_H
-#define COMMANDS_H
+#ifndef MOVECOMMAND_H
+#define MOVECOMMAND_H
 #include "Command.h"
-#include "Observer.h"
-#include <string>
 #include <glm/glm.hpp>
 
 namespace dae
 {
-class LogCommand : public Command // For testing purposes
-{
-public:
-	LogCommand( const std::string& string );
-	LogCommand( std::string&& string );
-	virtual ~LogCommand() = default;
-
-	virtual void Execute() override;
-
-private:
-	std::string m_Text{};
-};
-
 class TransformComponent;
 class MoveCommand : public Command
 {

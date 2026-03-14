@@ -20,7 +20,8 @@ endif()
 # list source files here
 add_executable(${TARGET_NAME} ${TARGET_PARAM}
   # Commands
-  Minigin/Commands/Commands.cpp
+  Minigin/Commands/LogCommand.cpp
+  Minigin/Commands/MoveCommand.cpp
 
   # Components
   Minigin/Components/FpsComponent.cpp

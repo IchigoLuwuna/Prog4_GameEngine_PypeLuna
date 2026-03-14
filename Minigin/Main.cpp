@@ -7,10 +7,10 @@
 #include "Minigin.h"
 #include "SceneManager.h"
 #include "ResourceManager.h"
-#include "Components/Components.h"
-#include "Commands/Commands.h"
-#include "Gamepad.h"
 #include "InputManager.h"
+#include "Commands/LogCommand.h"
+#include "Commands/MoveCommand.h"
+#include "Components/Components.h"
 
 #include <filesystem>
 namespace fs = std::filesystem;
