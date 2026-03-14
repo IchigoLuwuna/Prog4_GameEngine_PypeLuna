@@ -1,10 +1,5 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
-#include "Commands.h"
-#include "Gamepad.h"
-#include "ImGuiComponents.h"
-#include "InputManager.h"
-
 #if _DEBUG && __has_include( <vld.h>)
 #	include <vld.h>
 #endif
@@ -12,7 +7,10 @@
 #include "Minigin.h"
 #include "SceneManager.h"
 #include "ResourceManager.h"
-#include "Components.h"
+#include "Components/Components.h"
+#include "Commands/Commands.h"
+#include "Gamepad.h"
+#include "InputManager.h"
 
 #include <filesystem>
 namespace fs = std::filesystem;

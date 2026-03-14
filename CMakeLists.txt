@@ -19,26 +19,30 @@ endif()
 
 # list source files here
 add_executable(${TARGET_NAME} ${TARGET_PARAM}
-  Minigin/Commands.cpp
+  # Commands
+  Minigin/Commands/Commands.cpp
+
+  # Components
+  Minigin/Components/FpsComponent.cpp
+  Minigin/Components/ImGuiComponents.cpp
+  Minigin/Components/MovementComponents.cpp
+  Minigin/Components/TextComponent.cpp
+  Minigin/Components/TextureComponent.cpp
+  Minigin/Components/TransformComponent.cpp
+
   Minigin/Font.cpp
-  Minigin/FpsComponent.cpp
   Minigin/GameObject.cpp
   Minigin/Gamepad.cpp
-  Minigin/ImGuiComponents.cpp
   Minigin/InputManager.cpp
   Minigin/Main.cpp
   Minigin/Minigin.cpp
-  Minigin/MovementComponents.cpp
   Minigin/Observer.cpp
   Minigin/Renderer.cpp
   Minigin/ResourceManager.cpp
   Minigin/Scene.cpp
   Minigin/SceneManager.cpp
-  Minigin/TextComponent.cpp
   Minigin/Texture2D.cpp
-  Minigin/TextureComponent.cpp
   Minigin/Timer.cpp
-  Minigin/TransformComponent.cpp
   Minigin/imgui_plot.cpp
 )
 

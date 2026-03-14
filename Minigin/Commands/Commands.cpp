@@ -1,6 +1,6 @@
 #include "Commands.h"
 #include <iostream>
-#include "TransformComponent.h"
+#include "Components/TransformComponent.h"
 #include "Timer.h"
 
 dae::LogCommand::LogCommand( const std::string& string )

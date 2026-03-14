@@ -1,7 +1,7 @@
 #include <algorithm>
 #include "GameObject.h"
-#include "TransformComponent.h"
-#include "RenderComponent.h"
+#include "Components/TransformComponent.h"
+#include "Components/RenderComponent.h"
 
 dae::GameObject::GameObject()
 {
