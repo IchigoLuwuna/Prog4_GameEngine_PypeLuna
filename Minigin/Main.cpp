@@ -91,6 +91,10 @@ static void load()
 	dae::InputManager::GetInstance().BindCommand<dae::LogCommand>(
 		selectKey, dae::InputManager::KeyState::up, "Select Released" );
 
+	auto pTextTransform{ text->GetComponent<dae::TransformComponent>() };
+	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
+		SDL_SCANCODE_E, dae::InputManager::KeyState::held, pTextTransform, glm::vec2{ 0.f, 50.f } );
+
 	// Add to scene
 	scene.Add( std::move( background ) );
 	scene.Add( std::move( logo ) );
