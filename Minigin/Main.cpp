@@ -46,6 +46,8 @@ static void load()
 
 	// Create SceneGraph
 
+	// Register Observers To Subjects
+
 	// Create bindings
 	// Doto Sheep using keyboard
 	constexpr float moveSpeed{ 150.f };
