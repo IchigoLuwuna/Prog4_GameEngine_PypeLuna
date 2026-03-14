@@ -36,7 +36,6 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
         Minigin/Engine/Input/InputManager.cpp
     # Patterns
         Minigin/Engine/Patterns/GameObject.cpp
-        Minigin/Engine/Patterns/Observer.cpp
     # Rendering
         Minigin/Engine/Rendering/Renderer.cpp
         Minigin/Engine/Rendering/imgui_plot.cpp

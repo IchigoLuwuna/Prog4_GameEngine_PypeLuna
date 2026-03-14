@@ -8,13 +8,13 @@
 #include "Engine/Core/ResourceManager.h"
 #include "Engine/Scene/SceneManager.h"
 #include "Engine/Input/InputManager.h"
+#include "Engine/Components/TransformComponent.h"
+#include "Engine/Commands/LogCommand.h"
 
 #include "Components/FpsComponent.h"
 #include "Components/TextComponent.h"
 #include "Components/TextureComponent.h"
-#include "Engine/Components/TransformComponent.h"
 
-#include "Engine/Commands/LogCommand.h"
 #include "Commands/MoveCommand.h"
 
 #include <filesystem>
@@ -93,10 +93,6 @@ static void load()
 		startKey, dae::InputManager::KeyState::down, "Start Pressed" );
 	dae::InputManager::GetInstance().BindCommand<dae::LogCommand>(
 		selectKey, dae::InputManager::KeyState::up, "Select Released" );
-
-	auto pTextTransform{ text->GetComponent<dae::TransformComponent>() };
-	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
-		SDL_SCANCODE_E, dae::InputManager::KeyState::held, pTextTransform, glm::vec2{ 0.f, 50.f } );
 
 	// Add to scene
 	scene.Add( std::move( background ) );
