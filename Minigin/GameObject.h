@@ -4,6 +4,9 @@
 #include <vector>
 #include "Component.h"
 
+template <typename ComponentType, typename... Args>
+concept ComponentConstructable = requires( Args... args ) { ComponentType( nullptr, args... ); };
+
 namespace dae
 {
 class Texture2D;
@@ -28,9 +31,9 @@ public:
 		return m_pParent;
 	}
 
-	template <typename ComponentType, typename... Types>
-		requires std::derived_from<ComponentType, Component>
-	void AddComponent( const Types&... args )
+	template <typename ComponentType, typename... Args>
+		requires std::derived_from<ComponentType, Component> && ComponentConstructable<ComponentType, Args...>
+	void AddComponent( const Args&... args )
 	{
 		m_Components.push_back( std::make_unique<ComponentType>( this, args... ) );
 	}
