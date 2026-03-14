@@ -1,12 +1,12 @@
 #ifndef COMMANDS_H
 #define COMMANDS_H
 #include "Command.h"
+#include "Observer.h"
 #include <string>
 #include <glm/glm.hpp>
 
 namespace dae
 {
-class TransformComponent;
 class LogCommand : public Command // For testing purposes
 {
 public:
@@ -20,6 +20,7 @@ private:
 	std::string m_Text{};
 };
 
+class TransformComponent;
 class MoveCommand : public Command
 {
 public:
