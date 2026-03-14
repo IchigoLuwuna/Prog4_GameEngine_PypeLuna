@@ -23,7 +23,7 @@ public:
 	}
 	virtual ~Subject()
 	{
-		static const auto subjectDestructed{ std::hash<std::string>()( "subjectDestructed" ) };
+		static const auto subjectDestructed{ std::hash<std::string>()( "e_SubjectDestructed" ) };
 		NotifyObservers( subjectDestructed );
 	}
 
