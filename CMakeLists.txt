@@ -62,10 +62,8 @@ if(NOT glm_FOUND)
     FetchContent_MakeAvailable(glm)
 endif()
 
-if (NOT WIN32)
-    find_package(SDL3 3.4 CONFIG QUIET)
-    find_package(SDL3_ttf 3.2.2 CONFIG QUIET)
-else()
+find_package(SDL3 3.4 CONFIG QUIET)
+if (NOT SDL3_FOUND)
     # Add SDL3
     if (WIN32)
         FetchContent_Declare(
@@ -87,7 +85,10 @@ else()
     )
         FetchContent_MakeAvailable(SDL3)
     endif()
+endif()
 
+find_package(SDL3_ttf 3.2.2 CONFIG QUIET)
+if (NOT SDL3_ttf_FOUND)
     # Add SDL3_ttf
     if (WIN32)
         FetchContent_Declare(
