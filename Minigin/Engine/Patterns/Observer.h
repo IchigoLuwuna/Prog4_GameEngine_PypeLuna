@@ -13,9 +13,13 @@ public:
 };
 
 template <typename SubjectType>
-class Subject
+class Subject final
 {
 public:
+	Subject( SubjectType* pParent )
+		: m_pParent( pParent )
+	{
+	}
 	virtual ~Subject() = default;
 	void RegisterObserver( Observer<SubjectType>* pObserver )
 	{
@@ -26,11 +30,17 @@ public:
 		m_Observers.erase( std::ranges::find( m_Observers.begin(), m_Observers.end(), pObserver ) );
 	}
 
-protected:
-	void NotifyObservers( size_t eventHash );
+	void NotifyObservers( size_t eventHash )
+	{
+		for ( auto* observer : m_Observers )
+		{
+			observer->Notify( eventHash, reinterpret_cast<SubjectType*>( this ) );
+		}
+	}
 
 private:
 	std::vector<Observer<SubjectType>*> m_Observers{};
+	SubjectType* m_pParent{};
 };
 } // namespace dae
 #endif
