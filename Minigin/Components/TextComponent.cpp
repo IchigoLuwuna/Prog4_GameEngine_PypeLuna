@@ -1,9 +1,9 @@
 #include "TextComponent.h"
 #include <SDL3_ttf/SDL_ttf.h>
 #include <stdexcept>
-#include "Renderer.h"
-#include "TransformComponent.h"
-#include "GameObject.h"
+#include "Engine/Rendering/Renderer.h"
+#include "Engine/Components/TransformComponent.h"
+#include "Engine/Patterns/GameObject.h"
 
 dae::TextComponent::TextComponent( GameObject* pParent,
 								   const std::string& text,

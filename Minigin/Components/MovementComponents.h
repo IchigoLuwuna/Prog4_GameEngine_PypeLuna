@@ -1,7 +1,7 @@
 #ifndef MOVEMENTCOMPONENTS_H
 #define MOVEMENTCOMPONENTS_H
 #include <glm/glm.hpp>
-#include "Component.h"
+#include "Engine/Patterns/Component.h"
 // This header contains a collection of different generic and automatic movement behaviours
 namespace dae
 {

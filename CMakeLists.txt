@@ -19,9 +19,30 @@ endif()
 
 # list source files here
 add_executable(${TARGET_NAME} ${TARGET_PARAM}
-  # Commands
-  Minigin/Commands/LogCommand.cpp
-  Minigin/Commands/MoveCommand.cpp
+  # Engine
+    # Core
+        Minigin/Engine/Core/Minigin.cpp
+        Minigin/Engine/Core/ResourceManager.cpp
+    # Components
+        Minigin/Engine/Components/TransformComponent.cpp
+    # Commands
+        Minigin/Engine/Commands/LogCommand.cpp
+    # Helpers
+        Minigin/Engine/Helpers/Font.cpp
+        Minigin/Engine/Helpers/Texture2D.cpp
+        Minigin/Engine/Helpers/Timer.cpp
+    # Input
+        Minigin/Engine/Input/Gamepad.cpp
+        Minigin/Engine/Input/InputManager.cpp
+    # Patterns
+        Minigin/Engine/Patterns/GameObject.cpp
+        Minigin/Engine/Patterns/Observer.cpp
+    # Rendering
+        Minigin/Engine/Rendering/Renderer.cpp
+        Minigin/Engine/Rendering/imgui_plot.cpp
+    # Scene
+        Minigin/Engine/Scene/Scene.cpp
+        Minigin/Engine/Scene/SceneManager.cpp
 
   # Components
   Minigin/Components/FpsComponent.cpp
@@ -29,22 +50,11 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   Minigin/Components/MovementComponents.cpp
   Minigin/Components/TextComponent.cpp
   Minigin/Components/TextureComponent.cpp
-  Minigin/Components/TransformComponent.cpp
 
-  Minigin/Font.cpp
-  Minigin/GameObject.cpp
-  Minigin/Gamepad.cpp
-  Minigin/InputManager.cpp
+  # Commands
+  Minigin/Commands/MoveCommand.cpp
+
   Minigin/Main.cpp
-  Minigin/Minigin.cpp
-  Minigin/Observer.cpp
-  Minigin/Renderer.cpp
-  Minigin/ResourceManager.cpp
-  Minigin/Scene.cpp
-  Minigin/SceneManager.cpp
-  Minigin/Texture2D.cpp
-  Minigin/Timer.cpp
-  Minigin/imgui_plot.cpp
 )
 
 # enable c++20 features

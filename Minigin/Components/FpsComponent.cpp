@@ -1,7 +1,7 @@
 #include "FpsComponent.h"
-#include "GameObject.h"
+#include "Engine/Helpers/Timer.h"
+#include "Engine/Patterns/GameObject.h"
 #include "TextComponent.h"
-#include "Timer.h"
 
 void dae::FpsComponent::Update()
 {

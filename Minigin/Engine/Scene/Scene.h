@@ -2,7 +2,7 @@
 #include <memory>
 #include <string>
 #include <vector>
-#include "GameObject.h"
+#include "Engine/Patterns/GameObject.h"
 
 namespace dae
 {

@@ -1,6 +1,6 @@
 #ifndef LOGCOMMAND_H
 #define LOGCOMMAND_H
-#include "Command.h"
+#include "Engine/Patterns/Command.h"
 #include <string>
 
 namespace dae

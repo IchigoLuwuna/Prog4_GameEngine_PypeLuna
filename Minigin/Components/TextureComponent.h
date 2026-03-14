@@ -1,8 +1,8 @@
 #ifndef TEXTURECOMPONENT_H
 #define TEXTURECOMPONENT_H
 #include <memory>
-#include "RenderComponent.h"
-#include "Texture2D.h"
+#include "Engine/Patterns/RenderComponent.h"
+#include "Engine/Helpers/Texture2D.h"
 
 namespace dae
 {

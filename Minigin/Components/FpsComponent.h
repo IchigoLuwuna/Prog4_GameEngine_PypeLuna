@@ -1,6 +1,6 @@
 #ifndef FPSCOMPONENT_H
 #define FPSCOMPONENT_H
-#include "Component.h"
+#include "Engine/Patterns/Component.h"
 
 namespace dae
 {

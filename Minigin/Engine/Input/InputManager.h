@@ -5,8 +5,8 @@
 #include <memory>
 #include <array>
 #include "Gamepad.h"
-#include "Singleton.h"
-#include "Command.h"
+#include "Engine/Patterns/Singleton.h"
+#include "Engine/Patterns/Command.h"
 
 namespace dae
 {

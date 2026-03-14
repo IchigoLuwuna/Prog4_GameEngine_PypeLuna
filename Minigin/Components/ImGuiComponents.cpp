@@ -2,8 +2,8 @@
 #include <cmath>
 #include <numeric>
 #include <algorithm>
-#include "Timer.h"
-#include "imgui_plot.h"
+#include "Engine/Helpers/Timer.h"
+#include "Engine/Rendering/imgui_plot.h"
 
 void dae::ImGuiComponents::Exercise1Component::Update()
 {

@@ -1,6 +1,6 @@
 #ifndef MOVECOMMAND_H
 #define MOVECOMMAND_H
-#include "Command.h"
+#include "Engine/Patterns/Command.h"
 #include <glm/glm.hpp>
 
 namespace dae

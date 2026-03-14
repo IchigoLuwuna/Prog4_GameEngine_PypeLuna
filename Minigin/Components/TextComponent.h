@@ -3,9 +3,9 @@
 #include <memory>
 #include <string>
 #include <SDL3/SDL_pixels.h>
-#include "Font.h"
-#include "RenderComponent.h"
-#include "Texture2D.h"
+#include "Engine/Helpers/Font.h"
+#include "Engine/Helpers/Texture2D.h"
+#include "Engine/Patterns/RenderComponent.h"
 
 namespace dae
 {

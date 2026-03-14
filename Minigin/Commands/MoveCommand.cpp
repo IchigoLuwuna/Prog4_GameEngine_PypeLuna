@@ -1,6 +1,6 @@
 #include "MoveCommand.h"
-#include "Components/TransformComponent.h"
-#include "Timer.h"
+#include "Engine/Components/TransformComponent.h"
+#include "Engine/Helpers/Timer.h"
 
 dae::MoveCommand::MoveCommand( TransformComponent* pBoundTransform, const glm::vec2& movement )
 	: m_pBoundTransform( pBoundTransform )

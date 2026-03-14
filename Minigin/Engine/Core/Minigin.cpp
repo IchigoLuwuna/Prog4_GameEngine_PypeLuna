@@ -2,7 +2,7 @@
 #include <stdexcept>
 #include <iostream>
 #include <thread>
-#include "Timer.h"
+#include "Engine/Helpers/Timer.h"
 
 #if WIN32
 #	define WIN32_LEAN_AND_MEAN
@@ -13,9 +13,9 @@
 // #include <SDL3_image/SDL_image.h>
 #include <SDL3_ttf/SDL_ttf.h>
 #include "Minigin.h"
-#include "InputManager.h"
-#include "SceneManager.h"
-#include "Renderer.h"
+#include "Engine/Input/InputManager.h"
+#include "Engine/Scene/SceneManager.h"
+#include "Engine/Rendering/Renderer.h"
 #include "ResourceManager.h"
 
 SDL_Window* g_window{};

@@ -1,7 +1,7 @@
 #include "MovementComponents.h"
-#include "GameObject.h"
-#include "TransformComponent.h"
-#include "Timer.h"
+#include "Engine/Patterns/GameObject.h"
+#include "Engine/Helpers/Timer.h"
+#include "Engine/Components/TransformComponent.h"
 
 dae::SlideMovementComponent::SlideMovementComponent( GameObject* pParent, const glm::vec3& movement )
 	: Component( pParent )

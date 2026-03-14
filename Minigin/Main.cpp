@@ -4,13 +4,18 @@
 #	include <vld.h>
 #endif
 
-#include "Minigin.h"
-#include "SceneManager.h"
-#include "ResourceManager.h"
-#include "InputManager.h"
-#include "Commands/LogCommand.h"
+#include "Engine/Core/Minigin.h"
+#include "Engine/Core/ResourceManager.h"
+#include "Engine/Scene/SceneManager.h"
+#include "Engine/Input/InputManager.h"
+
+#include "Components/FpsComponent.h"
+#include "Components/TextComponent.h"
+#include "Components/TextureComponent.h"
+#include "Engine/Components/TransformComponent.h"
+
+#include "Engine/Commands/LogCommand.h"
 #include "Commands/MoveCommand.h"
-#include "Components/Components.h"
 
 #include <filesystem>
 namespace fs = std::filesystem;

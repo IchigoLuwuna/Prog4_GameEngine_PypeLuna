@@ -2,7 +2,7 @@
 #include <vector>
 #include <memory>
 #include "Scene.h"
-#include "Singleton.h"
+#include "Engine/Patterns/Singleton.h"
 
 namespace dae
 {
