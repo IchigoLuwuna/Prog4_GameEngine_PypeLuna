@@ -20,7 +20,7 @@ public:
 		: m_pParent( pParent )
 	{
 	}
-	virtual ~Subject() = default;
+	~Subject() = default;
 
 	void RegisterObserver( Observer<SubjectType>* pObserver )
 	{
