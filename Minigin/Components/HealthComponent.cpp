@@ -66,7 +66,7 @@ uint32_t dae::HealthComponent::GetMaxHealth() const
 }
 bool dae::HealthComponent::IsDead() const
 {
-	return m_Health != 0;
+	return m_Health == 0;
 }
 
 void dae::HealthComponent::RegisterObserver( Observer<HealthComponent>* pObserver )
