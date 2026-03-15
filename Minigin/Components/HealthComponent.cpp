@@ -1,8 +1,10 @@
 #include "HealthComponent.h"
+#include "Engine/Patterns/GameObject.h"
 #include <algorithm>
 #include <string>
 
 static const size_t healthChanged{ std::hash<std::string>()( "e_HealthChanged" ) };
+static const size_t entityDied{ std::hash<std::string>()( "e_EntityDied" ) };
 
 dae::HealthComponent::HealthComponent( GameObject* pGameObject, uint32_t health, uint32_t maxHealth )
 	: Component( pGameObject )
@@ -29,6 +31,11 @@ void dae::HealthComponent::Damage( uint32_t damage )
 					   static_cast<int32_t>( damage ) }; // signed to prevent underflows
 	m_Health = std::max( 0, newHealth );
 
+	if ( m_Health == 0 )
+	{
+		m_Subject.NotifyObservers( entityDied );
+		GetParent()->m_MarkedForRemoval = true;
+	}
 	m_Subject.NotifyObservers( healthChanged );
 }
 
