@@ -53,6 +53,7 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   Minigin/Components/TextureComponent.cpp
 
   # Commands
+  Minigin/Commands/DamageCommand.cpp
   Minigin/Commands/MoveCommand.cpp
 
   Minigin/Main.cpp
