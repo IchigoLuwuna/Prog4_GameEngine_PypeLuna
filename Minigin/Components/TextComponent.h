@@ -1,7 +1,6 @@
 #ifndef TEXTCOMPONENT_H
 #define TEXTCOMPONENT_H
 #include <memory>
-#include <string>
 #include <SDL3/SDL_pixels.h>
 #include "Engine/Helpers/Font.h"
 #include "Engine/Helpers/Texture2D.h"

@@ -45,6 +45,7 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
 
   # Components
   Minigin/Components/FpsComponent.cpp
+  Minigin/Components/HealthComponent.cpp
   Minigin/Components/ImGuiComponents.cpp
   Minigin/Components/MovementComponents.cpp
   Minigin/Components/TextComponent.cpp

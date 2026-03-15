@@ -12,6 +12,7 @@
 #include "Engine/Commands/LogCommand.h"
 
 #include "Components/FpsComponent.h"
+#include "Components/HealthComponent.h"
 #include "Components/TextComponent.h"
 #include "Components/TextureComponent.h"
 
@@ -29,11 +30,9 @@ static void load()
 	background->AddComponent<dae::TextureComponent>( "./background.png" );
 
 	auto logo{ std::make_unique<dae::GameObject>() };
-	logo->GetComponent<dae::TransformComponent>()->MoveTo( 358.f, 180.f );
 	logo->AddComponent<dae::TextureComponent>( "./logo.png" );
 
 	auto text{ std::make_unique<dae::GameObject>() };
-	text->GetComponent<dae::TransformComponent>()->MoveTo( 292.f, 20.f );
 	auto font{ dae::ResourceManager::GetInstance().LoadFont( "Lingua.otf", 36 ) };
 	text->AddComponent<dae::TextComponent>( "Programming 4 Assignment", font, SDL_Color{ 255, 255, 0, 255 } );
 
@@ -43,11 +42,20 @@ static void load()
 
 	auto dotoSheep{ std::make_unique<dae::GameObject>() };
 	dotoSheep->AddComponent<dae::TextureComponent>( "./doto-sheep.png" );
+	dotoSheep->AddComponent<dae::HealthComponent>( 3 );
 
 	auto operaBird{ std::make_unique<dae::GameObject>() };
 	operaBird->AddComponent<dae::TextureComponent>( "./opera-bird.png" );
+	operaBird->AddComponent<dae::HealthComponent>( 3 );
 
 	// Create SceneGraph
+
+	// Set Starting Positions
+	logo->GetComponent<dae::TransformComponent>()->MoveTo( 358.f, 180.f );
+	text->GetComponent<dae::TransformComponent>()->MoveTo( 292.f, 20.f );
+
+	dotoSheep->GetComponent<dae::TransformComponent>()->MoveTo( glm::vec2{ 150.f, 200.f } );
+	operaBird->GetComponent<dae::TransformComponent>()->MoveTo( glm::vec2{ 500.f, 200.f } );
 
 	// Register Observers To Subjects
 
