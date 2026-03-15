@@ -1,7 +1,6 @@
 #ifndef OBSERVER_H
 #define OBSERVER_H
 #include <vector>
-#include <string>
 
 namespace dae
 {
@@ -21,11 +20,7 @@ public:
 		: m_pParent( pParent )
 	{
 	}
-	virtual ~Subject()
-	{
-		static const auto subjectDestructed{ std::hash<std::string>()( "e_SubjectDestructed" ) };
-		NotifyObservers( subjectDestructed );
-	}
+	virtual ~Subject() = default;
 
 	void RegisterObserver( Observer<SubjectType>* pObserver )
 	{
