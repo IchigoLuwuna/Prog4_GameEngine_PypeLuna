@@ -8,13 +8,11 @@ class TextComponent;
 class FpsComponent : public Component
 {
 public:
-	FpsComponent( GameObject* pParent )
-		: Component( pParent )
-	{
-	}
+	FpsComponent( GameObject* pParent );
 	virtual ~FpsComponent() = default;
 
 	virtual void Update() override;
+	void UpdateText();
 
 private:
 	float m_Fps{};
