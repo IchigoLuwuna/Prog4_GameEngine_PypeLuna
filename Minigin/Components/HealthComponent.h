@@ -2,6 +2,7 @@
 #define HEALTHCOMPONENT_H
 #include <cstdint>
 #include "Engine/Patterns/Component.h"
+#include "Engine/Patterns/Observer.h"
 
 namespace dae
 {
@@ -24,9 +25,14 @@ public:
 	uint32_t GetMaxHealth() const;
 	bool IsDead() const;
 
+	void RegisterObserver( Observer<HealthComponent>* pObserver );
+	void RemoveObserver( Observer<HealthComponent>* pObserver );
+
 private:
 	uint32_t m_Health{};
 	uint32_t m_MaxHealth{};
+
+	Subject<HealthComponent> m_Subject;
 };
 } // namespace dae
 #endif
