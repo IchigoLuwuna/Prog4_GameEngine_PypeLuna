@@ -13,9 +13,11 @@
 
 #include "Components/FpsComponent.h"
 #include "Components/HealthComponent.h"
+#include "Components/HealthDisplayComponent.h"
 #include "Components/TextComponent.h"
 #include "Components/TextureComponent.h"
 
+#include "Commands/DamageCommand.h"
 #include "Commands/MoveCommand.h"
 
 #include <filesystem>
@@ -26,29 +28,54 @@ static void load()
 	auto& scene{ dae::SceneManager::GetInstance().CreateScene() };
 
 	// Initialize objects
+	// Base
 	auto background{ std::make_unique<dae::GameObject>() };
 	background->AddComponent<dae::TextureComponent>( "./background.png" );
-
 	auto logo{ std::make_unique<dae::GameObject>() };
 	logo->AddComponent<dae::TextureComponent>( "./logo.png" );
-
 	auto text{ std::make_unique<dae::GameObject>() };
-	auto font{ dae::ResourceManager::GetInstance().LoadFont( "Lingua.otf", 36 ) };
-	text->AddComponent<dae::TextComponent>( "Programming 4 Assignment", font, SDL_Color{ 255, 255, 0, 255 } );
-
+	auto bigFont{ dae::ResourceManager::GetInstance().LoadFont( "Lingua.otf", 36 ) };
+	text->AddComponent<dae::TextComponent>( "Programming 4 Assignment", bigFont, SDL_Color{ 255, 255, 0, 255 } );
 	auto fps{ std::make_unique<dae::GameObject>() };
-	fps->AddComponent<dae::TextComponent>( ".", font );
+	fps->AddComponent<dae::TextComponent>( ".", bigFont );
 	fps->AddComponent<dae::FpsComponent>();
+	//
 
+	// Player Characters
+	auto operaBird{ std::make_unique<dae::GameObject>() };
+	operaBird->AddComponent<dae::TextureComponent>( "./opera-bird.png" );
+	operaBird->AddComponent<dae::HealthComponent>( 3 );
 	auto dotoSheep{ std::make_unique<dae::GameObject>() };
 	dotoSheep->AddComponent<dae::TextureComponent>( "./doto-sheep.png" );
 	dotoSheep->AddComponent<dae::HealthComponent>( 3 );
 
-	auto operaBird{ std::make_unique<dae::GameObject>() };
-	operaBird->AddComponent<dae::TextureComponent>( "./opera-bird.png" );
-	operaBird->AddComponent<dae::HealthComponent>( 3 );
+	// Scoreboard
+	auto smallFont{ dae::ResourceManager::GetInstance().LoadFont( "Lingua.otf", 18 ) };
+
+	auto operaInfoText{ std::make_unique<dae::GameObject>() };
+	operaInfoText->AddComponent<dae::TextComponent>(
+		"Use the D-Pad to move TM Opera O (bird), X to inflict damage, A and B to pick up pellets",
+		smallFont,
+		SDL_Color{ 255, 255, 255, 255 } );
+	auto dotoInfoText{ std::make_unique<dae::GameObject>() };
+	dotoInfoText->AddComponent<dae::TextComponent>(
+		"Use WASD to move Meisho Doto (sheep), C to inflict damage, Z and X to pick up pellets ",
+		smallFont,
+		SDL_Color{ 255, 255, 255, 255 } );
+
+	auto operaHealthDisplay{ std::make_unique<dae::GameObject>() };
+	operaHealthDisplay->AddComponent<dae::TextComponent>( ".", smallFont, SDL_Color{ 255, 255, 255, 255 } );
+	operaHealthDisplay->AddComponent<dae::HealthDisplayComponent>( operaBird->GetComponent<dae::HealthComponent>() );
+
+	auto dotoHealthDisplay{ std::make_unique<dae::GameObject>() };
+	dotoHealthDisplay->AddComponent<dae::TextComponent>( ".", smallFont, SDL_Color{ 255, 255, 255, 255 } );
+	dotoHealthDisplay->AddComponent<dae::HealthDisplayComponent>( dotoSheep->GetComponent<dae::HealthComponent>() );
+	//
 
 	// Create SceneGraph
+	dotoInfoText->SetParent( operaInfoText.get() );
+	operaHealthDisplay->SetParent( operaInfoText.get() );
+	dotoHealthDisplay->SetParent( operaInfoText.get() );
 
 	// Set Starting Positions
 	logo->GetComponent<dae::TransformComponent>()->MoveTo( 358.f, 180.f );
@@ -56,6 +83,11 @@ static void load()
 
 	dotoSheep->GetComponent<dae::TransformComponent>()->MoveTo( glm::vec2{ 150.f, 200.f } );
 	operaBird->GetComponent<dae::TransformComponent>()->MoveTo( glm::vec2{ 500.f, 200.f } );
+
+	operaInfoText->GetComponent<dae::TransformComponent>()->MoveTo( glm::vec2{ 10.f, 100.f } );
+	dotoInfoText->GetComponent<dae::TransformComponent>()->MoveTo( glm::vec2{ 0.f, 24.f } );
+	operaHealthDisplay->GetComponent<dae::TransformComponent>()->MoveTo( glm::vec2{ 0.f, 64.f } );
+	dotoHealthDisplay->GetComponent<dae::TransformComponent>()->MoveTo( glm::vec2{ 0.f, 88.f } );
 
 	// Register Observers To Subjects
 
@@ -71,6 +103,8 @@ static void load()
 		SDL_SCANCODE_A, dae::InputManager::KeyState::held, pDotoSheepTransform, glm::vec2{ -moveSpeed, 0.f } );
 	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
 		SDL_SCANCODE_D, dae::InputManager::KeyState::held, pDotoSheepTransform, glm::vec2{ moveSpeed, 0.f } );
+	dae::InputManager::GetInstance().BindCommand<dae::DamageCommand>(
+		SDL_SCANCODE_C, dae::InputManager::KeyState::down, dotoSheep->GetComponent<dae::HealthComponent>(), 1 );
 	//
 
 	// Opera Bird using controller
@@ -78,6 +112,7 @@ static void load()
 	const auto dDownKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::down ) };
 	const auto dLeftKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::left ) };
 	const auto dRightKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::right ) };
+	const auto northKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::north ) };
 	auto pOperaBirdTransform{ operaBird->GetComponent<dae::TransformComponent>() };
 	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
 		dUpKey, dae::InputManager::KeyState::held, pOperaBirdTransform, glm::vec2{ 0.f, -moveSpeed * 2.f } );
@@ -87,20 +122,9 @@ static void load()
 		dLeftKey, dae::InputManager::KeyState::held, pOperaBirdTransform, glm::vec2{ -moveSpeed * 2.f, 0.f } );
 	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
 		dRightKey, dae::InputManager::KeyState::held, pOperaBirdTransform, glm::vec2{ moveSpeed * 2.f, 0.f } );
+	dae::InputManager::GetInstance().BindCommand<dae::DamageCommand>(
+		northKey, dae::InputManager::KeyState::down, operaBird->GetComponent<dae::HealthComponent>(), 1 );
 	//
-
-	// Test/Showcase down/up bindings
-	dae::InputManager::GetInstance().BindCommand<dae::LogCommand>(
-		SDL_SCANCODE_RETURN, dae::InputManager::KeyState::down, "Enter Pressed" );
-	dae::InputManager::GetInstance().BindCommand<dae::LogCommand>(
-		SDL_SCANCODE_BACKSPACE, dae::InputManager::KeyState::up, "Backspace Released" );
-
-	const auto startKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::start ) };
-	const auto selectKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::select ) };
-	dae::InputManager::GetInstance().BindCommand<dae::LogCommand>(
-		startKey, dae::InputManager::KeyState::down, "Start Pressed" );
-	dae::InputManager::GetInstance().BindCommand<dae::LogCommand>(
-		selectKey, dae::InputManager::KeyState::up, "Select Released" );
 
 	// Add to scene
 	scene.Add( std::move( background ) );
@@ -108,6 +132,10 @@ static void load()
 	scene.Add( std::move( text ) );
 	scene.Add( std::move( dotoSheep ) );
 	scene.Add( std::move( operaBird ) );
+	scene.Add( std::move( operaInfoText ) );
+	scene.Add( std::move( dotoInfoText ) );
+	scene.Add( std::move( operaHealthDisplay ) );
+	scene.Add( std::move( dotoHealthDisplay ) );
 	scene.Add( std::move( fps ) );
 }
 
