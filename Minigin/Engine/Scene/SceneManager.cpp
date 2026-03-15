@@ -1,9 +1,15 @@
 #include "SceneManager.h"
 #include "Scene.h"
 
+dae::Scene& dae::SceneManager::CreateScene()
+{
+	m_Scenes.emplace_back( std::make_unique<Scene>() );
+	return *m_Scenes.back();
+}
+
 void dae::SceneManager::Update()
 {
-	for ( auto& scene : m_scenes )
+	for ( auto& scene : m_Scenes )
 	{
 		scene->Update();
 	}
@@ -11,14 +17,16 @@ void dae::SceneManager::Update()
 
 void dae::SceneManager::Render()
 {
-	for ( const auto& scene : m_scenes )
+	for ( const auto& scene : m_Scenes )
 	{
 		scene->Render();
 	}
 }
 
-dae::Scene& dae::SceneManager::CreateScene()
+void dae::SceneManager::CleanUpRemovableObjects()
 {
-	m_scenes.emplace_back( new Scene() );
-	return *m_scenes.back();
+	for ( auto& scene : m_Scenes )
+	{
+		scene->CleanUpRemovableObjects();
+	}
 }

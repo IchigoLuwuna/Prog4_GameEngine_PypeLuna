@@ -2,7 +2,6 @@
 #include <stdexcept>
 #include <iostream>
 #include <thread>
-#include "Engine/Helpers/Timer.h"
 
 #if WIN32
 #	define WIN32_LEAN_AND_MEAN
@@ -16,9 +15,10 @@
 #include "Engine/Input/InputManager.h"
 #include "Engine/Scene/SceneManager.h"
 #include "Engine/Rendering/Renderer.h"
+#include "Engine/Helpers/Timer.h"
 #include "ResourceManager.h"
 
-SDL_Window* g_window{};
+SDL_Window* g_Window{};
 
 void LogSDLVersion( const std::string& message, int major, int minor, int patch )
 {
@@ -80,21 +80,21 @@ dae::Minigin::Minigin( const std::filesystem::path& dataPath )
 		throw std::runtime_error( std::string( "SDL_Init Error: " ) + SDL_GetError() );
 	}
 
-	g_window = SDL_CreateWindow( "Programming 4 assignment", 1024, 576, SDL_WINDOW_OPENGL );
-	if ( g_window == nullptr )
+	g_Window = SDL_CreateWindow( "Programming 4 assignment", 1024, 576, SDL_WINDOW_OPENGL );
+	if ( g_Window == nullptr )
 	{
 		throw std::runtime_error( std::string( "SDL_CreateWindow Error: " ) + SDL_GetError() );
 	}
 
-	Renderer::GetInstance().Init( g_window );
+	Renderer::GetInstance().Init( g_Window );
 	ResourceManager::GetInstance().Init( dataPath );
 }
 
 dae::Minigin::~Minigin()
 {
 	Renderer::GetInstance().Destroy();
-	SDL_DestroyWindow( g_window );
-	g_window = nullptr;
+	SDL_DestroyWindow( g_Window );
+	g_Window = nullptr;
 	SDL_Quit();
 }
 
@@ -124,4 +124,5 @@ void dae::Minigin::RunOneFrame()
 	m_Quit = !InputManager::GetInstance().ProcessInput();
 	SceneManager::GetInstance().Update();
 	Renderer::GetInstance().Render();
+	SceneManager::GetInstance().CleanUpRemovableObjects();
 }

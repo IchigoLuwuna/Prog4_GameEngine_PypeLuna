@@ -3,6 +3,7 @@
 #include <memory>
 #include <vector>
 #include "Component.h"
+#include "Engine/Patterns/Observer.h"
 
 template <typename ComponentType, typename... Args>
 concept ComponentConstructable = requires( Args... args ) { ComponentType( nullptr, args... ); };
@@ -10,6 +11,7 @@ concept ComponentConstructable = requires( Args... args ) { ComponentType( nullp
 namespace dae
 {
 class Texture2D;
+class Component;
 class GameObject final
 {
 public:
@@ -52,6 +54,8 @@ public:
 
 		return nullptr;
 	}
+
+	bool m_MarkedForRemoval{}; // Trivial get/set
 
 private:
 	GameObject* m_pParent{};

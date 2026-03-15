@@ -2,39 +2,52 @@
 #include <cassert>
 #include "Scene.h"
 
-using namespace dae;
-
-void Scene::Add( std::unique_ptr<GameObject> object )
+void dae::Scene::Add( std::unique_ptr<GameObject> object )
 {
-	assert( object != nullptr && "Cannot add a null GameObject to the scene." );
-	m_objects.emplace_back( std::move( object ) );
+	assert( object && "Cannot add a null GameObject to the scene." );
+	m_Objects.emplace_back( std::move( object ) );
 }
 
-void Scene::Remove( const GameObject& object )
+void dae::Scene::Remove( const GameObject& object )
 {
-	m_objects.erase( std::remove_if( m_objects.begin(),
-									 m_objects.end(),
+	m_Objects.erase( std::remove_if( m_Objects.begin(),
+									 m_Objects.end(),
 									 [&object]( const auto& ptr ) { return ptr.get() == &object; } ),
-					 m_objects.end() );
+					 m_Objects.end() );
 }
 
-void Scene::RemoveAll()
+void dae::Scene::RemoveAll()
 {
-	m_objects.clear();
+	m_Objects.clear();
 }
 
-void Scene::Update()
+void dae::Scene::Update()
 {
-	for ( auto& object : m_objects )
+	for ( auto& object : m_Objects )
 	{
 		object->Update();
 	}
 }
 
-void Scene::Render() const
+void dae::Scene::Render() const
 {
-	for ( const auto& object : m_objects )
+	for ( const auto& object : m_Objects )
 	{
 		object->Render();
+	}
+}
+
+void dae::Scene::CleanUpRemovableObjects()
+{
+	for ( size_t index{}; index < m_Objects.size(); ++index )
+	{
+		auto& object{ m_Objects[index] };
+		if ( object->m_MarkedForRemoval )
+		{
+			object.reset();
+			std::swap( object, m_Objects.back() );
+			m_Objects.pop_back();
+			--index;
+		}
 	}
 }

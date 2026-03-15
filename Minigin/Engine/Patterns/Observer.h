@@ -40,7 +40,7 @@ public:
 	{
 		for ( auto* observer : m_Observers )
 		{
-			observer->Notify( eventHash, reinterpret_cast<SubjectType*>( this ) );
+			observer->Notify( eventHash, reinterpret_cast<SubjectType*>( m_pParent ) );
 		}
 	}
 

@@ -1,6 +1,5 @@
 #pragma once
 #include <memory>
-#include <string>
 #include <vector>
 #include "Engine/Patterns/GameObject.h"
 
@@ -9,12 +8,16 @@ namespace dae
 class Scene final
 {
 public:
+	Scene() = default;
+
 	void Add( std::unique_ptr<GameObject> object );
 	void Remove( const GameObject& object );
 	void RemoveAll();
 
 	void Update();
 	void Render() const;
+
+	void CleanUpRemovableObjects();
 
 	~Scene() = default;
 	Scene( const Scene& other ) = delete;
@@ -23,10 +26,7 @@ public:
 	Scene& operator=( Scene&& other ) = delete;
 
 private:
-	friend class SceneManager;
-	explicit Scene() = default;
-
-	std::vector<std::unique_ptr<GameObject>> m_objects{};
+	std::vector<std::unique_ptr<GameObject>> m_Objects{};
 };
 
 } // namespace dae

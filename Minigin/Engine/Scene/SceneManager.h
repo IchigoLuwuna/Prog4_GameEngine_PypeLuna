@@ -14,10 +14,11 @@ public:
 
 	void Update();
 	void Render();
+	void CleanUpRemovableObjects();
 
 private:
 	friend class Singleton<SceneManager>;
 	SceneManager() = default;
-	std::vector<std::unique_ptr<Scene>> m_scenes{};
+	std::vector<std::unique_ptr<Scene>> m_Scenes{};
 };
 } // namespace dae

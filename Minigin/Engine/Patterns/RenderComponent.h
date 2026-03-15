@@ -1,6 +1,6 @@
 #ifndef RENDERCOMPONENT_H
 #define RENDERCOMPONENT_H
-#include "Engine/Patterns/Component.h"
+#include "Component.h"
 
 namespace dae
 {
