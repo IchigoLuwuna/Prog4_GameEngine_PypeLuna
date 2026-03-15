@@ -4,6 +4,7 @@
 
 namespace dae
 {
+class TextComponent;
 class FpsComponent : public Component
 {
 public:
@@ -18,6 +19,7 @@ public:
 private:
 	float m_Fps{};
 	float m_LastUpdate{};
+	TextComponent* m_pTextComponent{};
 };
 } // namespace dae
 #endif

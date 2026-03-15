@@ -5,6 +5,12 @@
 
 void dae::FpsComponent::Update()
 {
+	if ( !m_pTextComponent )
+	{
+		m_pTextComponent = GetParent()->GetComponent<dae::TextComponent>();
+		assert( m_pTextComponent && "FpsComponent requires parent to have a text component" );
+	}
+
 	constexpr float updateInterval{ 0.5f };
 	const float totalElapsed{ Timer::GetInstance().GetTotalElapsed() };
 	if ( totalElapsed > m_LastUpdate + updateInterval )
@@ -14,6 +20,6 @@ void dae::FpsComponent::Update()
 
 		const std::string fpsDisplayString{ std::format( "{:.1f} FPS", m_Fps ) };
 
-		GetParent()->GetComponent<TextComponent>()->SetText( fpsDisplayString );
+		m_pTextComponent->SetText( fpsDisplayString );
 	}
 }
