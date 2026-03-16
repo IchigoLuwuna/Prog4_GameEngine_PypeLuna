@@ -79,9 +79,20 @@ void dae::GameObject::RemoveChild( GameObject* pChild )
 		return;
 	}
 
-	auto child{ std::find( m_Children.begin(), m_Children.end(), pChild ) };
-	( *child )->m_pParent = nullptr;
-	m_Children.erase( child );
+	for ( int index{}; index < static_cast<int>( m_Children.size() ); ++index )
+	{
+		auto child{ m_Children[index] };
+		if ( child != pChild )
+		{
+			continue;
+		}
+
+		child->m_pParent = nullptr;
+		child = nullptr;
+		std::swap( m_Children[index], m_Children.back() );
+		m_Children.pop_back();
+		--index;
+	}
 }
 
 void dae::GameObject::MarkForRemoval()
