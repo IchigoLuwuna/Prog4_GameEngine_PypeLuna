@@ -8,8 +8,14 @@
 #	include <windows.h>
 #endif
 
+#if USE_STEAMWORKS
+// #	pragma warning( push )
+// #	pragma warning( disable : 4996 )
+#	include <steam_api.h>
+// #	pragma warning( pop )
+#endif
+
 #include <SDL3/SDL.h>
-// #include <SDL3_image/SDL_image.h>
 #include <SDL3_ttf/SDL_ttf.h>
 #include "Minigin.h"
 #include "Engine/Input/InputManager.h"
@@ -88,10 +94,21 @@ dae::Minigin::Minigin( const std::filesystem::path& dataPath )
 
 	Renderer::GetInstance().Init( g_Window );
 	ResourceManager::GetInstance().Init( dataPath );
+
+#if USE_STEAMWORKS
+	if ( !SteamAPI_Init() )
+	{
+		throw std::runtime_error( "Fatal Error - Steam must be running to play this Game (SteamAPI_init failed)" );
+	}
+#endif
 }
 
 dae::Minigin::~Minigin()
 {
+#if USE_STEAMWORKS
+	SteamAPI_Shutdown();
+#endif
+
 	Renderer::GetInstance().Destroy();
 	SDL_DestroyWindow( g_Window );
 	g_Window = nullptr;
@@ -122,6 +139,9 @@ void dae::Minigin::Run( const std::function<void()>& load )
 void dae::Minigin::RunOneFrame()
 {
 	m_Quit = !InputManager::GetInstance().ProcessInput();
+#if USE_STEAMWORKS
+	SteamAPI_RunCallbacks();
+#endif
 	SceneManager::GetInstance().Update();
 	Renderer::GetInstance().Render();
 	SceneManager::GetInstance().CleanUpRemovableObjects();
