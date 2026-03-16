@@ -1,10 +1,9 @@
 #include "HealthDisplayComponent.h"
 #include "Components/TextComponent.h"
+#include "Engine/Helpers/SdbmHash.h"
 #include "Engine/Patterns/GameObject.h"
 #include <cassert>
 #include <format>
-
-static const size_t healthChanged{ std::hash<std::string>()( "e_HealthChanged" ) };
 
 dae::HealthDisplayComponent::HealthDisplayComponent( GameObject* pParent, HealthComponent* pHealth )
 	: Component( pParent )
@@ -22,12 +21,16 @@ dae::HealthDisplayComponent::HealthDisplayComponent( GameObject* pParent, Health
 
 void dae::HealthDisplayComponent::Notify( size_t eventHash, HealthComponent* pHealth )
 {
-	if ( eventHash != healthChanged )
+	switch ( eventHash )
 	{
+	case Hash( "e_HealthChanged" ): {
+		UpdateText( pHealth );
 		return;
 	}
-
-	UpdateText( pHealth );
+	default: {
+		return;
+	}
+	}
 }
 
 void dae::HealthDisplayComponent::UpdateText( HealthComponent* pHealth )

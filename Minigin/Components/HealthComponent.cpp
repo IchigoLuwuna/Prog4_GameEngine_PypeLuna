@@ -1,10 +1,7 @@
 #include "HealthComponent.h"
+#include "Engine/Helpers/SdbmHash.h"
 #include "Engine/Patterns/GameObject.h"
 #include <algorithm>
-#include <string>
-
-static const size_t healthChanged{ std::hash<std::string>()( "e_HealthChanged" ) };
-static const size_t entityDied{ std::hash<std::string>()( "e_EntityDied" ) };
 
 dae::HealthComponent::HealthComponent( GameObject* pGameObject, uint32_t health, uint32_t maxHealth )
 	: Component( pGameObject )
@@ -23,7 +20,7 @@ void dae::HealthComponent::Heal( uint32_t healing )
 	uint32_t newHealth{ m_Health + healing };
 	m_Health = std::min( newHealth, m_MaxHealth );
 
-	m_Subject.NotifyObservers( healthChanged );
+	m_Subject.NotifyObservers( Hash( "e_HealthChanged" ) );
 }
 void dae::HealthComponent::Damage( uint32_t damage )
 {
@@ -33,10 +30,10 @@ void dae::HealthComponent::Damage( uint32_t damage )
 
 	if ( m_Health == 0 )
 	{
-		m_Subject.NotifyObservers( entityDied );
-		GetParent()->m_MarkedForRemoval = true;
+		m_Subject.NotifyObservers( Hash( "e_EntityDied" ) );
+		GetParent()->MarkForRemoval();
 	}
-	m_Subject.NotifyObservers( healthChanged );
+	m_Subject.NotifyObservers( Hash( "e_HealthChanged" ) );
 }
 
 void dae::HealthComponent::IncreaseMax( uint32_t increase )
@@ -44,7 +41,7 @@ void dae::HealthComponent::IncreaseMax( uint32_t increase )
 	m_MaxHealth += increase;
 	m_Health += increase;
 
-	m_Subject.NotifyObservers( healthChanged );
+	m_Subject.NotifyObservers( Hash( "e_HealthChanged" ) );
 }
 void dae::HealthComponent::DecreaseMax( uint32_t decrease )
 {
@@ -53,7 +50,7 @@ void dae::HealthComponent::DecreaseMax( uint32_t decrease )
 	m_MaxHealth = std::max( 1, newMax );
 	m_Health = std::min( m_Health, m_MaxHealth );
 
-	m_Subject.NotifyObservers( healthChanged );
+	m_Subject.NotifyObservers( Hash( "e_HealthChanged" ) );
 }
 
 uint32_t dae::HealthComponent::GetHealth() const
