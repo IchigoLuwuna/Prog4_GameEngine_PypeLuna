@@ -39,15 +39,8 @@ void dae::Scene::Render() const
 
 void dae::Scene::CleanUpRemovableObjects()
 {
-	for ( size_t index{}; index < m_Objects.size(); ++index )
-	{
-		auto& object{ m_Objects[index] };
-		if ( object->m_MarkedForRemoval )
-		{
-			object.reset();
-			std::swap( object, m_Objects.back() );
-			m_Objects.pop_back();
-			--index;
-		}
-	}
+	m_Objects.erase( std::remove_if( m_Objects.begin(),
+									 m_Objects.end(),
+									 []( auto& object ) { return object->IsMarkedForRemoval(); } ),
+					 m_Objects.end() );
 }
