@@ -3,10 +3,6 @@
 #include <memory>
 #include <vector>
 #include "Component.h"
-#include "Engine/Patterns/Observer.h"
-
-template <typename ComponentType, typename... Args>
-concept ComponentConstructable = requires( Args... args ) { ComponentType( nullptr, args... ); };
 
 namespace dae
 {
@@ -34,7 +30,8 @@ public:
 	}
 
 	template <typename ComponentType, typename... Args>
-		requires std::derived_from<ComponentType, Component> && ComponentConstructable<ComponentType, Args...>
+		requires std::derived_from<ComponentType, Component> &&
+				 requires( Args... args ) { ComponentType( nullptr, args... ); }
 	void AddComponent( const Args&... args )
 	{
 		m_Components.push_back( std::make_unique<ComponentType>( this, args... ) );

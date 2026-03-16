@@ -24,9 +24,9 @@ public:
 
 	bool ProcessInput();
 
-	template <typename CommandType, typename... Types>
-		requires std::derived_from<CommandType, Command>
-	void BindCommand( int key, KeyState state, const Types&... args )
+	template <typename CommandType, typename... Args>
+		requires std::derived_from<CommandType, Command> && requires( Args... args ) { CommandType( args... ); }
+	void BindCommand( int key, KeyState state, const Args&... args )
 	{
 		m_CommandBindings[key][static_cast<int>( state )] = std::make_unique<CommandType>( args... );
 	}
@@ -35,7 +35,6 @@ public:
 private:
 	std::bitset<SDL_SCANCODE_COUNT> m_KeyStates{};
 	std::bitset<SDL_SCANCODE_COUNT> m_PreviousKeyStates{};
-	// std::unordered_map<int, std::unique_ptr<Command>> m_CommandBindings{};
 	std::array<std::array<std::unique_ptr<Command>, KeyStateCount>, SDL_SCANCODE_COUNT> m_CommandBindings{};
 	Gamepad m_Gamepad{};
 
