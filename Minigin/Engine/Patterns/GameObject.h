@@ -12,7 +12,7 @@ class GameObject final
 {
 public:
 	GameObject();
-	~GameObject() = default;
+	~GameObject();
 	GameObject( const GameObject& other ) = delete;
 	GameObject( GameObject&& other ) = default;
 	GameObject& operator=( const GameObject& other ) = delete;
@@ -52,13 +52,16 @@ public:
 		return nullptr;
 	}
 
-	bool m_MarkedForRemoval{}; // Trivial get/set
+	void MarkForRemoval();
+	bool IsMarkedForRemoval() const;
 
 private:
 	GameObject* m_pParent{};
 	std::vector<GameObject*> m_Children{};
 
 	std::vector<std::unique_ptr<Component>> m_Components{};
+
+	bool m_MarkedForRemoval{};
 
 	void AddChild( GameObject* pChild );
 	void RemoveChild( GameObject* pChild );

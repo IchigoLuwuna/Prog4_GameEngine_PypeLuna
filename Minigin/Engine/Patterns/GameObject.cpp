@@ -8,6 +8,14 @@ dae::GameObject::GameObject()
 	AddComponent<TransformComponent>(); // All GameObjects require a transform
 }
 
+dae::GameObject::~GameObject()
+{
+	if ( m_pParent )
+	{
+		m_pParent->RemoveChild( this );
+	}
+}
+
 void dae::GameObject::Update()
 {
 	for ( auto& upComponent : m_Components )
@@ -74,4 +82,18 @@ void dae::GameObject::RemoveChild( GameObject* pChild )
 	auto child{ std::find( m_Children.begin(), m_Children.end(), pChild ) };
 	( *child )->m_pParent = nullptr;
 	m_Children.erase( child );
+}
+
+void dae::GameObject::MarkForRemoval()
+{
+	m_MarkedForRemoval = true;
+	for ( auto* child : m_Children ) // Recurse down scene graph
+	{
+		child->MarkForRemoval();
+	}
+}
+
+bool dae::GameObject::IsMarkedForRemoval() const
+{
+	return m_MarkedForRemoval;
 }
