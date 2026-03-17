@@ -9,8 +9,10 @@
 #include "Engine/Scene/SceneManager.h"
 #include "Engine/Input/InputManager.h"
 #include "Engine/Components/TransformComponent.h"
-#include "Engine/Commands/LogCommand.h"
 
+#ifndef NDEBUG
+#	include "Engine/Components/DebugComponent.h"
+#endif
 #include "Components/FpsComponent.h"
 #include "Components/HealthComponent.h"
 #include "Components/HealthDisplayComponent.h"
@@ -125,6 +127,21 @@ static void load()
 	dae::InputManager::GetInstance().BindCommand<dae::DamageCommand>(
 		northKey, dae::InputManager::KeyState::down, operaBird->GetComponent<dae::HealthComponent>(), 1 );
 	//
+
+#ifndef NDEBUG
+	//  Attach names to objects when debugging
+	background->AddComponent<dae::DebugComponent>( "background" );
+	logo->AddComponent<dae::DebugComponent>( "logo" );
+	text->AddComponent<dae::DebugComponent>( "text" );
+	dotoSheep->AddComponent<dae::DebugComponent>( "dotoSheep" );
+	operaBird->AddComponent<dae::DebugComponent>( "operaBird" );
+	operaInfoText->AddComponent<dae::DebugComponent>( "operaInfoText" );
+	dotoInfoText->AddComponent<dae::DebugComponent>( "dotoInfoText" );
+	operaHealthDisplay->AddComponent<dae::DebugComponent>( "operaHealthDisplay" );
+	dotoHealthDisplay->AddComponent<dae::DebugComponent>( "dotoHealthDisplay" );
+	fps->AddComponent<dae::DebugComponent>( "fps" );
+//
+#endif
 
 	// Add to scene
 	scene.Add( std::move( background ) );
