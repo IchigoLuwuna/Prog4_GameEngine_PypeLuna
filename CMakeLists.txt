@@ -22,6 +22,7 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   # Engine
     # Core
         Minigin/Engine/Core/Minigin.cpp
+        Minigin/Engine/Core/EventManager.cpp
         Minigin/Engine/Core/ResourceManager.cpp
     # Components
         Minigin/Engine/Components/TransformComponent.cpp
@@ -29,6 +30,7 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
         Minigin/Engine/Commands/LogCommand.cpp
     # Helpers
         Minigin/Engine/Helpers/Font.cpp
+        Minigin/Engine/Helpers/Listener.cpp
         Minigin/Engine/Helpers/Texture2D.cpp
         Minigin/Engine/Helpers/Timer.cpp
     # Input
