@@ -201,6 +201,11 @@ int main( int, char*[] )
 	if ( !fs::exists( data_location ) )
 		data_location = "../Data/";
 #endif
+
+#ifndef NDEBUG
+	std::cout << "Game is running in debug mode, extra info will be displayed in the console\n";
+#endif
+
 	dae::Minigin engine( data_location );
 	engine.Run( load );
 	return 0;

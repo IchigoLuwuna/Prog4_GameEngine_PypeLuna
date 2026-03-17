@@ -7,7 +7,10 @@
 #	include <windows.h>
 #	include <XInput.h>
 #endif
-#include <iostream>
+
+#ifndef NDEBUG
+#	include <iostream>
+#endif
 
 class dae::Gamepad::GamepadImpl
 {
@@ -115,7 +118,9 @@ void dae::Gamepad::GamepadImpl::AddGamepad()
 	}
 	if ( !SDL_HasGamepad() )
 	{
+#	ifndef NDEBUG
 		std::cout << "No gamepad detected\n";
+#	endif
 		return;
 	}
 	int gamepadCount{};
@@ -124,7 +129,9 @@ void dae::Gamepad::GamepadImpl::AddGamepad()
 	// We just want Player 1
 	m_pGamepad = SDL_OpenGamepad( gamepads[0] );
 
+#	ifndef NDEBUG
 	std::cout << "Connected with Gamepad: " << SDL_GetGamepadName( m_pGamepad ) << "\n";
+#	endif
 #endif
 }
 
@@ -135,7 +142,9 @@ void dae::Gamepad::RemoveGamepad()
 void dae::Gamepad::GamepadImpl::RemoveGamepad()
 {
 #ifndef _WIN32
+#	ifndef NDEBUG
 	std::cout << "Removed Gamepad: " << SDL_GetGamepadName( m_pGamepad ) << "\n";
+#	endif
 	SDL_CloseGamepad( m_pGamepad );
 	m_pGamepad = nullptr;
 #endif
