@@ -25,6 +25,8 @@ public:
 	{
 	}
 
+	virtual ~TransformComponent() = default;
+
 	virtual void Update() override
 	{
 	}
