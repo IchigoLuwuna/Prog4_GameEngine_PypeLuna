@@ -28,12 +28,12 @@ void dae::HealthComponent::Damage( uint32_t damage )
 					   static_cast<int32_t>( damage ) }; // signed to prevent underflows
 	m_Health = std::max( 0, newHealth );
 
+	m_Subject.NotifyObservers( Hash( "e_HealthChanged" ) );
 	if ( m_Health == 0 )
 	{
 		m_Subject.NotifyObservers( Hash( "e_EntityDied" ) );
 		GetParent()->MarkForRemoval();
 	}
-	m_Subject.NotifyObservers( Hash( "e_HealthChanged" ) );
 }
 
 void dae::HealthComponent::IncreaseMax( uint32_t increase )

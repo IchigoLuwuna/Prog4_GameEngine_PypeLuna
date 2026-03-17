@@ -27,6 +27,9 @@ void dae::HealthDisplayComponent::Notify( size_t eventHash, HealthComponent* pHe
 		UpdateText( pHealth );
 		return;
 	}
+	case Hash( "e_EntityDied" ): {
+		m_pTextComponent->SetText( "dead :(" );
+	}
 	default: {
 		return;
 	}
