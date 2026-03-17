@@ -7,16 +7,22 @@
 
 dae::HealthDisplayComponent::HealthDisplayComponent( GameObject* pParent, HealthComponent* pHealth )
 	: Component( pParent )
+	, m_pSubject( pHealth )
 {
 	pHealth->RegisterObserver( this );
 
-	if ( !m_pTextComponent )
+	if ( !m_pText )
 	{
-		m_pTextComponent = GetParent()->GetComponent<TextComponent>();
-		assert( m_pTextComponent && "HealthDisplayComponent requires parent to have a text component" );
+		m_pText = GetParent()->GetComponent<TextComponent>();
+		assert( m_pText && "HealthDisplayComponent requires parent to have a text component" );
 	}
 
 	UpdateText( pHealth );
+}
+
+dae::HealthDisplayComponent::~HealthDisplayComponent()
+{
+	m_pSubject->RemoveObserver( this );
 }
 
 void dae::HealthDisplayComponent::Notify( size_t eventHash, HealthComponent* pHealth )
@@ -28,7 +34,7 @@ void dae::HealthDisplayComponent::Notify( size_t eventHash, HealthComponent* pHe
 		return;
 	}
 	case Hash( "e_EntityDied" ): {
-		m_pTextComponent->SetText( "dead :(" );
+		m_pText->SetText( "dead :(" );
 	}
 	default: {
 		return;
@@ -40,5 +46,5 @@ void dae::HealthDisplayComponent::UpdateText( HealthComponent* pHealth )
 {
 	auto health{ pHealth->GetHealth() };
 	const std::string displayString{ std::format( "health: {}", health ) };
-	m_pTextComponent->SetText( displayString );
+	m_pText->SetText( displayString );
 }

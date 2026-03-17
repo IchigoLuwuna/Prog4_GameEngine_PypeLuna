@@ -11,7 +11,7 @@ class HealthDisplayComponent : public Component, public Observer<HealthComponent
 {
 public:
 	HealthDisplayComponent( GameObject* pParent, HealthComponent* pHealth );
-	virtual ~HealthDisplayComponent() = default;
+	virtual ~HealthDisplayComponent();
 
 	virtual void Update() override
 	{
@@ -21,7 +21,8 @@ public:
 	void UpdateText( HealthComponent* pHealth );
 
 private:
-	TextComponent* m_pTextComponent{};
+	TextComponent* m_pText{};
+	HealthComponent* m_pSubject{};
 };
 } // namespace dae
 #endif
