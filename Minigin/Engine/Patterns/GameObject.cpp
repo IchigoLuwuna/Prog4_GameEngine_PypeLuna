@@ -88,7 +88,6 @@ void dae::GameObject::RemoveChild( GameObject* pChild )
 		}
 
 		child->m_pParent = nullptr;
-		child = nullptr;
 		std::swap( m_Children[index], m_Children.back() );
 		m_Children.pop_back();
 		--index;
