@@ -17,10 +17,12 @@
 #include "Components/HealthComponent.h"
 #include "Components/HealthDisplayComponent.h"
 #include "Components/ScoreComponent.h"
+#include "Components/ScoreDisplayComponent.h"
 #include "Components/TextComponent.h"
 #include "Components/TextureComponent.h"
 
 #include "Commands/DamageCommand.h"
+#include "Commands/IncreaseScoreCommand.h"
 #include "Commands/MoveCommand.h"
 
 #include <filesystem>
@@ -74,15 +76,25 @@ static void load()
 	operaHealthDisplay->AddComponent<dae::TextComponent>( ".", smallFont, SDL_Color{ 255, 255, 255, 255 } );
 	operaHealthDisplay->AddComponent<dae::HealthDisplayComponent>( operaBird->GetComponent<dae::HealthComponent>() );
 
+	auto operaScoreDisplay{ std::make_unique<dae::GameObject>() };
+	operaScoreDisplay->AddComponent<dae::TextComponent>( ".", smallFont, SDL_Color{ 255, 255, 255, 255 } );
+	operaScoreDisplay->AddComponent<dae::ScoreDisplayComponent>( operaBird->GetComponent<dae::ScoreComponent>() );
+
 	auto dotoHealthDisplay{ std::make_unique<dae::GameObject>() };
 	dotoHealthDisplay->AddComponent<dae::TextComponent>( ".", smallFont, SDL_Color{ 255, 255, 255, 255 } );
 	dotoHealthDisplay->AddComponent<dae::HealthDisplayComponent>( dotoSheep->GetComponent<dae::HealthComponent>() );
+
+	auto dotoScoreDisplay{ std::make_unique<dae::GameObject>() };
+	dotoScoreDisplay->AddComponent<dae::TextComponent>( ".", smallFont, SDL_Color{ 255, 255, 255, 255 } );
+	dotoScoreDisplay->AddComponent<dae::ScoreDisplayComponent>( dotoSheep->GetComponent<dae::ScoreComponent>() );
 	//
 
 	// Create SceneGraph
 	dotoInfoText->SetParent( operaInfoText.get() );
 	operaHealthDisplay->SetParent( operaInfoText.get() );
+	operaScoreDisplay->SetParent( operaInfoText.get() );
 	dotoHealthDisplay->SetParent( operaInfoText.get() );
+	dotoScoreDisplay->SetParent( operaInfoText.get() );
 	//
 
 	// Set Starting Positions
@@ -95,30 +107,21 @@ static void load()
 	operaInfoText->GetComponent<dae::TransformComponent>()->MoveTo( glm::vec2{ 10.f, 100.f } );
 	dotoInfoText->GetComponent<dae::TransformComponent>()->MoveTo( glm::vec2{ 0.f, 24.f } );
 	operaHealthDisplay->GetComponent<dae::TransformComponent>()->MoveTo( glm::vec2{ 0.f, 64.f } );
-	dotoHealthDisplay->GetComponent<dae::TransformComponent>()->MoveTo( glm::vec2{ 0.f, 88.f } );
+	operaScoreDisplay->GetComponent<dae::TransformComponent>()->MoveTo( glm::vec2{ 0.f, 88.f } );
+	dotoHealthDisplay->GetComponent<dae::TransformComponent>()->MoveTo( glm::vec2{ 0.f, 112.f } );
+	dotoScoreDisplay->GetComponent<dae::TransformComponent>()->MoveTo( glm::vec2{ 0.f, 136.f } );
 	//
 
 	// Create bindings
-	// Doto Sheep using keyboard
 	constexpr float moveSpeed{ 150.f };
-	auto pDotoSheepTransform{ dotoSheep->GetComponent<dae::TransformComponent>() };
-	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
-		SDL_SCANCODE_W, dae::InputManager::KeyState::held, pDotoSheepTransform, glm::vec2{ 0.f, -moveSpeed } );
-	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
-		SDL_SCANCODE_S, dae::InputManager::KeyState::held, pDotoSheepTransform, glm::vec2{ 0.f, moveSpeed } );
-	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
-		SDL_SCANCODE_A, dae::InputManager::KeyState::held, pDotoSheepTransform, glm::vec2{ -moveSpeed, 0.f } );
-	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
-		SDL_SCANCODE_D, dae::InputManager::KeyState::held, pDotoSheepTransform, glm::vec2{ moveSpeed, 0.f } );
-	dae::InputManager::GetInstance().BindCommand<dae::DamageCommand>(
-		SDL_SCANCODE_C, dae::InputManager::KeyState::down, dotoSheep->GetComponent<dae::HealthComponent>(), 1 );
-	//
-
 	// Opera Bird using controller
 	const auto dUpKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::up ) };
 	const auto dDownKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::down ) };
 	const auto dLeftKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::left ) };
 	const auto dRightKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::right ) };
+
+	const auto southKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::south ) };
+	const auto eastKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::east ) };
 	const auto northKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::north ) };
 	auto pOperaBirdTransform{ operaBird->GetComponent<dae::TransformComponent>() };
 	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
@@ -129,8 +132,34 @@ static void load()
 		dLeftKey, dae::InputManager::KeyState::held, pOperaBirdTransform, glm::vec2{ -moveSpeed * 2.f, 0.f } );
 	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
 		dRightKey, dae::InputManager::KeyState::held, pOperaBirdTransform, glm::vec2{ moveSpeed * 2.f, 0.f } );
+
 	dae::InputManager::GetInstance().BindCommand<dae::DamageCommand>(
 		northKey, dae::InputManager::KeyState::down, operaBird->GetComponent<dae::HealthComponent>(), 1 );
+
+	dae::InputManager::GetInstance().BindCommand<dae::IncreaseScoreCommand>(
+		southKey, dae::InputManager::KeyState::down, operaBird->GetComponent<dae::ScoreComponent>(), 10 );
+	dae::InputManager::GetInstance().BindCommand<dae::IncreaseScoreCommand>(
+		eastKey, dae::InputManager::KeyState::down, operaBird->GetComponent<dae::ScoreComponent>(), 100 );
+	//
+
+	// Doto Sheep using keyboard
+	auto pDotoSheepTransform{ dotoSheep->GetComponent<dae::TransformComponent>() };
+	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
+		SDL_SCANCODE_W, dae::InputManager::KeyState::held, pDotoSheepTransform, glm::vec2{ 0.f, -moveSpeed } );
+	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
+		SDL_SCANCODE_S, dae::InputManager::KeyState::held, pDotoSheepTransform, glm::vec2{ 0.f, moveSpeed } );
+	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
+		SDL_SCANCODE_A, dae::InputManager::KeyState::held, pDotoSheepTransform, glm::vec2{ -moveSpeed, 0.f } );
+	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
+		SDL_SCANCODE_D, dae::InputManager::KeyState::held, pDotoSheepTransform, glm::vec2{ moveSpeed, 0.f } );
+
+	dae::InputManager::GetInstance().BindCommand<dae::DamageCommand>(
+		SDL_SCANCODE_C, dae::InputManager::KeyState::down, dotoSheep->GetComponent<dae::HealthComponent>(), 1 );
+
+	dae::InputManager::GetInstance().BindCommand<dae::IncreaseScoreCommand>(
+		SDL_SCANCODE_Z, dae::InputManager::KeyState::down, dotoSheep->GetComponent<dae::ScoreComponent>(), 10 );
+	dae::InputManager::GetInstance().BindCommand<dae::IncreaseScoreCommand>(
+		SDL_SCANCODE_X, dae::InputManager::KeyState::down, dotoSheep->GetComponent<dae::ScoreComponent>(), 100 );
 	//
 
 #ifndef NDEBUG
@@ -157,7 +186,9 @@ static void load()
 	scene.Add( std::move( operaInfoText ) );
 	scene.Add( std::move( dotoInfoText ) );
 	scene.Add( std::move( operaHealthDisplay ) );
+	scene.Add( std::move( operaScoreDisplay ) );
 	scene.Add( std::move( dotoHealthDisplay ) );
+	scene.Add( std::move( dotoScoreDisplay ) );
 	scene.Add( std::move( fps ) );
 }
 
