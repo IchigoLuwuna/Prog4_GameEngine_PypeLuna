@@ -2,6 +2,7 @@
 #define MINIGIN_H
 #include <functional>
 #include <filesystem>
+#include "Engine/Core/EventManager.h"
 
 namespace dae
 {
@@ -17,6 +18,8 @@ public:
 	Minigin( Minigin&& other ) = delete;
 	Minigin& operator=( const Minigin& other ) = delete;
 	Minigin& operator=( Minigin&& other ) = delete;
+
+	static EventManager eventManager;
 
 private:
 	bool m_Quit{};

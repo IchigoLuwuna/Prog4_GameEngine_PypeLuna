@@ -7,6 +7,11 @@ dae::Scene& dae::SceneManager::CreateScene()
 	return *m_Scenes.back();
 }
 
+void dae::SceneManager::Destroy()
+{
+	m_Scenes.clear();
+}
+
 void dae::SceneManager::Update()
 {
 	for ( auto& scene : m_Scenes )

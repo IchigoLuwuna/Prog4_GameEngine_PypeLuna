@@ -1,5 +1,4 @@
 #include "GameObject.h"
-#include <algorithm>
 #include "Engine/Components/TransformComponent.h"
 #include "RenderComponent.h"
 
@@ -78,20 +77,12 @@ void dae::GameObject::RemoveChild( GameObject* pChild )
 	{
 		return;
 	}
-
-	for ( int index{}; index < static_cast<int>( m_Children.size() ); ++index )
+	if ( m_Children.begin() > m_Children.end() )
 	{
-		auto child{ m_Children[index] };
-		if ( child != pChild )
-		{
-			continue;
-		}
-
-		child->m_pParent = nullptr;
-		std::swap( m_Children[index], m_Children.back() );
-		m_Children.pop_back();
-		--index;
+		return;
 	}
+
+	std::erase_if( m_Children, [&]( auto* child ) { return child == pChild; } );
 }
 
 void dae::GameObject::MarkForRemoval()

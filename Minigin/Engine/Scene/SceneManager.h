@@ -11,6 +11,7 @@ class SceneManager final : public Singleton<SceneManager>
 {
 public:
 	Scene& CreateScene();
+	void Destroy();
 
 	void Update();
 	void Render();

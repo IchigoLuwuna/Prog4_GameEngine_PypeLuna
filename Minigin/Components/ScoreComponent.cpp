@@ -1,12 +1,12 @@
 #include "ScoreComponent.h"
-#include "Engine/Core/EventManager.h"
+#include "Engine/Core/Minigin.h"
 #include "Engine/Helpers/SdbmHash.h"
 
 void dae::ScoreComponent::Accumulate( uint32_t increase )
 {
 	m_Score += increase;
 	constexpr auto eventHash{ Hash( "e_ScoreChanged" ) };
-	EventManager::GetInstance().SendEvent( { eventHash, &m_Score } );
+	Minigin::eventManager.SendEvent( { eventHash, &m_Score } );
 	m_Subject.NotifyObservers( eventHash );
 }
 
@@ -21,5 +21,5 @@ void dae::ScoreComponent::RegisterObserver( Observer<ScoreComponent>* pObserver 
 }
 void dae::ScoreComponent::RemoveObserver( Observer<ScoreComponent>* pObserver )
 {
-	m_Subject.RegisterObserver( pObserver );
+	m_Subject.RemoveObserver( pObserver );
 }

@@ -25,6 +25,8 @@
 #include "EventManager.h"
 #include "ResourceManager.h"
 
+dae::EventManager dae::Minigin::eventManager{};
+
 SDL_Window* g_Window{};
 
 void LogSDLVersion( const std::string& message, int major, int minor, int patch )
@@ -110,7 +112,11 @@ dae::Minigin::~Minigin()
 	SteamAPI_Shutdown();
 #endif
 
+	// Clean up singletons
+	SceneManager::GetInstance().Destroy();
+	ResourceManager::GetInstance().Destroy();
 	Renderer::GetInstance().Destroy();
+	//
 	SDL_DestroyWindow( g_Window );
 	g_Window = nullptr;
 	SDL_Quit();
@@ -143,7 +149,7 @@ void dae::Minigin::RunOneFrame()
 #if USE_STEAMWORKS
 	SteamAPI_RunCallbacks();
 #endif
-	EventManager::GetInstance().ProcessEvents();
+	eventManager.ProcessEvents();
 	SceneManager::GetInstance().Update();
 	Renderer::GetInstance().Render();
 	SceneManager::GetInstance().CleanUpRemovableObjects();

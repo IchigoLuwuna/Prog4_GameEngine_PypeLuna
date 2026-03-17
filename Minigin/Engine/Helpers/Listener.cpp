@@ -1,15 +1,16 @@
 #include "Listener.h"
+#include "Engine/Core/Minigin.h"
 #include "Engine/Core/EventManager.h"
 
 dae::Listener::Listener( void* id, std::function<void( Event& event )> handler )
 	: m_Id( id )
 {
-	EventManager::GetInstance().AttachListener( m_Id, handler );
+	Minigin::eventManager.AttachListener( m_Id, handler );
 }
 
 dae::Listener::~Listener()
 {
-	EventManager::GetInstance().DetachListener( m_Id );
+	Minigin::eventManager.DetachListener( m_Id );
 }
 
 dae::Listener::Listener( Listener&& other )

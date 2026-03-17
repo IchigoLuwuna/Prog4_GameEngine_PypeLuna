@@ -1,6 +1,7 @@
 #ifndef DEBUGCOMPONENT_H
 #define DEBUGCOMPONENT_H
 #include "Engine/Patterns/Component.h"
+#include <iostream>
 #include <string>
 
 namespace dae
@@ -13,7 +14,10 @@ public:
 		, m_Name( name )
 	{
 	}
-	virtual ~DebugComponent() = default;
+	virtual ~DebugComponent()
+	{
+		std::cout << "Removing: " << m_Name << "\n";
+	}
 
 	virtual void Update() override
 	{

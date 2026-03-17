@@ -12,7 +12,10 @@ dae::IncreaseScoreCommand::IncreaseScoreCommand( ScoreComponent* pBoundScore, ui
 
 void dae::IncreaseScoreCommand::Execute()
 {
-	m_pBoundScore->Accumulate( m_Increase );
+	if ( m_pBoundScore )
+	{
+		m_pBoundScore->Accumulate( m_Increase );
+	}
 }
 
 void dae::IncreaseScoreCommand::HandleEvent( Event& event )

@@ -8,12 +8,7 @@ namespace dae
 class TransformComponent : public Component
 {
 public:
-	TransformComponent( GameObject* pParent )
-		: Component( pParent )
-	{
-	}
-
-	TransformComponent( GameObject* pParent, const glm::vec2& pos )
+	TransformComponent( GameObject* pParent, const glm::vec2& pos = {} )
 		: Component( pParent )
 		, m_WorldTransform( pos )
 	{
