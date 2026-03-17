@@ -22,6 +22,7 @@
 #include "Engine/Scene/SceneManager.h"
 #include "Engine/Rendering/Renderer.h"
 #include "Engine/Helpers/Timer.h"
+#include "EventManager.h"
 #include "ResourceManager.h"
 
 SDL_Window* g_Window{};
@@ -142,6 +143,7 @@ void dae::Minigin::RunOneFrame()
 #if USE_STEAMWORKS
 	SteamAPI_RunCallbacks();
 #endif
+	EventManager::GetInstance().ProcessEvents();
 	SceneManager::GetInstance().Update();
 	Renderer::GetInstance().Render();
 	SceneManager::GetInstance().CleanUpRemovableObjects();
