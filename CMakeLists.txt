@@ -19,26 +19,55 @@ endif()
 
 # list source files here
 add_executable(${TARGET_NAME} ${TARGET_PARAM}
-  Minigin/Commands.cpp
-  Minigin/Font.cpp
-  Minigin/FpsComponent.cpp
-  Minigin/GameObject.cpp
-  Minigin/Gamepad.cpp
-  Minigin/ImGuiComponents.cpp
-  Minigin/InputManager.cpp
+    # Engine
+        # Core
+            Minigin/Engine/Core/Minigin.cpp
+            Minigin/Engine/Core/EventManager.cpp
+            Minigin/Engine/Core/ResourceManager.cpp
+        # Components
+            Minigin/Engine/Components/TransformComponent.cpp
+        # Commands
+            Minigin/Engine/Commands/LogCommand.cpp
+        # Achievement
+            Minigin/Engine/Achievement/SteamAchievements.cpp
+        # Helpers
+            Minigin/Engine/Helpers/Font.cpp
+            Minigin/Engine/Helpers/Listener.cpp
+            Minigin/Engine/Helpers/Texture2D.cpp
+            Minigin/Engine/Helpers/Timer.cpp
+        # Input
+            Minigin/Engine/Input/Gamepad.cpp
+            Minigin/Engine/Input/InputManager.cpp
+        # Patterns
+            Minigin/Engine/Patterns/Component.cpp
+            Minigin/Engine/Patterns/GameObject.cpp
+        # Rendering
+            Minigin/Engine/Rendering/Renderer.cpp
+            Minigin/Engine/Rendering/imgui_plot.cpp
+        # Scene
+            Minigin/Engine/Scene/Scene.cpp
+            Minigin/Engine/Scene/SceneManager.cpp
+
+    # Components
+        Minigin/Components/FpsComponent.cpp
+        Minigin/Components/HealthComponent.cpp
+        Minigin/Components/HealthDisplayComponent.cpp
+        Minigin/Components/ImGuiComponents.cpp
+        Minigin/Components/MovementComponents.cpp
+        Minigin/Components/ScoreComponent.cpp
+        Minigin/Components/ScoreDisplayComponent.cpp
+        Minigin/Components/TextComponent.cpp
+        Minigin/Components/TextureComponent.cpp
+
+    # Commands
+        Minigin/Commands/DamageCommand.cpp
+        Minigin/Commands/IncreaseScoreCommand.cpp
+        Minigin/Commands/MoveCommand.cpp
+
+    # Achievement
+        Minigin/Achievement/Achievement.cpp
+
   Minigin/Main.cpp
-  Minigin/Minigin.cpp
-  Minigin/MovementComponents.cpp
-  Minigin/Renderer.cpp
-  Minigin/ResourceManager.cpp
-  Minigin/Scene.cpp
-  Minigin/SceneManager.cpp
-  Minigin/TextComponent.cpp
-  Minigin/Texture2D.cpp
-  Minigin/TextureComponent.cpp
-  Minigin/Timer.cpp
-  Minigin/TransformComponent.cpp
-  Minigin/imgui_plot.cpp
 )
 
 # enable c++20 features
@@ -57,10 +86,8 @@ if(NOT glm_FOUND)
     FetchContent_MakeAvailable(glm)
 endif()
 
-if (NOT WIN32)
-    find_package(SDL3 3.4 CONFIG QUIET)
-    find_package(SDL3_ttf 3.2.2 CONFIG QUIET)
-else()
+find_package(SDL3 3.4 CONFIG QUIET)
+if (NOT SDL3_FOUND)
     # Add SDL3
     if (WIN32)
         FetchContent_Declare(
@@ -82,7 +109,10 @@ else()
     )
         FetchContent_MakeAvailable(SDL3)
     endif()
+endif()
 
+find_package(SDL3_ttf 3.2.2 CONFIG QUIET)
+if (NOT SDL3_ttf_FOUND)
     # Add SDL3_ttf
     if (WIN32)
         FetchContent_Declare(
@@ -163,7 +193,7 @@ target_link_libraries("${TARGET_NAME}" PUBLIC
 )
 
 if (WIN32)
-target_link_libraries("${TARGET_NAME}" PUBLIC
+    target_link_libraries("${TARGET_NAME}" PUBLIC
     xinput
 )
 endif()
