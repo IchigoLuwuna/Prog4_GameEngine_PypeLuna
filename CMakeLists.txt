@@ -58,6 +58,7 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
 
   # Commands
   Minigin/Commands/DamageCommand.cpp
+  Minigin/Commands/IncreaseScoreCommand.cpp
   Minigin/Commands/MoveCommand.cpp
 
   Minigin/Main.cpp
