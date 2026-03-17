@@ -17,6 +17,8 @@ class EventManager final
 public:
 	EventManager() = default;
 
+	void Destroy();
+
 	void AttachListener( void* pListener, std::function<void( Event& event )> handler );
 	void DetachListener( void* pListener );
 	void ProcessEvents();

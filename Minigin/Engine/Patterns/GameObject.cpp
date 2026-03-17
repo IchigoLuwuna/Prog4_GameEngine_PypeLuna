@@ -13,6 +13,11 @@ dae::GameObject::~GameObject()
 	{
 		m_pParent->RemoveChild( this );
 	}
+
+	for ( auto* child : m_Children )
+	{
+		child->m_pParent = nullptr;
+	}
 }
 
 void dae::GameObject::Update()

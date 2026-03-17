@@ -3,6 +3,12 @@
 #	include <iostream>
 #endif
 
+void dae::EventManager::Destroy()
+{
+	ProcessEvents();
+	m_Listeners.clear();
+}
+
 void dae::EventManager::AttachListener( void* pListener, std::function<void( Event& event )> handler )
 {
 	m_Listeners.push_back( { pListener, handler } );

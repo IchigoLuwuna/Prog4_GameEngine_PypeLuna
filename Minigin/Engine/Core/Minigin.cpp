@@ -112,7 +112,8 @@ dae::Minigin::~Minigin()
 	SteamAPI_Shutdown();
 #endif
 
-	// Clean up singletons
+	// Clean up singletons, globals and statics
+	eventManager.Destroy();
 	SceneManager::GetInstance().Destroy();
 	ResourceManager::GetInstance().Destroy();
 	Renderer::GetInstance().Destroy();
