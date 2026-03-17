@@ -9,10 +9,14 @@
 #endif
 
 #if USE_STEAMWORKS
-// #	pragma warning( push )
-// #	pragma warning( disable : 4996 )
+#	if WIN32
+#		pragma warning( push )
+#		pragma warning( disable : 4996 )
+#	endif
 #	include <steam_api.h>
-// #	pragma warning( pop )
+#	if WIN32
+#		pragma warning( pop )
+#	endif
 #endif
 
 #include <SDL3/SDL.h>
