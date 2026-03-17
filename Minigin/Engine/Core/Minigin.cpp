@@ -8,17 +8,6 @@
 #	include <windows.h>
 #endif
 
-#if USE_STEAMWORKS
-#	if WIN32
-#		pragma warning( push )
-#		pragma warning( disable : 4996 )
-#	endif
-#	include <steam_api.h>
-#	if WIN32
-#		pragma warning( pop )
-#	endif
-#endif
-
 #include <SDL3/SDL.h>
 #include <SDL3_ttf/SDL_ttf.h>
 #include "Minigin.h"
@@ -28,6 +17,19 @@
 #include "Engine/Helpers/Timer.h"
 #include "EventManager.h"
 #include "ResourceManager.h"
+
+#if USE_STEAMWORKS
+#	if WIN32
+#		pragma warning( push )
+#		pragma warning( disable : 4996 )
+#	endif
+#	include <steam_api.h>
+#	if WIN32
+#		pragma warning( pop )
+#	endif
+
+std::unique_ptr<dae::steam::SteamAchievements> dae::Minigin::steamAchievements{};
+#endif
 
 dae::EventManager dae::Minigin::eventManager{};
 
@@ -92,6 +94,8 @@ dae::Minigin::Minigin( const std::filesystem::path& dataPath )
 	{
 		throw std::runtime_error( "Fatal Error - Steam must be running to play this Game (SteamAPI_init failed)" );
 	}
+
+	steamAchievements = std::make_unique<steam::SteamAchievements>( std::vector<steam::Achievement>( 0 ) );
 #endif
 
 	if ( !SDL_InitSubSystem( SDL_INIT_VIDEO | SDL_INIT_GAMEPAD ) )

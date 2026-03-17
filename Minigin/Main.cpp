@@ -25,6 +25,8 @@
 #include "Commands/IncreaseScoreCommand.h"
 #include "Commands/MoveCommand.h"
 
+#include "Achievement/Achievement.h"
+
 #include <filesystem>
 namespace fs = std::filesystem;
 
@@ -190,6 +192,11 @@ static void load()
 	scene.Add( std::move( dotoHealthDisplay ) );
 	scene.Add( std::move( dotoScoreDisplay ) );
 	scene.Add( std::move( fps ) );
+	//
+
+	// Attach achievement handler
+	dae::Minigin::eventManager.AttachListener( nullptr, dae::achievements::HandleEvent );
+	//
 }
 
 int main( int, char*[] )

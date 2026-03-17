@@ -3,6 +3,7 @@
 #include <functional>
 #include <filesystem>
 #include "Engine/Core/EventManager.h"
+#include "Engine/Achievement/SteamAchievements.h"
 
 namespace dae
 {
@@ -18,6 +19,10 @@ public:
 	Minigin( Minigin&& other ) = delete;
 	Minigin& operator=( const Minigin& other ) = delete;
 	Minigin& operator=( Minigin&& other ) = delete;
+
+#if USE_STEAMWORKS
+	static std::unique_ptr<steam::SteamAchievements> steamAchievements;
+#endif
 
 	static EventManager eventManager;
 
