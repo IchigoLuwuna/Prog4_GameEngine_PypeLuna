@@ -18,11 +18,12 @@ public:
 	}
 
 	virtual void Notify( size_t eventHash, HealthComponent* pSubject ) override;
-	void UpdateText( HealthComponent* pHealth );
 
 private:
 	TextComponent* m_pText{};
 	HealthComponent* m_pSubject{};
+
+	void UpdateText( HealthComponent* pHealth );
 };
 } // namespace dae
 #endif
