@@ -52,6 +52,7 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
   Minigin/Components/HealthDisplayComponent.cpp
   Minigin/Components/ImGuiComponents.cpp
   Minigin/Components/MovementComponents.cpp
+  Minigin/Components/ScoreComponent.cpp
   Minigin/Components/TextComponent.cpp
   Minigin/Components/TextureComponent.cpp
 
