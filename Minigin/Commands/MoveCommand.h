@@ -15,12 +15,13 @@ public:
 	virtual ~MoveCommand() = default;
 
 	virtual void Execute() override;
-	void HandleEvent( Event& event );
 
 private:
 	TransformComponent* m_pBoundTransform{};
 	glm::vec2 m_Movement{};
 	Listener m_Listener;
+
+	void HandleEvent( Event& event );
 };
 } // namespace dae
 #endif

@@ -15,7 +15,7 @@ public:
 		, m_Subject( this )
 	{
 	}
-	virtual ~ScoreComponent();
+	virtual ~ScoreComponent() = default;
 
 	virtual void Update() override
 	{

@@ -16,6 +16,7 @@
 #include "Components/FpsComponent.h"
 #include "Components/HealthComponent.h"
 #include "Components/HealthDisplayComponent.h"
+#include "Components/ScoreComponent.h"
 #include "Components/TextComponent.h"
 #include "Components/TextureComponent.h"
 
@@ -47,9 +48,13 @@ static void load()
 	auto operaBird{ std::make_unique<dae::GameObject>() };
 	operaBird->AddComponent<dae::TextureComponent>( "./opera-bird.png" );
 	operaBird->AddComponent<dae::HealthComponent>( 3 );
+	operaBird->AddComponent<dae::ScoreComponent>();
+
 	auto dotoSheep{ std::make_unique<dae::GameObject>() };
 	dotoSheep->AddComponent<dae::TextureComponent>( "./doto-sheep.png" );
 	dotoSheep->AddComponent<dae::HealthComponent>( 3 );
+	dotoSheep->AddComponent<dae::ScoreComponent>();
+	//
 
 	// Scoreboard
 	auto smallFont{ dae::ResourceManager::GetInstance().LoadFont( "Lingua.otf", 18 ) };
@@ -78,6 +83,7 @@ static void load()
 	dotoInfoText->SetParent( operaInfoText.get() );
 	operaHealthDisplay->SetParent( operaInfoText.get() );
 	dotoHealthDisplay->SetParent( operaInfoText.get() );
+	//
 
 	// Set Starting Positions
 	logo->GetComponent<dae::TransformComponent>()->MoveTo( 358.f, 180.f );
@@ -90,8 +96,7 @@ static void load()
 	dotoInfoText->GetComponent<dae::TransformComponent>()->MoveTo( glm::vec2{ 0.f, 24.f } );
 	operaHealthDisplay->GetComponent<dae::TransformComponent>()->MoveTo( glm::vec2{ 0.f, 64.f } );
 	dotoHealthDisplay->GetComponent<dae::TransformComponent>()->MoveTo( glm::vec2{ 0.f, 88.f } );
-
-	// Register Observers To Subjects
+	//
 
 	// Create bindings
 	// Doto Sheep using keyboard
