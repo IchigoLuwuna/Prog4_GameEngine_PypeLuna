@@ -37,6 +37,7 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
         Minigin/Engine/Input/Gamepad.cpp
         Minigin/Engine/Input/InputManager.cpp
     # Patterns
+        Minigin/Engine/Patterns/Component.cpp
         Minigin/Engine/Patterns/GameObject.cpp
     # Rendering
         Minigin/Engine/Rendering/Renderer.cpp

@@ -11,7 +11,7 @@ public:
 		: m_pParent{ pParent }
 	{
 	}
-	virtual ~Component() = default;
+	virtual ~Component();
 
 	Component( const Component& ) = delete;
 	Component( Component&& ) = default;
