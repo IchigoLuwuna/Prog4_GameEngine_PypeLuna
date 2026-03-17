@@ -81,6 +81,13 @@ dae::Minigin::Minigin( const std::filesystem::path& dataPath )
 {
 	PrintSDLVersion();
 
+#if USE_STEAMWORKS
+	if ( !SteamAPI_Init() )
+	{
+		throw std::runtime_error( "Fatal Error - Steam must be running to play this Game (SteamAPI_init failed)" );
+	}
+#endif
+
 	if ( !SDL_InitSubSystem( SDL_INIT_VIDEO | SDL_INIT_GAMEPAD ) )
 	{
 		SDL_Log( "Renderer error: %s", SDL_GetError() );
@@ -95,13 +102,6 @@ dae::Minigin::Minigin( const std::filesystem::path& dataPath )
 
 	Renderer::GetInstance().Init( g_Window );
 	ResourceManager::GetInstance().Init( dataPath );
-
-#if USE_STEAMWORKS
-	if ( !SteamAPI_Init() )
-	{
-		throw std::runtime_error( "Fatal Error - Steam must be running to play this Game (SteamAPI_init failed)" );
-	}
-#endif
 }
 
 dae::Minigin::~Minigin()
