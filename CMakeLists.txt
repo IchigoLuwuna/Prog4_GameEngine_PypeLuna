@@ -27,6 +27,7 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
         # Components
             Minigin/Engine/Components/TransformComponent.cpp
         # Commands
+            Minigin/Engine/Commands/EventCommand.cpp
             Minigin/Engine/Commands/LogCommand.cpp
         # Achievement
             Minigin/Engine/Achievement/SteamAchievements.cpp
@@ -61,7 +62,6 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
 
     # Commands
         Minigin/Commands/DamageCommand.cpp
-        Minigin/Commands/IncreaseScoreCommand.cpp
         Minigin/Commands/MoveCommand.cpp
 
     # Achievement
