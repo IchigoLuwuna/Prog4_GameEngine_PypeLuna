@@ -1,7 +1,7 @@
 #ifndef DAMAGECOMMAND_H
 #define DAMAGECOMMAND_H
 #include <cstdint>
-#include "Engine/Helpers/Listener.h"
+#include "Engine/Helpers/Subscription.h"
 #include "Engine/Patterns/Command.h"
 
 namespace dae
@@ -18,7 +18,7 @@ public:
 private:
 	HealthComponent* m_pBoundHealth{};
 	uint32_t m_Damage{};
-	Listener m_Listener;
+	Subscription m_Listener;
 
 	void HandleEvent( Event& event );
 };

@@ -29,7 +29,7 @@ public:
 
 private:
 	uint32_t m_Score{};
-	Subject<ScoreComponent> m_Subject;
+	Messenger<ScoreComponent> m_Subject;
 };
 } // namespace dae
 #endif

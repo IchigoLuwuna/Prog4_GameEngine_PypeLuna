@@ -32,7 +32,7 @@ private:
 	uint32_t m_Health{};
 	uint32_t m_MaxHealth{};
 
-	Subject<HealthComponent> m_Subject;
+	Messenger<HealthComponent> m_Subject;
 };
 } // namespace dae
 #endif

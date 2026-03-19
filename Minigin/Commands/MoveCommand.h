@@ -1,6 +1,6 @@
 #ifndef MOVECOMMAND_H
 #define MOVECOMMAND_H
-#include "Engine/Helpers/Listener.h"
+#include "Engine/Helpers/Subscription.h"
 #include "Engine/Patterns/Command.h"
 #include <glm/glm.hpp>
 
@@ -19,7 +19,7 @@ public:
 private:
 	TransformComponent* m_pBoundTransform{};
 	glm::vec2 m_Movement{};
-	Listener m_Listener;
+	Subscription m_Listener;
 
 	void HandleEvent( Event& event );
 };

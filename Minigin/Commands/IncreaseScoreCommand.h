@@ -1,7 +1,7 @@
 #ifndef INCREASESCORECOMMAND_H
 #define INCREASESCORECOMMAND_H
 #include "Engine/Patterns/Command.h"
-#include "Engine/Helpers/Listener.h"
+#include "Engine/Helpers/Subscription.h"
 #include <cstdint>
 
 namespace dae
@@ -18,7 +18,7 @@ public:
 private:
 	ScoreComponent* m_pBoundScore{};
 	uint32_t m_Increase{};
-	Listener m_Listener;
+	Subscription m_Listener;
 
 	void HandleEvent( Event& event );
 };

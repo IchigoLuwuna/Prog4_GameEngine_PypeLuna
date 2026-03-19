@@ -1,6 +1,6 @@
 #ifndef SCOREDISPLAYCOMPONENT_H
 #define SCOREDISPLAYCOMPONENT_H
-#include "Engine/Helpers/Listener.h"
+#include "Engine/Helpers/Subscription.h"
 #include "Engine/Patterns/Component.h"
 #include "Engine/Patterns/Observer.h"
 
@@ -23,7 +23,7 @@ public:
 private:
 	TextComponent* m_pText{};
 	ScoreComponent* m_pSubject{};
-	Listener m_Listener;
+	Subscription m_Listener;
 
 	void UpdateText( ScoreComponent* pScore );
 	void HandleEvent( Event& event );

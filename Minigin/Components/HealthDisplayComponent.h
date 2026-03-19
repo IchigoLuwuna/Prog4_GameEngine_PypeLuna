@@ -1,7 +1,7 @@
 #ifndef HEALTHDISPLAYCOMPONENT_H
 #define HEALTHDISPLAYCOMPONENT_H
 #include "Components/HealthComponent.h"
-#include "Engine/Helpers/Listener.h"
+#include "Engine/Helpers/Subscription.h"
 #include "Engine/Patterns/Component.h"
 #include "Engine/Patterns/Observer.h"
 
@@ -23,7 +23,7 @@ public:
 private:
 	TextComponent* m_pText{};
 	HealthComponent* m_pSubject{};
-	Listener m_Listener;
+	Subscription m_Listener;
 
 	void UpdateText( HealthComponent* pHealth );
 	void HandleEvent( Event& event );
