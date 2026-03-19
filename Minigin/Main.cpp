@@ -21,11 +21,12 @@
 #include "Components/TextComponent.h"
 #include "Components/TextureComponent.h"
 
+#include "Engine/Commands/EventCommand.h"
 #include "Commands/DamageCommand.h"
-#include "Commands/IncreaseScoreCommand.h"
 #include "Commands/MoveCommand.h"
 
 #include "Achievement/Achievement.h"
+#include "Engine/Helpers/SdbmHash.h"
 
 #include <filesystem>
 namespace fs = std::filesystem;
@@ -138,10 +139,12 @@ static void load()
 	dae::InputManager::GetInstance().BindCommand<dae::DamageCommand>(
 		northKey, dae::InputManager::KeyState::down, operaBird->GetComponent<dae::HealthComponent>(), 1 );
 
-	dae::InputManager::GetInstance().BindCommand<dae::IncreaseScoreCommand>(
-		southKey, dae::InputManager::KeyState::down, operaBird->GetComponent<dae::ScoreComponent>(), 10 );
-	dae::InputManager::GetInstance().BindCommand<dae::IncreaseScoreCommand>(
-		eastKey, dae::InputManager::KeyState::down, operaBird->GetComponent<dae::ScoreComponent>(), 100 );
+	dae::InputManager::GetInstance().BindCommand<dae::EventCommand>(
+		southKey,
+		dae::InputManager::KeyState::down,
+		dae::Event{ dae::Hash( "e_SmallPelletPickup" ), operaBird.get() } );
+	dae::InputManager::GetInstance().BindCommand<dae::EventCommand>(
+		eastKey, dae::InputManager::KeyState::down, dae::Event{ dae::Hash( "e_BigPelletPickup" ), operaBird.get() } );
 	//
 
 	// Doto Sheep using keyboard
@@ -158,10 +161,14 @@ static void load()
 	dae::InputManager::GetInstance().BindCommand<dae::DamageCommand>(
 		SDL_SCANCODE_C, dae::InputManager::KeyState::down, dotoSheep->GetComponent<dae::HealthComponent>(), 1 );
 
-	dae::InputManager::GetInstance().BindCommand<dae::IncreaseScoreCommand>(
-		SDL_SCANCODE_Z, dae::InputManager::KeyState::down, dotoSheep->GetComponent<dae::ScoreComponent>(), 10 );
-	dae::InputManager::GetInstance().BindCommand<dae::IncreaseScoreCommand>(
-		SDL_SCANCODE_X, dae::InputManager::KeyState::down, dotoSheep->GetComponent<dae::ScoreComponent>(), 100 );
+	dae::InputManager::GetInstance().BindCommand<dae::EventCommand>(
+		SDL_SCANCODE_Z,
+		dae::InputManager::KeyState::down,
+		dae::Event{ dae::Hash( "e_SmallPelletPickup" ), dotoSheep.get() } );
+	dae::InputManager::GetInstance().BindCommand<dae::EventCommand>(
+		SDL_SCANCODE_X,
+		dae::InputManager::KeyState::down,
+		dae::Event{ dae::Hash( "e_BigPelletPickup" ), dotoSheep.get() } );
 	//
 
 #ifndef NDEBUG
