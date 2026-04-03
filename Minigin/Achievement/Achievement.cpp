@@ -10,7 +10,7 @@ void dae::achievements::HandleEvent( Event& event )
 {
 	switch ( event.EventHash )
 	{
-	case Hash( "e_ScoreChanged" ): {
+	case "e_ScoreChanged"_hash: {
 		CheckWinOneGame( event.pData );
 	}
 	default: {

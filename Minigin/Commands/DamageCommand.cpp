@@ -28,7 +28,7 @@ void dae::DamageCommand::HandleEvent( Event& event )
 {
 	switch ( event.EventHash )
 	{
-	case Hash( "e_ComponentRemoved" ): {
+	case "e_ComponentRemoved"_hash: {
 		if ( event.pData == m_pBoundHealth )
 		{
 			m_pBoundHealth = nullptr;

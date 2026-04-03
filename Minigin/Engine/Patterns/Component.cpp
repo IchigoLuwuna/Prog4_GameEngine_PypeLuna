@@ -4,5 +4,5 @@
 
 dae::Component::~Component()
 {
-	Minigin::eventManager.SendEvent( { Hash( "e_ComponentRemoved" ), this } );
+	Minigin::eventManager.SendEvent( { "e_ComponentRemoved"_hash, this } );
 }

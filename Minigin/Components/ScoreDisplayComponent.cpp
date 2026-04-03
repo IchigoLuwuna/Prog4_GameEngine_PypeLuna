@@ -35,7 +35,7 @@ void dae::ScoreDisplayComponent::Notify( size_t eventHash, ScoreComponent* pSubj
 {
 	switch ( eventHash )
 	{
-	case Hash( "e_ScoreChanged" ): {
+	case "e_ScoreChanged"_hash: {
 		UpdateText( pSubject );
 	}
 	default: {
@@ -55,7 +55,7 @@ void dae::ScoreDisplayComponent::HandleEvent( Event& event )
 {
 	switch ( event.EventHash )
 	{
-	case Hash( "e_ComponentRemoved" ): {
+	case "e_ComponentRemoved"_hash: {
 		if ( event.pData == m_pSubject )
 		{
 			m_pSubject = nullptr;

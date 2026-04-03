@@ -34,11 +34,11 @@ void dae::HealthDisplayComponent::Notify( size_t eventHash, HealthComponent* pHe
 {
 	switch ( eventHash )
 	{
-	case Hash( "e_HealthChanged" ): {
+	case "e_HealthChanged"_hash: {
 		UpdateText( pHealth );
 		return;
 	}
-	case Hash( "e_EntityDied" ): {
+	case "e_EntityDied"_hash: {
 		m_pText->SetText( "dead :(" );
 	}
 	default: {
@@ -58,7 +58,7 @@ void dae::HealthDisplayComponent::HandleEvent( Event& event )
 {
 	switch ( event.EventHash )
 	{
-	case Hash( "e_ComponentRemoved" ): {
+	case "e_ComponentRemoved"_hash: {
 		if ( event.pData == m_pSubject )
 		{
 			m_pSubject = nullptr;

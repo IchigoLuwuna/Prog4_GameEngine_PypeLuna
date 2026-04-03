@@ -20,7 +20,7 @@ void dae::HealthComponent::Heal( uint32_t healing )
 	uint32_t newHealth{ m_Health + healing };
 	m_Health = std::min( newHealth, m_MaxHealth );
 
-	m_Subject.NotifyObservers( Hash( "e_HealthChanged" ) );
+	m_Subject.NotifyObservers( "e_HealthChanged"_hash );
 }
 void dae::HealthComponent::Damage( uint32_t damage )
 {
@@ -28,10 +28,10 @@ void dae::HealthComponent::Damage( uint32_t damage )
 					   static_cast<int32_t>( damage ) }; // signed to prevent underflows
 	m_Health = std::max( 0, newHealth );
 
-	m_Subject.NotifyObservers( Hash( "e_HealthChanged" ) );
+	m_Subject.NotifyObservers( "e_HealthChanged"_hash );
 	if ( m_Health == 0 )
 	{
-		m_Subject.NotifyObservers( Hash( "e_EntityDied" ) );
+		m_Subject.NotifyObservers( "e_EntityDied"_hash );
 		GetParent()->MarkForRemoval();
 	}
 }
@@ -41,7 +41,7 @@ void dae::HealthComponent::IncreaseMax( uint32_t increase )
 	m_MaxHealth += increase;
 	m_Health += increase;
 
-	m_Subject.NotifyObservers( Hash( "e_HealthChanged" ) );
+	m_Subject.NotifyObservers( "e_HealthChanged"_hash );
 }
 void dae::HealthComponent::DecreaseMax( uint32_t decrease )
 {
@@ -50,7 +50,7 @@ void dae::HealthComponent::DecreaseMax( uint32_t decrease )
 	m_MaxHealth = std::max( 1, newMax );
 	m_Health = std::min( m_Health, m_MaxHealth );
 
-	m_Subject.NotifyObservers( Hash( "e_HealthChanged" ) );
+	m_Subject.NotifyObservers( "e_HealthChanged"_hash );
 }
 
 uint32_t dae::HealthComponent::GetHealth() const

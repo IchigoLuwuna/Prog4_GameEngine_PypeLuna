@@ -13,7 +13,7 @@ dae::ScoreComponent::ScoreComponent( GameObject* pParent, uint32_t startingScore
 void dae::ScoreComponent::Accumulate( uint32_t increase )
 {
 	m_Score += increase;
-	constexpr auto eventHash{ Hash( "e_ScoreChanged" ) };
+	constexpr auto eventHash{ "e_ScoreChanged"_hash };
 	Minigin::eventManager.SendEvent( { eventHash, &m_Score } );
 	m_Subject.NotifyObservers( eventHash );
 }
@@ -36,7 +36,7 @@ void dae::ScoreComponent::HandleEvent( Event& event )
 {
 	switch ( event.EventHash )
 	{
-	case Hash( "e_SmallPelletPickup" ): {
+	case "e_SmallPelletPickup"_hash: {
 		if ( event.pData != GetParent() )
 		{
 			return;
@@ -46,7 +46,7 @@ void dae::ScoreComponent::HandleEvent( Event& event )
 
 		return;
 	}
-	case Hash( "e_BigPelletPickup" ): {
+	case "e_BigPelletPickup"_hash: {
 		if ( event.pData != GetParent() )
 		{
 			return;
