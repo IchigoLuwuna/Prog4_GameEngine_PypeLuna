@@ -1,7 +1,7 @@
 #include "TransformComponent.h"
 #include "Engine/Patterns/GameObject.h"
 
-const glm::vec2& dae::TransformComponent::GetPosition()
+const glm::vec2& dae::TransformComponent::GetPosition() const
 {
 	if ( !m_WorldDirty )
 	{

@@ -1,5 +1,6 @@
 #ifndef FPSCOMPONENT_H
 #define FPSCOMPONENT_H
+#include "Engine/Memory/ReferencePtr.h"
 #include "Engine/Patterns/Component.h"
 
 namespace dae
@@ -17,7 +18,7 @@ public:
 private:
 	float m_Fps{};
 	float m_LastUpdate{};
-	TextComponent* m_pTextComponent{};
+	ReferencePtr<TextComponent> m_pTextComponent{};
 };
 } // namespace dae
 #endif

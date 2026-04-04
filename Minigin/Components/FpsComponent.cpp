@@ -6,10 +6,10 @@
 dae::FpsComponent::FpsComponent( GameObject* pParent )
 	: Component( pParent )
 {
-	if ( !m_pTextComponent )
+	if ( !m_pTextComponent.Validate() )
 	{
-		m_pTextComponent = GetParent()->GetComponent<dae::TextComponent>();
-		assert( m_pTextComponent && "FpsComponent requires parent to have a text component" );
+		m_pTextComponent = GetParent()->GetComponent<TextComponent>();
+		assert( m_pTextComponent.Validate() && "FpsComponent requires parent to have a text component" );
 	}
 
 	UpdateText();

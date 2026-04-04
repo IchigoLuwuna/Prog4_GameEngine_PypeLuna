@@ -52,12 +52,12 @@ static void load()
 	// Player Characters
 	auto operaBird{ std::make_unique<dae::GameObject>() };
 	operaBird->AddComponent<dae::TextureComponent>( "./opera-bird.png" );
-	operaBird->AddComponent<dae::HealthComponent>( 3 );
+	operaBird->AddComponent<dae::HealthComponent>( 3u );
 	operaBird->AddComponent<dae::ScoreComponent>();
 
 	auto dotoSheep{ std::make_unique<dae::GameObject>() };
 	dotoSheep->AddComponent<dae::TextureComponent>( "./doto-sheep.png" );
-	dotoSheep->AddComponent<dae::HealthComponent>( 3 );
+	dotoSheep->AddComponent<dae::HealthComponent>( 3u );
 	dotoSheep->AddComponent<dae::ScoreComponent>();
 	//
 
@@ -126,15 +126,22 @@ static void load()
 	const auto southKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::south ) };
 	const auto eastKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::east ) };
 	const auto northKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::north ) };
-	auto pOperaBirdTransform{ operaBird->GetComponent<dae::TransformComponent>() };
-	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
-		dUpKey, dae::InputManager::KeyState::held, pOperaBirdTransform, glm::vec2{ 0.f, -moveSpeed * 2.f } );
-	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
-		dDownKey, dae::InputManager::KeyState::held, pOperaBirdTransform, glm::vec2{ 0.f, moveSpeed * 2.f } );
-	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
-		dLeftKey, dae::InputManager::KeyState::held, pOperaBirdTransform, glm::vec2{ -moveSpeed * 2.f, 0.f } );
-	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
-		dRightKey, dae::InputManager::KeyState::held, pOperaBirdTransform, glm::vec2{ moveSpeed * 2.f, 0.f } );
+	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>( dUpKey,
+																	dae::InputManager::KeyState::held,
+																	operaBird->GetComponent<dae::TransformComponent>(),
+																	glm::vec2{ 0.f, -moveSpeed * 2.f } );
+	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>( dDownKey,
+																	dae::InputManager::KeyState::held,
+																	operaBird->GetComponent<dae::TransformComponent>(),
+																	glm::vec2{ 0.f, moveSpeed * 2.f } );
+	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>( dLeftKey,
+																	dae::InputManager::KeyState::held,
+																	operaBird->GetComponent<dae::TransformComponent>(),
+																	glm::vec2{ -moveSpeed * 2.f, 0.f } );
+	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>( dRightKey,
+																	dae::InputManager::KeyState::held,
+																	operaBird->GetComponent<dae::TransformComponent>(),
+																	glm::vec2{ moveSpeed * 2.f, 0.f } );
 
 	dae::InputManager::GetInstance().BindCommand<dae::DamageCommand>(
 		northKey, dae::InputManager::KeyState::down, operaBird->GetComponent<dae::HealthComponent>(), 1 );
@@ -147,14 +154,22 @@ static void load()
 
 	// Doto Sheep using keyboard
 	auto pDotoSheepTransform{ dotoSheep->GetComponent<dae::TransformComponent>() };
-	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
-		SDL_SCANCODE_W, dae::InputManager::KeyState::held, pDotoSheepTransform, glm::vec2{ 0.f, -moveSpeed } );
-	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
-		SDL_SCANCODE_S, dae::InputManager::KeyState::held, pDotoSheepTransform, glm::vec2{ 0.f, moveSpeed } );
-	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
-		SDL_SCANCODE_A, dae::InputManager::KeyState::held, pDotoSheepTransform, glm::vec2{ -moveSpeed, 0.f } );
-	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
-		SDL_SCANCODE_D, dae::InputManager::KeyState::held, pDotoSheepTransform, glm::vec2{ moveSpeed, 0.f } );
+	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>( SDL_SCANCODE_W,
+																	dae::InputManager::KeyState::held,
+																	dotoSheep->GetComponent<dae::TransformComponent>(),
+																	glm::vec2{ 0.f, -moveSpeed } );
+	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>( SDL_SCANCODE_S,
+																	dae::InputManager::KeyState::held,
+																	dotoSheep->GetComponent<dae::TransformComponent>(),
+																	glm::vec2{ 0.f, moveSpeed } );
+	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>( SDL_SCANCODE_A,
+																	dae::InputManager::KeyState::held,
+																	dotoSheep->GetComponent<dae::TransformComponent>(),
+																	glm::vec2{ -moveSpeed, 0.f } );
+	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>( SDL_SCANCODE_D,
+																	dae::InputManager::KeyState::held,
+																	dotoSheep->GetComponent<dae::TransformComponent>(),
+																	glm::vec2{ moveSpeed, 0.f } );
 
 	dae::InputManager::GetInstance().BindCommand<dae::DamageCommand>(
 		SDL_SCANCODE_C, dae::InputManager::KeyState::down, dotoSheep->GetComponent<dae::HealthComponent>(), 1 );

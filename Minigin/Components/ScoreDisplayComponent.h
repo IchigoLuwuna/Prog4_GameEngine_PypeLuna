@@ -1,6 +1,7 @@
 #ifndef SCOREDISPLAYCOMPONENT_H
 #define SCOREDISPLAYCOMPONENT_H
 #include "Engine/Helpers/Subscription.h"
+#include "Engine/Memory/ReferencePtr.h"
 #include "Engine/Patterns/Component.h"
 #include "Engine/Patterns/Observer.h"
 
@@ -11,7 +12,7 @@ class TextComponent;
 class ScoreDisplayComponent : public Component, Observer<ScoreComponent>
 {
 public:
-	ScoreDisplayComponent( GameObject* pParent, ScoreComponent* pScore );
+	ScoreDisplayComponent( GameObject* pParent, const ReferencePtr<ScoreComponent>& pScore );
 	virtual ~ScoreDisplayComponent();
 
 	virtual void Update() override
@@ -21,9 +22,8 @@ public:
 	virtual void Notify( size_t eventHash, ScoreComponent* pSubject ) override;
 
 private:
-	TextComponent* m_pText{};
-	ScoreComponent* m_pSubject{};
-	Subscription m_Listener;
+	ReferencePtr<TextComponent> m_pText{};
+	ReferencePtr<ScoreComponent> m_pSubject{};
 
 	void UpdateText( ScoreComponent* pScore );
 	void HandleEvent( Event& event );

@@ -26,9 +26,10 @@ public:
 
 	template <typename CommandType, typename... Args>
 		requires std::derived_from<CommandType, Command> && requires( Args... args ) { CommandType( args... ); }
-	void BindCommand( int key, KeyState state, const Args&... args )
+	void BindCommand( int key, KeyState state, Args... args )
 	{
-		m_CommandBindings[key][static_cast<int>( state )] = std::make_unique<CommandType>( args... );
+		auto command{ std::make_unique<CommandType>( std::forward<Args>( args )... ) };
+		m_CommandBindings[key][static_cast<int>( state )] = std::move( command );
 	}
 	void ClearBinding( int key, KeyState state );
 

@@ -1,8 +1,9 @@
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
-#include <memory>
 #include <vector>
 #include "Component.h"
+#include "Engine/Memory/SafePtr.h"
+#include "Engine/Memory/ReferencePtr.h"
 
 namespace dae
 {
@@ -32,24 +33,31 @@ public:
 	template <typename ComponentType, typename... Args>
 		requires std::derived_from<ComponentType, Component> &&
 				 requires( Args... args ) { ComponentType( nullptr, args... ); }
-	void AddComponent( const Args&... args )
+	void AddComponent( Args... args )
 	{
-		m_Components.push_back( std::make_unique<ComponentType>( this, args... ) );
+		SafePtr<ComponentType> component{ this, std::forward<Args>( args )... };
+		m_Components.push_back( SafePtr<Component>( std::move( component ) ) );
+	}
+	template <typename ComponentType>
+		requires std::derived_from<ComponentType, Component>
+	void AddComponent( std::unique_ptr<ComponentType>&& pComponent )
+	{
+		m_Components.push_back( std::move( pComponent ) );
 	}
 
 	template <typename T>
-	T* GetComponent()
+	ReferencePtr<T> GetComponent() const
 	{
 		for ( auto& component : m_Components )
 		{
-			T* pComponent{ dynamic_cast<T*>( component.get() ) };
+			T* pComponent{ dynamic_cast<T*>( component.Get() ) };
 			if ( pComponent )
 			{
-				return pComponent;
+				return ReferencePtr<T>( component );
 			}
 		}
 
-		return nullptr;
+		return ReferencePtr<T>();
 	}
 
 	void MarkForRemoval();
@@ -59,7 +67,7 @@ private:
 	GameObject* m_pParent{};
 	std::vector<GameObject*> m_Children{};
 
-	std::vector<std::unique_ptr<Component>> m_Components{};
+	std::vector<SafePtr<Component>> m_Components{};
 
 	bool m_MarkedForRemoval{};
 

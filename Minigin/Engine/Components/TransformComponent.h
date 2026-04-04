@@ -26,7 +26,7 @@ public:
 	{
 	}
 
-	const glm::vec2& GetPosition();
+	const glm::vec2& GetPosition() const;
 
 	void MoveTo( float x, float y );
 	void MoveTo( const glm::vec2& position );
@@ -36,7 +36,7 @@ public:
 	void MarkForUpdate();
 
 private:
-	glm::vec2 m_WorldTransform{};
+	mutable glm::vec2 m_WorldTransform{};
 	glm::vec2 m_LocalTransform{};
 
 	mutable bool m_WorldDirty{ true };

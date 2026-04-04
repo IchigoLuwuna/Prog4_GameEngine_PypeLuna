@@ -14,7 +14,6 @@ void dae::ScoreComponent::Accumulate( uint32_t increase )
 {
 	m_Score += increase;
 	constexpr auto eventHash{ "e_ScoreChanged"_hash };
-	Minigin::eventManager.SendEvent( { eventHash, &m_Score } );
 	m_Subject.NotifyObservers( eventHash );
 }
 

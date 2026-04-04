@@ -13,6 +13,6 @@ dae::TextureComponent::TextureComponent( GameObject* pParent, const std::string&
 
 void dae::TextureComponent::Render() const
 {
-	TransformComponent* position{ GetParent()->GetComponent<TransformComponent>() };
+	auto position{ GetParent()->GetComponent<TransformComponent>() };
 	Renderer::GetInstance().RenderTexture( *m_Texture, position->GetPosition().x, position->GetPosition().y );
 }

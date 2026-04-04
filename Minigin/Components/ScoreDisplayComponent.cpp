@@ -3,29 +3,27 @@
 #include <format>
 #include "Components/ScoreComponent.h"
 #include "Components/TextComponent.h"
-#include "Engine/Core/EventManager.h"
 #include "Engine/Helpers/SdbmHash.h"
 #include "Engine/Patterns/GameObject.h"
 
-dae::ScoreDisplayComponent::ScoreDisplayComponent( GameObject* pParent, ScoreComponent* pScore )
+dae::ScoreDisplayComponent::ScoreDisplayComponent( GameObject* pParent, const ReferencePtr<ScoreComponent>& pScore )
 	: Component( pParent )
 	, m_pSubject( pScore )
-	, m_Listener( this, std::bind( &ScoreDisplayComponent::HandleEvent, this, std::placeholders::_1 ) )
 {
 	pScore->RegisterObserver( this );
 
-	if ( !m_pText )
+	if ( !m_pText.Validate() )
 	{
 		m_pText = GetParent()->GetComponent<TextComponent>();
-		assert( m_pText && "ScoreDisplayComponent requires parent to have a text component" );
+		assert( m_pText.Validate() && "ScoreDisplayComponent requires parent to have a text component" );
 	}
 
-	UpdateText( pScore );
+	UpdateText( pScore.Get() );
 }
 
 dae::ScoreDisplayComponent::~ScoreDisplayComponent()
 {
-	if ( m_pSubject )
+	if ( m_pSubject.Validate() )
 	{
 		m_pSubject->RemoveObserver( this );
 	}
@@ -49,21 +47,4 @@ void dae::ScoreDisplayComponent::UpdateText( ScoreComponent* pScore )
 	auto score{ pScore->GetScore() };
 	const std::string displayString{ std::format( "score: {}", score ) };
 	m_pText->SetText( displayString );
-}
-
-void dae::ScoreDisplayComponent::HandleEvent( Event& event )
-{
-	switch ( event.EventHash )
-	{
-	case "e_ComponentRemoved"_hash: {
-		if ( event.pData == m_pSubject )
-		{
-			m_pSubject = nullptr;
-		}
-		return;
-	}
-	default: {
-		return;
-	}
-	}
 }
