@@ -15,7 +15,7 @@ public:
 	SafePtr& operator=( const SafePtr& ) = delete;
 
 	template <typename... Args>
-	SafePtr( Args... args )
+	SafePtr( const Args&... args )
 		: m_pControlBlock( new ReferenceControlBlock<T>( std::make_unique<T>( args... ) ) )
 	{
 	}

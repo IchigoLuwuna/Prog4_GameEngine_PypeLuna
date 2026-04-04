@@ -33,9 +33,9 @@ public:
 	template <typename ComponentType, typename... Args>
 		requires std::derived_from<ComponentType, Component> &&
 				 requires( Args... args ) { ComponentType( nullptr, args... ); }
-	void AddComponent( Args... args )
+	void AddComponent( const Args&... args )
 	{
-		SafePtr<ComponentType> component{ this, std::forward<Args>( args )... };
+		SafePtr<ComponentType> component{ this, args... };
 		m_Components.push_back( SafePtr<Component>( std::move( component ) ) );
 	}
 	template <typename ComponentType>
