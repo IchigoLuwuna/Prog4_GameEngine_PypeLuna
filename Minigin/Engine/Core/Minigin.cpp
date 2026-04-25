@@ -17,6 +17,8 @@
 #include "Engine/Helpers/Timer.h"
 #include "EventManager.h"
 #include "ResourceManager.h"
+#include "Engine/Patterns/ServiceLocator.h"
+#include "Engine/Sound/SoundService.h"
 
 #if USE_STEAMWORKS
 #	if WIN32
@@ -125,6 +127,7 @@ dae::Minigin::~Minigin()
 	SceneManager::GetInstance().Destroy();
 	ResourceManager::GetInstance().Destroy();
 	Renderer::GetInstance().Destroy();
+	ServiceLocator<SoundService>::GetInstance().RegisterService( nullptr );
 	//
 	SDL_DestroyWindow( g_Window );
 	g_Window = nullptr;
