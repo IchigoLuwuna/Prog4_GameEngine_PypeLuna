@@ -6,7 +6,7 @@
 namespace dae
 {
 template <typename ServiceType>
-class ServiceLocator final : Singleton<ServiceLocator<ServiceType>>
+class ServiceLocator final : public Singleton<ServiceLocator<ServiceType>>
 {
 public:
 	void RegisterService( std::unique_ptr<ServiceType>&& service )
@@ -15,10 +15,19 @@ public:
 	}
 	ServiceType& GetService()
 	{
+#ifndef NDEBUG
+		if ( !m_pService )
+		{
+			throw std::runtime_error( "Attempted to access unregistered service" );
+		}
+#endif
+
 		return *m_pService;
 	}
 
 private:
+	friend class Singleton<ServiceLocator<ServiceType>>;
+
 	std::unique_ptr<ServiceType> m_pService{};
 };
 } // namespace dae
