@@ -5,6 +5,8 @@
 #endif
 
 #include "Engine/Core/Minigin.h"
+#include "Engine/Patterns/ServiceLocator.h"
+#include "Engine/Sound/SDLSoundService.h"
 #include "Engine/Core/ResourceManager.h"
 #include "Engine/Scene/SceneManager.h"
 #include "Engine/Input/InputManager.h"
@@ -33,6 +35,8 @@ namespace fs = std::filesystem;
 
 static void load()
 {
+	dae::ServiceLocator<dae::SoundService>::GetInstance().RegisterService( std::make_unique<dae::SDLSoundService>() );
+
 	auto& scene{ dae::SceneManager::GetInstance().CreateScene() };
 
 	// Initialize objects
@@ -217,5 +221,4 @@ int main( int, char*[] )
 
 	dae::Minigin engine( data_location );
 	engine.Run( load );
-	return 0;
 }
