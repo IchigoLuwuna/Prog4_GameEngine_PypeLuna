@@ -20,12 +20,12 @@ public:
 
 private:
 	MIX_Mixer* m_pMixer{};
-	std::vector<std::pair<const char*, float>> m_RequestQueue{};
+	std::queue<std::pair<const char*, float>> m_RequestQueue{};
 	std::unordered_map<uint32_t, MIX_Audio*> m_AudioSamples{};
 
 	// Threading
 	std::jthread m_EventHandlerThread{};
-	std::mutex m_Mutex{};
+	std::mutex m_EventQueueMutex{};
 	std::condition_variable m_CV{};
 
 	void HandleEvents( std::stop_token stopToken );
@@ -49,9 +49,7 @@ dae::SDLSoundService::Impl::Impl()
 dae::SDLSoundService::~SDLSoundService() = default;
 dae::SDLSoundService::Impl::~Impl()
 {
-	std::unique_lock lock{ m_Mutex }; // Event handler might still be processing requests
-
-	m_RequestQueue.clear();
+	std::unique_lock lock{ m_EventQueueMutex }; // Event handler might still be processing requests
 
 	for ( auto& audio : m_AudioSamples )
 	{
@@ -74,8 +72,8 @@ void dae::SDLSoundService::Play( const char* path, const float volume )
 }
 void dae::SDLSoundService::Impl::Play( const char* path, const float volume )
 {
-	std::unique_lock lock{ m_Mutex };
-	m_RequestQueue.push_back( { path, volume } );
+	std::unique_lock lock{ m_EventQueueMutex };
+	m_RequestQueue.push( { path, volume } );
 	m_CV.notify_all();
 }
 
@@ -84,22 +82,30 @@ void dae::SDLSoundService::Impl::HandleEvents( std::stop_token stopToken )
 	while ( !stopToken.stop_requested() )
 	{
 		// Main loop
-		std::unique_lock lock{ m_Mutex };
+		std::unique_lock lock{ m_EventQueueMutex };
 		m_CV.wait( lock, [this, stopToken] {
 			return !m_RequestQueue.empty() || stopToken.stop_requested();
 		} ); // Wait for wakeup
-		for ( auto& request : m_RequestQueue )
+		while ( !m_RequestQueue.empty() )
 		{
-			const auto& path{ request.first };
-			auto volume{ request.second };
+			// Queue dependent code [LOCKED]
+			auto path{ m_RequestQueue.back().first };
+			auto volume{ m_RequestQueue.back().second };
+			m_RequestQueue.pop();
+			lock.unlock();
+			//
+
+			// Queue independent code [UNLOCKED]
 			auto hash{ std::hash<std::string>()( path ) };
 			if ( !m_AudioSamples.contains( hash ) )
 			{
 				m_AudioSamples.insert( { hash, LoadAudio( path ) } );
 			}
 			Playsound( m_AudioSamples[hash], volume );
+			//
+
+			lock.lock();
 		}
-		m_RequestQueue.clear();
 	}
 }
 
