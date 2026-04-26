@@ -1,30 +1,34 @@
 #pragma once
 #include <filesystem>
 #include <string>
-#include <memory>
+#include "Engine/Memory/SafePtr.h"
+#include "Engine/Memory/ReferencePtr.h"
 #include <map>
+#include <unordered_map>
 #include "Engine/Patterns/Singleton.h"
+#include "Engine/Helpers/Font.h"
+#include "Engine/Helpers/Texture2D.h"
 
 namespace dae
 {
 class Texture2D;
-class Font;
+// class Font;
 class ResourceManager final : public Singleton<ResourceManager>
 {
 public:
 	void Init( const std::filesystem::path& data );
 	void Destroy();
-	std::shared_ptr<Texture2D> LoadTexture( const std::string& file );
-	std::shared_ptr<Font> LoadFont( const std::string& file, uint8_t size );
+	ReferencePtr<Texture2D> LoadTexture( const std::string& file );
+	ReferencePtr<Font> LoadFont( const std::string& file, uint8_t size );
+
+	void UnloadUnusedResources();
 
 private:
 	friend class Singleton<ResourceManager>;
 	ResourceManager() = default;
 	std::filesystem::path m_dataPath;
 
-	void UnloadUnusedResources();
-
-	std::map<std::string, std::shared_ptr<Texture2D>> m_LoadedTextures;
-	std::map<std::pair<std::string, uint8_t>, std::shared_ptr<Font>> m_LoadedFonts;
+	std::unordered_map<std::string, SafePtr<Texture2D>> m_LoadedTextures;
+	std::map<std::pair<std::string, uint8_t>, SafePtr<Font>> m_LoadedFonts;
 };
 } // namespace dae
