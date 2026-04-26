@@ -41,7 +41,7 @@ public:
 		}
 	}
 
-	explicit ReferencePtr( const ReferencePtr& other )
+	ReferencePtr( const ReferencePtr& other )
 		: m_pControlBlock( other.m_pControlBlock )
 	{
 		if ( m_pControlBlock )

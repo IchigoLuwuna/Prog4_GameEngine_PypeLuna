@@ -80,6 +80,11 @@ public:
 		return m_pControlBlock->Get();
 	}
 
+	size_t GetRefCount()
+	{
+		return m_pControlBlock->GetRefCount();
+	}
+
 private:
 	ReferenceControlBlock<T>* m_pControlBlock{};
 };

@@ -20,6 +20,11 @@ public:
 		return m_pData.get();
 	}
 
+	size_t GetRefCount()
+	{
+		return m_RefCount;
+	}
+
 	// For SafePtr
 	void Reset()
 	{
