@@ -165,4 +165,5 @@ void dae::Minigin::RunOneFrame()
 	SceneManager::GetInstance().Update();
 	Renderer::GetInstance().Render();
 	SceneManager::GetInstance().CleanUpRemovableObjects();
+	ResourceManager::GetInstance().UnloadUnusedResources();
 }
