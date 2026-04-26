@@ -7,7 +7,7 @@
 
 dae::TextComponent::TextComponent( GameObject* pParent,
 								   const std::string& text,
-								   std::shared_ptr<Font> font,
+								   dae::ReferencePtr<Font> font,
 								   const SDL_Color& color )
 	: RenderComponent( pParent )
 	, m_Text( text )

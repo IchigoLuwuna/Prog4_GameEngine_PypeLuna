@@ -1,6 +1,6 @@
 #ifndef TEXTURECOMPONENT_H
 #define TEXTURECOMPONENT_H
-#include <memory>
+#include "Engine/Memory/ReferencePtr.h"
 #include "Engine/Patterns/RenderComponent.h"
 #include "Engine/Helpers/Texture2D.h"
 
@@ -18,7 +18,7 @@ public:
 	virtual void Render() const override;
 
 private:
-	std::shared_ptr<Texture2D> m_Texture;
+	ReferencePtr<Texture2D> m_Texture;
 };
 } // namespace dae
 #endif
