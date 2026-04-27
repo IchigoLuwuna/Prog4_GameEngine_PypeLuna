@@ -8,7 +8,7 @@ void CheckWinOneGame( void* pData );
 
 void dae::achievements::HandleEvent( Event& event )
 {
-	switch ( event.EventHash )
+	switch ( event.eventHash )
 	{
 	case "e_ScoreChanged"_hash: {
 		CheckWinOneGame( event.pData );

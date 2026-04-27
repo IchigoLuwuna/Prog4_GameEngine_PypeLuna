@@ -33,7 +33,7 @@ void dae::ScoreComponent::RemoveObserver( Observer<ScoreComponent>* pObserver )
 
 void dae::ScoreComponent::HandleEvent( Event& event )
 {
-	switch ( event.EventHash )
+	switch ( event.eventHash )
 	{
 	case "e_SmallPelletPickup"_hash: {
 		if ( event.pData != GetParent() )

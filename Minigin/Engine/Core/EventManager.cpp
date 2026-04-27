@@ -41,7 +41,7 @@ void dae::EventManager::SendEvent( const Event& event )
 	++m_EventsBack;
 
 #ifndef NDEBUG
-	std::cout << "Received event: Hash(" << event.EventHash << ")\n";
+	std::cout << "Received event: Hash(" << event.eventHash << ")\n";
 	if ( m_EventsBack >= m_Events.size() - 1 )
 	{
 		std::cout << "Warning: Event queue is full, consider expanding it\n";

@@ -8,7 +8,7 @@ namespace dae
 {
 struct Event
 {
-	size_t EventHash{};
+	size_t eventHash{};
 	void* pData{};
 };
 
