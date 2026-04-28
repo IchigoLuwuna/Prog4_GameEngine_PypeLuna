@@ -1,7 +1,7 @@
 #ifndef DEBUGSOUNDSERVICE_H
 #define DEBUGSOUNDSERVICE_H
 #include <memory>
-#include "Engine/Sound/SoundService.h"
+#include "Sound/SoundService.h"
 
 namespace dae
 {

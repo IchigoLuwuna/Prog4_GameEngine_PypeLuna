@@ -1,7 +1,7 @@
 #ifndef EVENTCOMMAND_H
 #define EVENTCOMMAND_H
-#include "Engine/Patterns/Command.h"
-#include "Engine/Core/EventManager.h"
+#include "Patterns/Command.h"
+#include "Core/EventManager.h"
 
 namespace dae
 {

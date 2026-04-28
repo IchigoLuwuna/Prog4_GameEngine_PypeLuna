@@ -14,44 +14,65 @@ if(EMSCRIPTEN)
     set(TARGET_PARAM )
 else()
     set(TARGET_NAME minigin)
-    set(TARGET_PARAM WIN32)
 endif()
+
+add_library(engine SHARED
+    # Core
+        Minigin/Engine/Core/Minigin.cpp
+        Minigin/Engine/Core/EventManager.cpp
+        Minigin/Engine/Core/ResourceManager.cpp
+    # Components
+        Minigin/Engine/Components/TransformComponent.cpp
+    # Commands
+        Minigin/Engine/Commands/EventCommand.cpp
+        Minigin/Engine/Commands/LogCommand.cpp
+    # Achievement
+        Minigin/Engine/Achievement/SteamAchievements.cpp
+    # Helpers
+        Minigin/Engine/Helpers/Font.cpp
+        Minigin/Engine/Helpers/Subscription.cpp
+        Minigin/Engine/Helpers/Texture2D.cpp
+        Minigin/Engine/Helpers/Timer.cpp
+    # Input
+        Minigin/Engine/Input/Gamepad.cpp
+        Minigin/Engine/Input/InputManager.cpp
+    # Patterns
+        Minigin/Engine/Patterns/Component.cpp
+        Minigin/Engine/Patterns/GameObject.cpp
+    # Rendering
+        Minigin/Engine/Rendering/Renderer.cpp
+        Minigin/Engine/Rendering/imgui_plot.cpp
+    # Scene
+        Minigin/Engine/Scene/Scene.cpp
+        Minigin/Engine/Scene/SceneManager.cpp
+    # Sound
+        Minigin/Engine/Sound/DebugSoundService.cpp
+        Minigin/Engine/Sound/SDLSoundService.cpp
+)
+set_target_properties(engine PROPERTIES PUBLIC_HEADER
+    Minigin/Engine/Engine.h
+    Minigin/Engine/Core.h
+    Minigin/Engine/Achievement.h
+    Minigin/Engine/Commands.h
+    Minigin/Engine/Helpers.h
+    Minigin/Engine/Input.h
+    Minigin/Engine/Memory.h
+    Minigin/Engine/Patterns.h
+    Minigin/Engine/Rendering.h
+    Minigin/Engine/Scene.h
+    Minigin/Engine/Sound.h
+)
+target_include_directories(engine PUBLIC Minigin/Engine)
+
+target_link_libraries(engine PRIVATE imgui)
+target_include_directories(engine PRIVATE
+    ${imgui_SOURCE_DIR}
+)
+
+target_link_options(engine PUBLIC "-fPIC")
 
 # list source files here
 add_executable(${TARGET_NAME} ${TARGET_PARAM}
-    # Engine
-        # Core
-            Minigin/Engine/Core/Minigin.cpp
-            Minigin/Engine/Core/EventManager.cpp
-            Minigin/Engine/Core/ResourceManager.cpp
-        # Components
-            Minigin/Engine/Components/TransformComponent.cpp
-        # Commands
-            Minigin/Engine/Commands/EventCommand.cpp
-            Minigin/Engine/Commands/LogCommand.cpp
-        # Achievement
-            Minigin/Engine/Achievement/SteamAchievements.cpp
-        # Helpers
-            Minigin/Engine/Helpers/Font.cpp
-            Minigin/Engine/Helpers/Subscription.cpp
-            Minigin/Engine/Helpers/Texture2D.cpp
-            Minigin/Engine/Helpers/Timer.cpp
-        # Input
-            Minigin/Engine/Input/Gamepad.cpp
-            Minigin/Engine/Input/InputManager.cpp
-        # Patterns
-            Minigin/Engine/Patterns/Component.cpp
-            Minigin/Engine/Patterns/GameObject.cpp
-        # Rendering
-            Minigin/Engine/Rendering/Renderer.cpp
-            Minigin/Engine/Rendering/imgui_plot.cpp
-        # Scene
-            Minigin/Engine/Scene/Scene.cpp
-            Minigin/Engine/Scene/SceneManager.cpp
-        # Sound
-            Minigin/Engine/Sound/DebugSoundService.cpp
-            Minigin/Engine/Sound/SDLSoundService.cpp
-
     # Components
         Minigin/Game/Components/FpsComponent.cpp
         Minigin/Game/Components/HealthComponent.cpp
@@ -73,6 +94,8 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
 
     Minigin/Game/Main.cpp
 )
+
+target_link_libraries(${TARGET_NAME} PUBLIC engine)
 
 # enable c++20 features
 target_compile_features(${TARGET_NAME} PUBLIC cxx_std_20)
@@ -182,7 +205,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(imgui)
 
-add_library(imgui STATIC
+add_library(imgui SHARED
   ${imgui_SOURCE_DIR}/imgui.cpp
   ${imgui_SOURCE_DIR}/imgui_draw.cpp
   ${imgui_SOURCE_DIR}/imgui_tables.cpp
@@ -191,6 +214,8 @@ add_library(imgui STATIC
   ${imgui_SOURCE_DIR}/backends/imgui_impl_sdl3.cpp
   ${imgui_SOURCE_DIR}/backends/imgui_impl_sdlrenderer3.cpp
 )
+
+target_link_options(imgui PUBLIC "-fPIC")
 
 # enable c++20 features
 target_compile_features(imgui PUBLIC cxx_std_20)

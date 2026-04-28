@@ -2,8 +2,8 @@
 #define GAMEOBJECT_H
 #include <vector>
 #include "Component.h"
-#include "Engine/Memory/SafePtr.h"
-#include "Engine/Memory/ReferencePtr.h"
+#include "Memory/SafePtr.h"
+#include "Memory/ReferencePtr.h"
 
 namespace dae
 {

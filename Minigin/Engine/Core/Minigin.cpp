@@ -11,14 +11,14 @@
 #include <SDL3/SDL.h>
 #include <SDL3_ttf/SDL_ttf.h>
 #include "Minigin.h"
-#include "Engine/Input/InputManager.h"
-#include "Engine/Scene/SceneManager.h"
-#include "Engine/Rendering/Renderer.h"
-#include "Engine/Helpers/Timer.h"
+#include "Input/InputManager.h"
+#include "Scene/SceneManager.h"
+#include "Rendering/Renderer.h"
+#include "Helpers/Timer.h"
 #include "EventManager.h"
+#include "Patterns/ServiceLocator.h"
+#include "Sound/SoundService.h"
 #include "ResourceManager.h"
-#include "Engine/Patterns/ServiceLocator.h"
-#include "Engine/Sound/SoundService.h"
 
 #if USE_STEAMWORKS
 #	if WIN32

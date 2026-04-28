@@ -1,6 +1,6 @@
 #include "Subscription.h"
-#include "Engine/Core/Minigin.h"
-#include "Engine/Core/EventManager.h"
+#include "Core/Minigin.h"
+#include "Core/EventManager.h"
 
 dae::Subscription::Subscription( void* id, std::function<void( Event& event )> handler )
 	: m_Id( id )

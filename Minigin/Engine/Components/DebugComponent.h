@@ -1,6 +1,6 @@
 #ifndef DEBUGCOMPONENT_H
 #define DEBUGCOMPONENT_H
-#include "Engine/Patterns/Component.h"
+#include "Patterns/Component.h"
 #include <iostream>
 #include <string>
 

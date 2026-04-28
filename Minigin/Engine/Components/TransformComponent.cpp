@@ -1,5 +1,5 @@
 #include "TransformComponent.h"
-#include "Engine/Patterns/GameObject.h"
+#include "Patterns/GameObject.h"
 
 const glm::vec2& dae::TransformComponent::GetPosition() const
 {

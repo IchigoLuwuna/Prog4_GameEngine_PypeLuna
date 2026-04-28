@@ -1,13 +1,13 @@
 #pragma once
 #include <filesystem>
 #include <string>
-#include "Engine/Memory/SafePtr.h"
-#include "Engine/Memory/ReferencePtr.h"
+#include "Memory/SafePtr.h"
+#include "Memory/ReferencePtr.h"
 #include <map>
 #include <unordered_map>
-#include "Engine/Patterns/Singleton.h"
-#include "Engine/Helpers/Font.h"
-#include "Engine/Helpers/Texture2D.h"
+#include "Patterns/Singleton.h"
+#include "Helpers/Font.h"
+#include "Helpers/Texture2D.h"
 
 namespace dae
 {

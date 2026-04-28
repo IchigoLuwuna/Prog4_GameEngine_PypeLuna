@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
 #include <vector>
-#include "Engine/Patterns/GameObject.h"
+#include "Patterns/GameObject.h"
 
 namespace dae
 {
