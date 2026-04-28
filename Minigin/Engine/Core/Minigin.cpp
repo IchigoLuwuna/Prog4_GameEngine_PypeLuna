@@ -161,9 +161,9 @@ void dae::Minigin::RunOneFrame()
 #if USE_STEAMWORKS
 	SteamAPI_RunCallbacks();
 #endif
-	eventManager.ProcessEvents();
 	SceneManager::GetInstance().Update();
 	Renderer::GetInstance().Render();
+	eventManager.ProcessEvents();
 	SceneManager::GetInstance().CleanUpRemovableObjects();
 	ResourceManager::GetInstance().UnloadUnusedResources();
 }
