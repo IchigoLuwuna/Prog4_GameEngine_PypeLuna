@@ -6,6 +6,7 @@
 
 #include "Engine/Core/Minigin.h"
 #include "Engine/Patterns/ServiceLocator.h"
+#include "Engine/Sound/DebugSoundService.h"
 #include "Engine/Sound/SDLSoundService.h"
 #include "Engine/Core/ResourceManager.h"
 #include "Engine/Scene/SceneManager.h"
@@ -20,6 +21,7 @@
 #include "Components/HealthDisplayComponent.h"
 #include "Components/ScoreComponent.h"
 #include "Components/ScoreDisplayComponent.h"
+#include "Components/ReactiveSoundComponent.h"
 #include "Components/TextComponent.h"
 #include "Components/TextureComponent.h"
 
@@ -35,7 +37,13 @@ namespace fs = std::filesystem;
 
 static void load()
 {
-	dae::ServiceLocator<dae::SoundService>::GetInstance().RegisterService( std::make_unique<dae::SDLSoundService>() );
+	auto soundService{ std::make_unique<dae::SDLSoundService>() };
+#ifndef NDEBUG
+	dae::ServiceLocator<dae::SoundService>::GetInstance().RegisterService(
+		std::make_unique<dae::DebugSoundService>( std::move( soundService ) ) );
+#else
+	dae::ServiceLocator<dae::SoundService>::GetInstance().RegisterService( std::move( soundService ) );
+#endif
 
 	auto& scene{ dae::SceneManager::GetInstance().CreateScene() };
 
@@ -58,11 +66,20 @@ static void load()
 	operaBird->AddComponent<dae::TextureComponent>( "./opera-bird.png" );
 	operaBird->AddComponent<dae::HealthComponent>( 3u );
 	operaBird->AddComponent<dae::ScoreComponent>();
+	operaBird
+		->AddComponent<dae::ReactiveSoundComponent>() // Easy to add sounds thanks to chaining
+		.AddSound( { "e_SmallPelletPickup"_hash, operaBird.get(), "Data/wow.mp3" } )
+		.AddSound( { "e_BigPelletPickup"_hash, operaBird.get(), "Data/wow.mp3" } )
+		.AddSound( { "e_EntityDied"_hash, operaBird.get(), "Data/fuku2.mp3" } );
 
 	auto dotoSheep{ std::make_unique<dae::GameObject>() };
 	dotoSheep->AddComponent<dae::TextureComponent>( "./doto-sheep.png" );
 	dotoSheep->AddComponent<dae::HealthComponent>( 3u );
 	dotoSheep->AddComponent<dae::ScoreComponent>();
+	dotoSheep->AddComponent<dae::ReactiveSoundComponent>()
+		.AddSound( { "e_SmallPelletPickup"_hash, dotoSheep.get(), "Data/wow.mp3" } )
+		.AddSound( { "e_BigPelletPickup"_hash, dotoSheep.get(), "Data/wow.mp3" } )
+		.AddSound( { "e_EntityDied"_hash, dotoSheep.get(), "Data/fuku1.mp3" } );
 	//
 
 	// Scoreboard
