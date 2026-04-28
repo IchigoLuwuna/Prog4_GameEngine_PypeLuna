@@ -1,6 +1,5 @@
 #ifndef REFERENCEPTR_H
 #define REFERENCEPTR_H
-#include "Engine/Memory/ReferenceControlBlock.h"
 #include "SafePtr.h"
 
 namespace dae
@@ -22,7 +21,7 @@ public:
 	template <typename Base>
 		requires std::derived_from<T, Base>
 	explicit ReferencePtr( const SafePtr<Base>& safePtr )
-		: m_pControlBlock( reinterpret_cast<ReferenceControlBlock<T>*>( safePtr.GetControlPtr() ) )
+		: m_pControlBlock( reinterpret_cast<ControlBlock<T>*>( safePtr.GetControlPtr() ) )
 	{
 		if ( m_pControlBlock )
 		{
@@ -33,7 +32,7 @@ public:
 	template <typename Derived>
 		requires std::derived_from<Derived, T>
 	explicit ReferencePtr( const SafePtr<Derived>& safePtr )
-		: m_pControlBlock( reinterpret_cast<ReferenceControlBlock<T>*>( safePtr.GetControlPtr() ) )
+		: m_pControlBlock( reinterpret_cast<ControlBlock<T>*>( safePtr.GetControlPtr() ) )
 	{
 		if ( m_pControlBlock )
 		{
@@ -138,8 +137,13 @@ public:
 		return m_pControlBlock->Get();
 	}
 
+	ControlBlock<T>* GetControlBlock()
+	{
+		return m_pControlBlock;
+	}
+
 private:
-	ReferenceControlBlock<T>* m_pControlBlock{};
+	ControlBlock<T>* m_pControlBlock{};
 };
 } // namespace dae
 #endif

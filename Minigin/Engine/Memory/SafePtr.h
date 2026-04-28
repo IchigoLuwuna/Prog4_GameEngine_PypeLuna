@@ -1,6 +1,6 @@
 #ifndef SAFEPTR_H
 #define SAFEPTR_H
-#include "ReferenceControlBlock.h"
+#include "ControlBlock.h"
 
 // A safe pointer creates a control block upon initialisation
 // See ReferenceControlBlock.h for details on its lifetime management
@@ -16,12 +16,12 @@ public:
 
 	template <typename... Args>
 	SafePtr( const Args&... args )
-		: m_pControlBlock( new ReferenceControlBlock<T>( std::make_unique<T>( args... ) ) )
+		: m_pControlBlock( new ControlBlock<T>( std::make_unique<T>( args... ) ) )
 	{
 	}
 
 	SafePtr( std::unique_ptr<T>&& pData )
-		: m_pControlBlock( new ReferenceControlBlock<T>( std::move( pData ) ) )
+		: m_pControlBlock( new ControlBlock<T>( std::move( pData ) ) )
 	{
 	}
 
@@ -70,7 +70,7 @@ public:
 		return m_pControlBlock->Get();
 	}
 
-	ReferenceControlBlock<T>* GetControlPtr() const
+	ControlBlock<T>* GetControlPtr() const
 	{
 		return m_pControlBlock;
 	}
@@ -86,7 +86,7 @@ public:
 	}
 
 private:
-	ReferenceControlBlock<T>* m_pControlBlock{};
+	ControlBlock<T>* m_pControlBlock{};
 };
 } // namespace dae
 #endif

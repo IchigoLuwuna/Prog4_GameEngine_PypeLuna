@@ -7,10 +7,10 @@
 namespace dae
 {
 template <typename T>
-class ReferenceControlBlock final
+class ControlBlock final
 {
 public:
-	ReferenceControlBlock( std::unique_ptr<T>&& pData )
+	ControlBlock( std::unique_ptr<T>&& pData )
 		: m_pData( std::move( pData ) )
 	{
 	}
