@@ -30,7 +30,7 @@ private:
 	std::mutex m_EventQueueMutex{};
 	std::condition_variable m_CV{};
 
-	void HandleEvents( std::stop_token stopToken );
+	void HandleRequests( std::stop_token stopToken );
 	MIX_Audio* LoadAudio( const char* path );
 	void Playsound( MIX_Audio* audio, float volume );
 };
@@ -44,7 +44,7 @@ dae::SDLSoundService::Impl::Impl()
 	MIX_Init(); // Can be safely called multiple times so no checks are needed
 	m_pMixer = MIX_CreateMixerDevice( SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, nullptr );
 
-	m_EventHandlerThread = std::jthread( &Impl::HandleEvents, this );
+	m_EventHandlerThread = std::jthread( &Impl::HandleRequests, this );
 }
 
 dae::SDLSoundService::~SDLSoundService() = default;
@@ -77,7 +77,7 @@ void dae::SDLSoundService::Impl::Play( const char* path, const float volume )
 	m_CV.notify_all();
 }
 
-void dae::SDLSoundService::Impl::HandleEvents( std::stop_token stopToken )
+void dae::SDLSoundService::Impl::HandleRequests( std::stop_token stopToken )
 {
 	while ( !stopToken.stop_requested() )
 	{
