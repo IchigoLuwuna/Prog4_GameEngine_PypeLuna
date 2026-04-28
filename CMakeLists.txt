@@ -49,6 +49,7 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
             Minigin/Engine/Scene/Scene.cpp
             Minigin/Engine/Scene/SceneManager.cpp
         # Sound
+            Minigin/Engine/Sound/DebugSoundService.cpp
             Minigin/Engine/Sound/SDLSoundService.cpp
 
     # Components
@@ -57,6 +58,7 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
         Minigin/Components/HealthDisplayComponent.cpp
         Minigin/Components/ImGuiComponents.cpp
         Minigin/Components/MovementComponents.cpp
+        Minigin/Components/ReactiveSoundComponent.cpp
         Minigin/Components/ScoreComponent.cpp
         Minigin/Components/ScoreDisplayComponent.cpp
         Minigin/Components/TextComponent.cpp
