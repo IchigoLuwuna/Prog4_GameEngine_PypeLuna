@@ -35,8 +35,8 @@ public:
 				 requires( Args... args ) { ComponentType( nullptr, args... ); }
 	ComponentType& AddComponent( const Args&... args )
 	{
-		SafePtr<ComponentType> component{ this, args... };
-		m_Components.push_back( SafePtr<Component>( std::move( component ) ) );
+		SafePtr<ComponentType> component{ std::make_unique<ComponentType>( this, args... ) };
+		m_Components.push_back( std::move( component ) );
 		return *reinterpret_cast<ComponentType*>( m_Components.back().Get() );
 	}
 	template <typename ComponentType>
