@@ -1,6 +1,7 @@
 #include "HealthComponent.h"
 #include "Engine/Helpers/SdbmHash.h"
 #include "Engine/Patterns/GameObject.h"
+#include "Engine/Core/Minigin.h"
 #include <algorithm>
 
 dae::HealthComponent::HealthComponent( GameObject* pGameObject, uint32_t health, uint32_t maxHealth )
@@ -32,6 +33,7 @@ void dae::HealthComponent::Damage( uint32_t damage )
 	if ( m_Health == 0 )
 	{
 		m_Subject.NotifyObservers( "e_EntityDied"_hash );
+		Minigin::eventManager.SendEvent( { "e_EntityDied"_hash, GetParent() } );
 		GetParent()->MarkForRemoval();
 	}
 }
