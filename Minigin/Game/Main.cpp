@@ -4,17 +4,17 @@
 #	include <vld.h>
 #endif
 
-#include "Engine/Core/Minigin.h"
-#include "Engine/Patterns/ServiceLocator.h"
-#include "Engine/Sound/DebugSoundService.h"
-#include "Engine/Sound/SDLSoundService.h"
-#include "Engine/Core/ResourceManager.h"
-#include "Engine/Scene/SceneManager.h"
-#include "Engine/Input/InputManager.h"
-#include "Engine/Components/TransformComponent.h"
+#include "Core/Minigin.h"
+#include "Patterns/ServiceLocator.h"
+#include "Sound/DebugSoundService.h"
+#include "Sound/SDLSoundService.h"
+#include "Core/ResourceManager.h"
+#include "Scene/SceneManager.h"
+#include "Input/InputManager.h"
+#include "Components/TransformComponent.h"
 
 #ifndef NDEBUG
-#	include "Engine/Components/DebugComponent.h"
+#	include "Components/DebugComponent.h"
 #endif
 #include "Components/FpsComponent.h"
 #include "Components/HealthComponent.h"
@@ -25,12 +25,12 @@
 #include "Components/TextComponent.h"
 #include "Components/TextureComponent.h"
 
-#include "Engine/Commands/EventCommand.h"
+#include "Commands/EventCommand.h"
 #include "Commands/DamageCommand.h"
 #include "Commands/MoveCommand.h"
 
 #include "Achievement/Achievement.h"
-#include "Engine/Helpers/SdbmHash.h"
+#include "Helpers/SdbmHash.h"
 
 #include <filesystem>
 namespace fs = std::filesystem;
