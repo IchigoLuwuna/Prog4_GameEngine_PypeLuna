@@ -1,6 +1,6 @@
 #ifndef HEALTHDISPLAYCOMPONENT_H
 #define HEALTHDISPLAYCOMPONENT_H
-#include "Components/HealthComponent.h"
+#include "HealthComponent.h"
 #include "Engine/Helpers/Subscription.h"
 #include "Engine/Memory/ReferencePtr.h"
 #include "Engine/Patterns/Component.h"

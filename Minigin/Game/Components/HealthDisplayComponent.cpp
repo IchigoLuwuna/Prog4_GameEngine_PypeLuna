@@ -1,5 +1,5 @@
 #include "HealthDisplayComponent.h"
-#include "Components/TextComponent.h"
+#include "TextComponent.h"
 #include "Engine/Helpers/SdbmHash.h"
 #include "Engine/Patterns/GameObject.h"
 #include <cassert>

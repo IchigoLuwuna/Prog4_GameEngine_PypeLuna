@@ -1,8 +1,8 @@
 #include "ScoreDisplayComponent.h"
 #include <cassert>
 #include <format>
-#include "Components/ScoreComponent.h"
-#include "Components/TextComponent.h"
+#include "ScoreComponent.h"
+#include "TextComponent.h"
 #include "Engine/Helpers/SdbmHash.h"
 #include "Engine/Patterns/GameObject.h"
 

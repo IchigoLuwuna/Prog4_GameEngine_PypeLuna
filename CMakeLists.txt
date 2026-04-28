@@ -53,25 +53,25 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
             Minigin/Engine/Sound/SDLSoundService.cpp
 
     # Components
-        Minigin/Components/FpsComponent.cpp
-        Minigin/Components/HealthComponent.cpp
-        Minigin/Components/HealthDisplayComponent.cpp
-        Minigin/Components/ImGuiComponents.cpp
-        Minigin/Components/MovementComponents.cpp
-        Minigin/Components/ReactiveSoundComponent.cpp
-        Minigin/Components/ScoreComponent.cpp
-        Minigin/Components/ScoreDisplayComponent.cpp
-        Minigin/Components/TextComponent.cpp
-        Minigin/Components/TextureComponent.cpp
+        Minigin/Game/Components/FpsComponent.cpp
+        Minigin/Game/Components/HealthComponent.cpp
+        Minigin/Game/Components/HealthDisplayComponent.cpp
+        Minigin/Game/Components/ImGuiComponents.cpp
+        Minigin/Game/Components/MovementComponents.cpp
+        Minigin/Game/Components/ReactiveSoundComponent.cpp
+        Minigin/Game/Components/ScoreComponent.cpp
+        Minigin/Game/Components/ScoreDisplayComponent.cpp
+        Minigin/Game/Components/TextComponent.cpp
+        Minigin/Game/Components/TextureComponent.cpp
 
     # Commands
-        Minigin/Commands/DamageCommand.cpp
-        Minigin/Commands/MoveCommand.cpp
+        Minigin/Game/Commands/DamageCommand.cpp
+        Minigin/Game/Commands/MoveCommand.cpp
 
     # Achievement
-        Minigin/Achievement/Achievement.cpp
+        Minigin/Game/Achievement/Achievement.cpp
 
-  Minigin/Main.cpp
+    Minigin/Game/Main.cpp
 )
 
 # enable c++20 features
