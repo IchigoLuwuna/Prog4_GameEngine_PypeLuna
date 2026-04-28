@@ -1,5 +1,7 @@
 #include "SDLSoundService.h"
+#include <cassert>
 #include <condition_variable>
+#include <iostream>
 #include <queue>
 #include <thread>
 #include <unordered_map>
@@ -42,7 +44,6 @@ dae::SDLSoundService::Impl::Impl()
 	MIX_Init(); // Can be safely called multiple times so no checks are needed
 	m_pMixer = MIX_CreateMixerDevice( SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, nullptr );
 
-	// TODO:
 	m_EventHandlerThread = std::jthread( &Impl::HandleEvents, this );
 }
 
@@ -59,7 +60,6 @@ dae::SDLSoundService::Impl::~Impl()
 		}
 	}
 
-	// TODO:This prevents a deadlock, but it's ugly, try to make it better :3
 	m_EventHandlerThread.request_stop();
 	m_CV.notify_all(); // Event thread is waiting for a notification, so we give it one
 
@@ -111,11 +111,20 @@ void dae::SDLSoundService::Impl::HandleEvents( std::stop_token stopToken )
 
 MIX_Audio* dae::SDLSoundService::Impl::LoadAudio( const char* path )
 {
-	return MIX_LoadAudio( m_pMixer, path, true );
+	auto audio{ MIX_LoadAudio( m_pMixer, path, true ) };
+	if ( !audio )
+	{
+		std::cout << SDL_GetError() << "\n";
+		assert( false && "Loading audio failed, see above for SDL error" );
+	}
+	return audio;
 }
 
-// TODO:Add volume
 void dae::SDLSoundService::Impl::Playsound( MIX_Audio* audio, float )
 {
-	MIX_PlayAudio( m_pMixer, audio );
+	if ( !MIX_PlayAudio( m_pMixer, audio ) )
+	{
+		std::cout << SDL_GetError() << "\n";
+		assert( false && "Playing audio failed, see above for SDL error" );
+	}
 }
