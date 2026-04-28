@@ -30,7 +30,7 @@ dae::ReferencePtr<dae::Texture2D> dae::ResourceManager::LoadTexture( const std::
 	const auto filename = fs::path( fullPath ).filename().string();
 	if ( m_LoadedTextures.find( filename ) == m_LoadedTextures.end() )
 	{
-		SafePtr<Texture2D> texture{ fullPath.string() };
+		SafePtr<Texture2D> texture{ std::make_unique<Texture2D>( fullPath.string() ) };
 		m_LoadedTextures.insert( std::pair( filename, std::move( texture ) ) );
 	}
 	return ReferencePtr( m_LoadedTextures.at( filename ) );
@@ -43,7 +43,7 @@ dae::ReferencePtr<dae::Font> dae::ResourceManager::LoadFont( const std::string& 
 	const auto key = std::pair<std::string, uint8_t>( filename, size );
 	if ( m_LoadedFonts.find( key ) == m_LoadedFonts.end() )
 	{
-		SafePtr<Font> font{ fullPath.string(), size };
+		SafePtr<Font> font{ std::make_unique<Font>( fullPath.string(), size ) };
 		m_LoadedFonts.insert( std::pair( key, std::move( font ) ) );
 	}
 	return ReferencePtr( m_LoadedFonts.at( key ) );
