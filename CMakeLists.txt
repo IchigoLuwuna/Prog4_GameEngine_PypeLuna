@@ -12,11 +12,13 @@ endif()
 if(EMSCRIPTEN)
   set(TARGET_NAME minigin_web)
   set(TARGET_PARAM )
+  set(LIBRARY_TYPE STATIC)
 else()
   set(TARGET_NAME minigin)
+  set(LIBRARY_TYPE SHARED)
 endif()
 
-add_library(engine SHARED
+add_library(engine ${LIBRARY_TYPE}
     # Core
         Minigin/Engine/Core/Minigin.cpp
         Minigin/Engine/Core/EventManager.cpp
@@ -49,7 +51,7 @@ add_library(engine SHARED
         Minigin/Engine/Sound/DebugSoundService.cpp
         Minigin/Engine/Sound/SDLSoundService.cpp
 )
-target_include_directories(engine PUBLIC Minigin/Engine)
+target_include_directories(engine PUBLIC Minigin/Engine/.)
 set_target_properties(engine PROPERTIES PUBLIC_HEADER
     Minigin/Engine/Engine.h
     Minigin/Engine/Core.h
@@ -194,7 +196,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(imgui)
 
-add_library(imgui SHARED
+add_library(imgui ${LIBRARY_TYPE}
   ${imgui_SOURCE_DIR}/imgui.cpp
   ${imgui_SOURCE_DIR}/imgui_draw.cpp
   ${imgui_SOURCE_DIR}/imgui_tables.cpp
