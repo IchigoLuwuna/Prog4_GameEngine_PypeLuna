@@ -31,7 +31,7 @@ void dae::ReactiveSoundComponent::HandleEvent( Event& event )
 		if ( reactiveSound.eventHash == event.eventHash &&
 			 ( reactiveSound.pSubject == event.pData || !reactiveSound.pSubject ) )
 		{
-			ServiceLocator<SoundService>::GetInstance().GetService().Play( reactiveSound.path.c_str(), 1.f );
+			ServiceLocator<SoundService>::GetInstance().GetService().Play( reactiveSound.path, 1.f );
 		}
 	}
 }

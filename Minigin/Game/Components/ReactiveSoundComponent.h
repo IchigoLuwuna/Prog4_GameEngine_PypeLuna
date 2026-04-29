@@ -17,8 +17,8 @@ public:
 	{
 		const size_t eventHash{}; // What to react to with a sound
 		const void*
-			pSubject{}; // Limit scope to a single subject (important for protecting your ears and being correct)
-		const std::string path{}; // Sound to play
+			pSubject{};		// Limit scope to a single subject (important for protecting your ears and being correct)
+		const char* path{}; // Sound to play
 	};
 
 	virtual void Update() override { };
