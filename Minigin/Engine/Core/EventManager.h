@@ -3,6 +3,7 @@
 #include <functional>
 #include <vector>
 #include <cstddef>
+#include <array>
 
 namespace dae
 {

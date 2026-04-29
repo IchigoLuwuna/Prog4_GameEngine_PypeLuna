@@ -1,6 +1,7 @@
 #ifndef SERVICELOCATOR_H
 #define SERVICELOCATOR_H
 #include <memory>
+#include <stdexcept>
 #include "Singleton.h"
 
 namespace dae
