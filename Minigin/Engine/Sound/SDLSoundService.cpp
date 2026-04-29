@@ -23,7 +23,7 @@ public:
 private:
 	MIX_Mixer* m_pMixer{};
 	std::queue<std::pair<const char*, float>> m_RequestQueue{};
-	std::unordered_map<uint32_t, MIX_Audio*> m_AudioSamples{};
+	std::unordered_map<size_t, MIX_Audio*> m_AudioSamples{};
 
 	// Threading
 	std::jthread m_EventHandlerThread{};

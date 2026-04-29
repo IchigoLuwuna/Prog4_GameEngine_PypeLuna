@@ -13,6 +13,9 @@ if(EMSCRIPTEN)
   set(TARGET_NAME minigin_web)
   set(TARGET_PARAM )
   set(LIBRARY_TYPE STATIC)
+elseif(WIN32)
+  set(TARGET_NAME minigin)
+  set(LIBRARY_TYPE STATIC)
 else()
   set(TARGET_NAME minigin)
   set(LIBRARY_TYPE SHARED)
@@ -65,8 +68,6 @@ set_target_properties(engine PROPERTIES PUBLIC_HEADER
     Minigin/Engine/Scene.h
     Minigin/Engine/Sound.h
 )
-
-target_compile_options(engine PRIVATE "-pthread")
 
 # list source files here
 add_executable(${TARGET_NAME} ${TARGET_PARAM}
@@ -209,7 +210,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(imgui)
 
-add_library(imgui ${LIBRARY_TYPE}
+add_library(imgui STATIC
   ${imgui_SOURCE_DIR}/imgui.cpp
   ${imgui_SOURCE_DIR}/imgui_draw.cpp
   ${imgui_SOURCE_DIR}/imgui_tables.cpp
@@ -272,6 +273,8 @@ else()
 endif()
 
 if(EMSCRIPTEN)
+  target_compile_options(engine PRIVATE "-pthread")
+
   set(EMSCRIPTEN_COMPILE_FLAGS "${EMSCRIPTEN_LINK_FLAGS} -g")
   set(EMSCRIPTEN_LINK_FLAGS "${EMSCRIPTEN_LINK_FLAGS} -sUSE_FREETYPE=1 -sUSE_HARFBUZZ=1 -g -sALLOW_MEMORY_GROWTH --preload-file \"${CMAKE_SOURCE_DIR}/Data@/\"")
 
