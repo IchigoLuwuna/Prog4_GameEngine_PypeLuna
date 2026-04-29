@@ -66,6 +66,8 @@ set_target_properties(engine PROPERTIES PUBLIC_HEADER
     Minigin/Engine/Sound.h
 )
 
+target_compile_options(engine PRIVATE "-pthread")
+
 # list source files here
 add_executable(${TARGET_NAME} ${TARGET_PARAM}
     # Components
@@ -224,14 +226,11 @@ target_link_libraries(imgui PRIVATE SDL3::SDL3)
 target_link_libraries(engine PRIVATE
     SDL3::SDL3
     SDL3_ttf::SDL3_ttf
-    SDL3_mixer
+    SDL3_mixer::SDL3_mixer
     glm
     imgui
 )
 target_include_directories(engine PRIVATE
-    ${SDL3_SOURCE_DIR}
-    ${SDL3_ttf_SOURCE_DIR}
-    ${SDL3_mixer_SOURCE_DIR}/include/
     ${imgui_SOURCE_DIR}
 )
 
@@ -252,7 +251,7 @@ target_include_directories("${TARGET_NAME}" PUBLIC
 
 target_link_libraries("${TARGET_NAME}" PUBLIC
   SDL3::SDL3
-  SDL3_mixer
+  SDL3_mixer::SDL3_mixer
   SDL3_ttf::SDL3_ttf
   glm::glm
   imgui

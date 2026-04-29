@@ -44,7 +44,7 @@ dae::SDLSoundService::Impl::Impl()
 	MIX_Init(); // Can be safely called multiple times so no checks are needed
 	m_pMixer = MIX_CreateMixerDevice( SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, nullptr );
 
-	m_EventHandlerThread = std::jthread( &Impl::HandleRequests, this );
+	m_EventHandlerThread = std::jthread( &Impl::HandleRequests, this, std::stop_token{} );
 }
 
 dae::SDLSoundService::~SDLSoundService() = default;
