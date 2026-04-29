@@ -13,6 +13,17 @@ public:
 	{
 		m_pService = std::move( service );
 	}
+
+	template <typename ServiceLayerType>
+		requires requires( std::unique_ptr<ServiceType>&& underlyingService ) {
+			ServiceLayerType( std::move( underlyingService ) );
+		}
+	void AddLayer()
+	{
+		auto serviceLayer{ std::make_unique<ServiceLayerType>( std::move( m_pService ) ) };
+		m_pService = std::move( serviceLayer );
+	}
+
 	ServiceType& GetService()
 	{
 #ifndef NDEBUG

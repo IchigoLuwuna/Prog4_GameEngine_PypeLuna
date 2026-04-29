@@ -1,5 +1,6 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
+#include "Sound/SDLSoundService.h"
 #if _DEBUG && __has_include( <vld.h>)
 #	include <vld.h>
 #endif
@@ -26,12 +27,10 @@ namespace fs = std::filesystem;
 
 static void load()
 {
-	auto soundService{ std::make_unique<dae::SDLSoundService>() };
+	dae::ServiceLocator<dae::SoundService>::GetInstance().RegisterService( std::make_unique<dae::SDLSoundService>() );
+
 #ifndef NDEBUG
-	dae::ServiceLocator<dae::SoundService>::GetInstance().RegisterService(
-		std::make_unique<dae::DebugSoundService>( std::move( soundService ) ) );
-#else
-	dae::ServiceLocator<dae::SoundService>::GetInstance().RegisterService( std::move( soundService ) );
+	dae::ServiceLocator<dae::SoundService>::GetInstance().AddLayer<dae::DebugSoundService>();
 #endif
 
 	auto& scene{ dae::SceneManager::GetInstance().CreateScene() };
