@@ -3,12 +3,13 @@
 #include <functional>
 #include <vector>
 #include <cstddef>
+#include <array>
 
 namespace dae
 {
 struct Event
 {
-	size_t EventHash{};
+	size_t eventHash{};
 	void* pData{};
 };
 

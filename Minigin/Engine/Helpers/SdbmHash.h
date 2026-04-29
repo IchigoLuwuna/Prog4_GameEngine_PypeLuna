@@ -4,39 +4,25 @@
 
 namespace dae
 {
-template <size_t length>
-class SdbmHash
+consteval size_t Hash( const char* string, size_t length )
 {
-public:
-	static consteval size_t Calculate( const char* text )
+	size_t hash{};
+	for ( size_t index{}; index < length; ++index )
 	{
-		size_t value{};
-		const size_t nextChar{ CalculateNext( text, value ) };
-		return nextChar + ( value << 6 ) + ( value << 16 ) - value;
+		hash = string[index] + ( hash << 6 ) + ( hash << 16 ) - hash;
 	}
-
-	static consteval size_t CalculateNext( const char* text, size_t& value )
-	{
-		const size_t nextChar{ SdbmHash<length - 1>::CalculateNext( text, value ) };
-		value = nextChar + ( value << 6 ) + ( value << 16 ) - value;
-		return text[length - 1];
-	}
-};
-
-template <>
-class SdbmHash<1>
-{
-public:
-	static consteval size_t CalculateNext( const char* text, size_t& )
-	{
-		return text[0];
-	}
-};
+	return hash;
+}
 
 template <size_t length>
 consteval size_t Hash( const char ( &text )[length] )
 {
-	return SdbmHash<length - 1>::Calculate( text );
+	return Hash( text, length );
 }
 } // namespace dae
+
+consteval size_t operator""_hash( const char* string, size_t length )
+{
+	return dae::Hash( string, length );
+}
 #endif

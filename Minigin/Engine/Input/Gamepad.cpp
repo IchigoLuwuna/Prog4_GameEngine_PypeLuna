@@ -1,7 +1,7 @@
 #include "Gamepad.h"
+#include <SDL3/SDL_scancode.h>
 #ifndef _WIN32
 #	include <SDL3/SDL_gamepad.h>
-#	include <SDL3/SDL_scancode.h>
 #else
 #	define WIN32_LEAN_AND_MEAN
 #	include <windows.h>

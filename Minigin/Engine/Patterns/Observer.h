@@ -13,14 +13,14 @@ public:
 };
 
 template <typename SubjectType>
-class Subject final
+class Messenger final
 {
 public:
-	Subject( SubjectType* pParent )
-		: m_pParent( pParent )
+	Messenger( SubjectType* pParent )
+		: m_pSubject( pParent )
 	{
 	}
-	~Subject() = default;
+	~Messenger() = default;
 
 	void RegisterObserver( Observer<SubjectType>* pObserver )
 	{
@@ -35,13 +35,13 @@ public:
 	{
 		for ( auto* observer : m_Observers )
 		{
-			observer->Notify( eventHash, reinterpret_cast<SubjectType*>( m_pParent ) );
+			observer->Notify( eventHash, m_pSubject );
 		}
 	}
 
 private:
 	std::vector<Observer<SubjectType>*> m_Observers{};
-	SubjectType* m_pParent{};
+	SubjectType* m_pSubject{};
 };
 } // namespace dae
 #endif

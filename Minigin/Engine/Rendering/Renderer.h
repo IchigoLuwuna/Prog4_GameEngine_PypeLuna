@@ -1,6 +1,6 @@
 #pragma once
 #include <SDL3/SDL.h>
-#include "Engine/Patterns/Singleton.h"
+#include "Patterns/Singleton.h"
 
 namespace dae
 {

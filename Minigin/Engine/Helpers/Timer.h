@@ -1,7 +1,7 @@
 #ifndef TIMER_H
 #define TIMER_H
 #include <chrono>
-#include "Engine/Patterns/Singleton.h"
+#include "Patterns/Singleton.h"
 
 namespace dae
 {

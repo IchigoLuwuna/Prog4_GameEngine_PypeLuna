@@ -1,5 +1,5 @@
 #include "GameObject.h"
-#include "Engine/Components/TransformComponent.h"
+#include "Components/TransformComponent.h"
 #include "RenderComponent.h"
 
 dae::GameObject::GameObject()
@@ -32,7 +32,7 @@ void dae::GameObject::Render() const
 {
 	for ( auto& upComponent : m_Components )
 	{
-		auto pRenderComponent{ dynamic_cast<RenderComponent*>( upComponent.get() ) };
+		auto pRenderComponent{ dynamic_cast<RenderComponent*>( upComponent.Get() ) };
 		if ( pRenderComponent )
 		{
 			pRenderComponent->Render();

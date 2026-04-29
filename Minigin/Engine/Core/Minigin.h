@@ -2,8 +2,8 @@
 #define MINIGIN_H
 #include <functional>
 #include <filesystem>
-#include "Engine/Core/EventManager.h"
-#include "Engine/Achievement/SteamAchievements.h"
+#include "EventManager.h"
+#include "Achievement/SteamAchievements.h"
 
 namespace dae
 {

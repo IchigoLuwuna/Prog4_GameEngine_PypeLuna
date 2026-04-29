@@ -5,8 +5,8 @@
 #include <memory>
 #include <array>
 #include "Gamepad.h"
-#include "Engine/Patterns/Singleton.h"
-#include "Engine/Patterns/Command.h"
+#include "Patterns/Singleton.h"
+#include "Patterns/Command.h"
 
 namespace dae
 {
@@ -28,7 +28,8 @@ public:
 		requires std::derived_from<CommandType, Command> && requires( Args... args ) { CommandType( args... ); }
 	void BindCommand( int key, KeyState state, const Args&... args )
 	{
-		m_CommandBindings[key][static_cast<int>( state )] = std::make_unique<CommandType>( args... );
+		auto command{ std::make_unique<CommandType>( args... ) };
+		m_CommandBindings[key][static_cast<int>( state )] = std::move( command );
 	}
 	void ClearBinding( int key, KeyState state );
 
