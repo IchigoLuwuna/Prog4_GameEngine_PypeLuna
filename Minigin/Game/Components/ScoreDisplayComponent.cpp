@@ -3,8 +3,6 @@
 #include <format>
 #include "ScoreComponent.h"
 #include "TextComponent.h"
-#include "Engine/Helpers/SdbmHash.h"
-#include "Engine/Patterns/GameObject.h"
 
 dae::ScoreDisplayComponent::ScoreDisplayComponent( GameObject* pParent, const ReferencePtr<ScoreComponent>& pScore )
 	: Component( pParent )

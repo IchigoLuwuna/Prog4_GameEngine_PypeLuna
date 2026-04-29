@@ -1,8 +1,7 @@
 #ifndef HEALTHCOMPONENT_H
 #define HEALTHCOMPONENT_H
 #include <cstdint>
-#include "Engine/Patterns/Component.h"
-#include "Engine/Patterns/Observer.h"
+#include <Patterns.h>
 
 namespace dae
 {

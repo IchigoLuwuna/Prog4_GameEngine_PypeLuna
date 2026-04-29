@@ -3,6 +3,7 @@
 #include "Core.h"
 #include "Achievement.h"
 #include "Commands.h"
+#include "Components.h"
 #include "Helpers.h"
 #include "Input.h"
 #include "Memory.h"

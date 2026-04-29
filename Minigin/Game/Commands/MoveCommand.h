@@ -1,9 +1,9 @@
 #ifndef MOVECOMMAND_H
 #define MOVECOMMAND_H
-#include "Engine/Helpers/Subscription.h"
-#include "Engine/Memory/ReferencePtr.h"
-#include "Engine/Patterns/Command.h"
 #include <glm/glm.hpp>
+#include <Patterns.h>
+#include <Memory.h>
+#include <Patterns.h>
 
 namespace dae
 {

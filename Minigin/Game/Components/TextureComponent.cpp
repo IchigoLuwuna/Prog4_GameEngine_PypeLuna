@@ -1,9 +1,7 @@
 #include "TextureComponent.h"
-#include "Engine/Patterns/RenderComponent.h"
-#include "Engine/Patterns/GameObject.h"
-#include "Engine/Components/TransformComponent.h"
-#include "Engine/Rendering/Renderer.h"
-#include "Engine/Core/ResourceManager.h"
+#include <Core.h>
+#include <Rendering.h>
+#include <Components.h>
 
 dae::TextureComponent::TextureComponent( GameObject* pParent, const std::string& path )
 	: RenderComponent( pParent )

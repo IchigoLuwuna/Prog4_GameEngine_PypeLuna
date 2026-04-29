@@ -1,9 +1,8 @@
 #ifndef DAMAGECOMMAND_H
 #define DAMAGECOMMAND_H
 #include <cstdint>
-#include "Engine/Helpers/Subscription.h"
-#include "Engine/Memory/ReferencePtr.h"
-#include "Engine/Patterns/Command.h"
+#include <Patterns.h>
+#include <Helpers.h>
 
 namespace dae
 {

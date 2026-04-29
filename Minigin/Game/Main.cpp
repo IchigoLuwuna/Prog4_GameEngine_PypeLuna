@@ -4,18 +4,8 @@
 #	include <vld.h>
 #endif
 
-#include "Core/Minigin.h"
-#include "Patterns/ServiceLocator.h"
-#include "Sound/DebugSoundService.h"
-#include "Sound/SDLSoundService.h"
-#include "Core/ResourceManager.h"
-#include "Scene/SceneManager.h"
-#include "Input/InputManager.h"
-#include "Components/TransformComponent.h"
+#include <Engine.h>
 
-#ifndef NDEBUG
-#	include "Components/DebugComponent.h"
-#endif
 #include "Components/FpsComponent.h"
 #include "Components/HealthComponent.h"
 #include "Components/HealthDisplayComponent.h"
@@ -30,7 +20,6 @@
 #include "Commands/MoveCommand.h"
 
 #include "Achievement/Achievement.h"
-#include "Helpers/SdbmHash.h"
 
 #include <filesystem>
 namespace fs = std::filesystem;
@@ -74,7 +63,7 @@ static void load()
 
 	auto dotoSheep{ std::make_unique<dae::GameObject>() };
 	dotoSheep->AddComponent<dae::TextureComponent>( "./doto-sheep.png" );
-	dotoSheep->AddComponent<dae::HealthComponent>( 3u );
+	dotoSheep->AddComponent<dae::HealthComponent>( 3 );
 	dotoSheep->AddComponent<dae::ScoreComponent>();
 	dotoSheep->AddComponent<dae::ReactiveSoundComponent>()
 		.AddSound( { "e_SmallPelletPickup"_hash, dotoSheep.get(), "Data/wow.mp3" } )

@@ -1,8 +1,7 @@
 #ifndef SCORECOMPONENT_H
 #define SCORECOMPONENT_H
-#include "Engine/Helpers/Subscription.h"
-#include "Engine/Patterns/Component.h"
-#include "Engine/Patterns/Observer.h"
+#include <Patterns.h>
+#include <Helpers.h>
 #include <cstdint>
 
 namespace dae

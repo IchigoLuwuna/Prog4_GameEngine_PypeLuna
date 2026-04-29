@@ -1,7 +1,6 @@
 #include "FpsComponent.h"
-#include "Engine/Helpers/Timer.h"
-#include "Engine/Patterns/GameObject.h"
 #include "TextComponent.h"
+#include <Helpers.h>
 
 dae::FpsComponent::FpsComponent( GameObject* pParent )
 	: Component( pParent )

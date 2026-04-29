@@ -1,7 +1,6 @@
 #include "ReactiveSoundComponent.h"
-#include "Engine/Core/EventManager.h"
-#include "Engine/Patterns/ServiceLocator.h"
-#include "Engine/Sound/SoundService.h"
+#include <Core.h>
+#include <Sound.h>
 
 dae::ReactiveSoundComponent::ReactiveSoundComponent( dae::GameObject* pParent )
 	: Component( pParent )

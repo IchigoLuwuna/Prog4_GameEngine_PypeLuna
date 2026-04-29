@@ -1,7 +1,6 @@
 #include "HealthComponent.h"
-#include "Engine/Helpers/SdbmHash.h"
-#include "Engine/Patterns/GameObject.h"
-#include "Engine/Core/Minigin.h"
+#include <Core.h>
+#include <Helpers.h>
 #include <algorithm>
 
 dae::HealthComponent::HealthComponent( GameObject* pGameObject, uint32_t health, uint32_t maxHealth )

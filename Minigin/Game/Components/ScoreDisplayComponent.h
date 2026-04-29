@@ -1,9 +1,7 @@
 #ifndef SCOREDISPLAYCOMPONENT_H
 #define SCOREDISPLAYCOMPONENT_H
-#include "Engine/Helpers/Subscription.h"
-#include "Engine/Memory/ReferencePtr.h"
-#include "Engine/Patterns/Component.h"
-#include "Engine/Patterns/Observer.h"
+#include <Patterns.h>
+#include <Core.h>
 
 namespace dae
 {

@@ -1,6 +1,5 @@
 #include "ScoreComponent.h"
-#include "Engine/Core/Minigin.h"
-#include "Engine/Helpers/SdbmHash.h"
+#include <Core.h>
 
 dae::ScoreComponent::ScoreComponent( GameObject* pParent, uint32_t startingScore )
 	: Component( pParent )

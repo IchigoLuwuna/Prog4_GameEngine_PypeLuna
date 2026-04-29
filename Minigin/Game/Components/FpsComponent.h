@@ -1,7 +1,7 @@
 #ifndef FPSCOMPONENT_H
 #define FPSCOMPONENT_H
-#include "Engine/Memory/ReferencePtr.h"
-#include "Engine/Patterns/Component.h"
+#include <Patterns.h>
+#include <Memory.h>
 
 namespace dae
 {

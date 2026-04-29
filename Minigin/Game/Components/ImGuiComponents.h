@@ -1,6 +1,6 @@
 #ifndef IMGUIWINDOWS_H
 #define IMGUIWINDOWS_H
-#include "Engine/Patterns/RenderComponent.h"
+#include <Patterns.h>
 #include <vector>
 #include <array>
 

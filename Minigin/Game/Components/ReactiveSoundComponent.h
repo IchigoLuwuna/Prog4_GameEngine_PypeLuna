@@ -1,9 +1,7 @@
 #ifndef SOUNDCOMPONENT_H
 #define SOUNDCOMPONENT_H
-#include "Engine/Memory/ReferencePtr.h"
-#include "Engine/Patterns/Component.h"
-#include "Engine/Helpers/Subscription.h"
-#include "Engine/Patterns/GameObject.h"
+#include <Patterns.h>
+#include <Helpers.h>
 #include <string>
 
 // This component can hook into events

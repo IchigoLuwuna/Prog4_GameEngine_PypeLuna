@@ -1,8 +1,10 @@
 #ifndef MOVEMENTCOMPONENTS_H
 #define MOVEMENTCOMPONENTS_H
 #include <glm/glm.hpp>
-#include "Engine/Patterns/Component.h"
+#include <Patterns.h>
+
 // This header contains a collection of different generic and automatic movement behaviours
+
 namespace dae
 {
 class SlideMovementComponent : public Component

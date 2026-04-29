@@ -1,10 +1,8 @@
 #ifndef TEXTCOMPONENT_H
 #define TEXTCOMPONENT_H
 #include <SDL3/SDL_pixels.h>
-#include "Engine/Helpers/Font.h"
-#include "Engine/Helpers/Texture2D.h"
-#include "Engine/Memory/ReferencePtr.h"
-#include "Engine/Patterns/RenderComponent.h"
+#include <Patterns.h>
+#include <Helpers.h>
 
 namespace dae
 {
