@@ -29,6 +29,8 @@ private:
 	std::jthread m_EventHandlerThread{};
 	std::mutex m_EventQueueMutex{};
 	std::condition_variable m_CV{};
+	std::stop_source m_StopSrc{}; // Usually I would let jthread implicetely handle stop tokens but emscripten forced my
+								  // hand by not liking that :(
 
 	void HandleRequests( std::stop_token stopToken );
 	MIX_Audio* LoadAudio( const char* path );
@@ -44,7 +46,7 @@ dae::SDLSoundService::Impl::Impl()
 	MIX_Init(); // Can be safely called multiple times so no checks are needed
 	m_pMixer = MIX_CreateMixerDevice( SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, nullptr );
 
-	m_EventHandlerThread = std::jthread( &Impl::HandleRequests, this, std::stop_token{} );
+	m_EventHandlerThread = std::jthread( &Impl::HandleRequests, this, m_StopSrc.get_token() );
 }
 
 dae::SDLSoundService::~SDLSoundService() = default;
@@ -60,7 +62,7 @@ dae::SDLSoundService::Impl::~Impl()
 		}
 	}
 
-	m_EventHandlerThread.request_stop();
+	m_StopSrc.request_stop();
 	m_CV.notify_all(); // Event thread is waiting for a notification, so we give it one
 
 	MIX_Quit();
