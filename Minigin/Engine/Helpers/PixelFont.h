@@ -1,6 +1,7 @@
 #ifndef PIXELFONT_H
 #define PIXELFONT_H
 #include "Helpers/Texture2D.h"
+#include "Memory/ReferencePtr.h"
 
 namespace dae
 {
@@ -14,7 +15,7 @@ public:
 	void SetIgnoreCapital( bool ignore );
 
 private:
-	Texture2D m_TypeFace;
+	ReferencePtr<Texture2D> m_TypeFace;
 	std::string m_Mapping{};
 	glm::vec2 m_CharDimensions{};
 	bool m_IgnoreCapital{};

@@ -1,9 +1,10 @@
 #include "PixelFont.h"
 #include "Rendering.h"
 #include <iostream>
+#include "Core/ResourceManager.h"
 
 dae::PixelFont::PixelFont( const std::string& path, const std::string& mapping, const glm::vec2& dimensions )
-	: m_TypeFace( path )
+	: m_TypeFace( ResourceManager::GetInstance().LoadTexture( path ) )
 	, m_Mapping( mapping )
 	, m_CharDimensions( dimensions )
 {
@@ -60,7 +61,7 @@ void dae::PixelFont::Render( const std::string& text, const glm::vec2& position 
 
 		SDL_FRect srcRect{ mappingIdx * m_CharDimensions.x, 0.f, m_CharDimensions.x, m_CharDimensions.y };
 		SDL_FRect dstRect{ printHead.x, printHead.y, m_CharDimensions.x, m_CharDimensions.y };
-		Renderer::GetInstance().RenderTexture( m_TypeFace, srcRect, dstRect );
+		Renderer::GetInstance().RenderTexture( *m_TypeFace, srcRect, dstRect );
 		printHead.x += m_CharDimensions.x;
 	}
 }
