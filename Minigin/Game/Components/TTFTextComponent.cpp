@@ -1,14 +1,15 @@
-#include "TextComponent.h"
+#include "TTFTextComponent.h"
 #include <SDL3_ttf/SDL_ttf.h>
+#include "Rendering/Renderer.h"
 #include <stdexcept>
 #include <Components.h>
 #include <Rendering.h>
 
-dae::TextComponent::TextComponent( GameObject* pParent,
-								   const std::string& text,
-								   dae::ReferencePtr<Font> font,
-								   const SDL_Color& color )
-	: RenderComponent( pParent )
+dae::TTFTextComponent::TTFTextComponent( GameObject* pParent,
+										 const std::string& text,
+										 dae::ReferencePtr<Font> font,
+										 const SDL_Color& color )
+	: TextComponent( pParent )
 	, m_Text( text )
 	, m_Color( color )
 	, m_Font( font )
@@ -16,7 +17,7 @@ dae::TextComponent::TextComponent( GameObject* pParent,
 	Update();
 }
 
-void dae::TextComponent::Update()
+void dae::TTFTextComponent::Update()
 {
 	if ( m_NeedsUpdate )
 	{
@@ -36,19 +37,25 @@ void dae::TextComponent::Update()
 	}
 }
 
-void dae::TextComponent::Render() const
+void dae::TTFTextComponent::Render() const
 {
+	// Text gets rendered at an internal 4x resolution
+
+	glm::vec2 renderScale{};
+	SDL_GetRenderScale( Renderer::GetInstance().GetSDLRenderer(), &renderScale.x, &renderScale.y );
+	SDL_SetRenderScale( Renderer::GetInstance().GetSDLRenderer(), renderScale.x / 4.f, renderScale.y / 4.f );
 	auto position{ GetParent()->GetComponent<TransformComponent>() };
 	Renderer::GetInstance().RenderTexture( *m_TextTexture, position->GetPosition().x, position->GetPosition().y );
+	SDL_SetRenderScale( Renderer::GetInstance().GetSDLRenderer(), renderScale.x, renderScale.y );
 }
 
-void dae::TextComponent::SetText( const std::string& text )
+void dae::TTFTextComponent::SetText( const std::string& text )
 {
 	m_Text = text;
 	m_NeedsUpdate = true;
 }
 
-void dae::TextComponent::SetColor( const SDL_Color& color )
+void dae::TTFTextComponent::SetColor( const SDL_Color& color )
 {
 	m_Color = color;
 	m_NeedsUpdate = true;
