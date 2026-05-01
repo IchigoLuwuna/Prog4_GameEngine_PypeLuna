@@ -35,6 +35,7 @@ add_library(engine ${LIBRARY_TYPE}
         Minigin/Engine/Achievement/SteamAchievements.cpp
     # Helpers
         Minigin/Engine/Helpers/Font.cpp
+        Minigin/Engine/Helpers/PixelFont.cpp
         Minigin/Engine/Helpers/Subscription.cpp
         Minigin/Engine/Helpers/Texture2D.cpp
         Minigin/Engine/Helpers/Timer.cpp
@@ -77,6 +78,7 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
         Minigin/Game/Components/HealthDisplayComponent.cpp
         Minigin/Game/Components/ImGuiComponents.cpp
         Minigin/Game/Components/MovementComponents.cpp
+        Minigin/Game/Components/PixelTextComponent.cpp
         Minigin/Game/Components/ReactiveSoundComponent.cpp
         Minigin/Game/Components/ScoreComponent.cpp
         Minigin/Game/Components/ScoreDisplayComponent.cpp

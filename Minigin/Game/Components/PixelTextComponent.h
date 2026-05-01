@@ -1,0 +1,39 @@
+#ifndef PIXELTEXTCOMPONENT_H
+#define PIXELTEXTCOMPONENT_H
+#include "Game/Components/TextComponent.h"
+#include "Helpers.h"
+
+namespace dae
+{
+class PixelTextComponent : public TextComponent
+{
+public:
+	PixelTextComponent( GameObject* pParent,
+						const std::string& path,
+						const std::string& mapping,
+						const glm::vec2& dimensions );
+	PixelTextComponent( GameObject* pParent,
+						const std::string& path,
+						std::string&& mapping,
+						const glm::vec2& dimensions );
+
+	virtual void Update() override
+	{
+		; // No behaviour (; for auto-formatting)
+	};
+	virtual void Render() const override;
+
+	virtual void SetText( const std::string& text ) override;
+	virtual void SetColor( const SDL_Color& ) override
+	{
+		// No behaviour
+	}
+
+	PixelTextComponent& SetIgnore( bool ignore );
+
+private:
+	PixelFont m_Font;
+	std::string m_Text{};
+};
+} // namespace dae
+#endif
