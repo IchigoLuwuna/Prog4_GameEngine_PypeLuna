@@ -1,7 +1,7 @@
 #ifndef PIXELTEXTCOMPONENT_H
 #define PIXELTEXTCOMPONENT_H
 #include "Game/Components/TextComponent.h"
-#include "Helpers.h"
+#include <Helpers.h>
 
 namespace dae
 {

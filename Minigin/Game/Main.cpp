@@ -7,18 +7,8 @@
 #include <Engine.h>
 
 #include "Components/FpsComponent.h"
-#include "Components/HealthComponent.h"
-#include "Components/HealthDisplayComponent.h"
-#include "Components/ScoreComponent.h"
-#include "Components/ScoreDisplayComponent.h"
-#include "Components/ReactiveSoundComponent.h"
 #include "Components/PixelTextComponent.h"
-#include "Components/TTFTextComponent.h"
-#include "Components/TextureComponent.h"
-
-#include "Commands/EventCommand.h"
-#include "Commands/DamageCommand.h"
-#include "Commands/MoveCommand.h"
+#include "Game/Components/ScrollingBGComponent.h"
 
 #include "Achievement/Achievement.h"
 
@@ -38,10 +28,11 @@ static void load()
 	// Initialize objects
 	// Base
 	auto background{ std::make_unique<dae::GameObject>() };
-	background->AddComponent<dae::TextureComponent>( "./BG.png" );
+	background->AddComponent<dae::ScrollingBGComponent>(
+		"BG.png", 64.f, dae::ScrollingBGComponent::ScrollingDir::down );
 	auto bigFont{ dae::ResourceManager::GetInstance().LoadFont( "Lingua.otf", 48 ) };
 	auto fps{ std::make_unique<dae::GameObject>() };
-	const std::string typefacePath{ "./Data/Typeface.png" };
+	const std::string typefacePath{ "Typeface.png" };
 	const std::string typefaceMapping{ "0123456789abcdefghijklmnopqrstuvwxyz-%.!" };
 	fps->AddComponent<dae::PixelTextComponent>( typefacePath, typefaceMapping, glm::vec2{ 8.f, 8.f } )
 		.SetIgnore( true );
