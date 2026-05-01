@@ -18,20 +18,8 @@ public:
 		}
 	}
 
-	template <typename Base>
-		requires std::derived_from<T, Base>
-	explicit ReferencePtr( const SafePtr<Base>& safePtr )
-		: m_pControlBlock( reinterpret_cast<ControlBlock<T>*>( safePtr.GetControlPtr() ) )
-	{
-		if ( m_pControlBlock )
-		{
-			m_pControlBlock->AddReference();
-		}
-	}
-
-	template <typename Derived>
-		requires std::derived_from<Derived, T>
-	explicit ReferencePtr( const SafePtr<Derived>& safePtr )
+	template <typename T2>
+	explicit ReferencePtr( const SafePtr<T2>& safePtr )
 		: m_pControlBlock( reinterpret_cast<ControlBlock<T>*>( safePtr.GetControlPtr() ) )
 	{
 		if ( m_pControlBlock )
