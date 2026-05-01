@@ -87,8 +87,11 @@ void PrintSDLVersion()
 				   SDL_VERSIONNUM_MICRO( version ) );
 }
 
-dae::Minigin::Minigin( const std::filesystem::path& dataPath )
+dae::Minigin::Minigin( const WindowSettings& settings, const std::filesystem::path& dataPath )
 {
+	const glm::vec2 renderScale{ settings.resolution.x / settings.internalResolution.x,
+								 settings.resolution.y / settings.internalResolution.y };
+
 	PrintSDLVersion();
 
 #if USE_STEAMWORKS
@@ -106,7 +109,7 @@ dae::Minigin::Minigin( const std::filesystem::path& dataPath )
 		throw std::runtime_error( std::string( "SDL_Init Error: " ) + SDL_GetError() );
 	}
 
-	g_Window = SDL_CreateWindow( "Programming 4 assignment", 1024, 576, SDL_WINDOW_OPENGL );
+	g_Window = SDL_CreateWindow( settings.name, settings.resolution.x, settings.resolution.y, SDL_WINDOW_OPENGL );
 	if ( g_Window == nullptr )
 	{
 		throw std::runtime_error( std::string( "SDL_CreateWindow Error: " ) + SDL_GetError() );
@@ -114,6 +117,8 @@ dae::Minigin::Minigin( const std::filesystem::path& dataPath )
 
 	Renderer::GetInstance().Init( g_Window );
 	ResourceManager::GetInstance().Init( dataPath );
+
+	SDL_SetRenderScale( Renderer::GetInstance().GetSDLRenderer(), renderScale.x, renderScale.y );
 }
 
 dae::Minigin::~Minigin()
