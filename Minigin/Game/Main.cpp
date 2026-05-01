@@ -12,6 +12,7 @@
 #include "Components/ScoreComponent.h"
 #include "Components/ScoreDisplayComponent.h"
 #include "Components/ReactiveSoundComponent.h"
+#include "Components/PixelTextComponent.h"
 #include "Components/TTFTextComponent.h"
 #include "Components/TextureComponent.h"
 
@@ -40,142 +41,31 @@ static void load()
 	background->AddComponent<dae::TextureComponent>( "./BG.png" );
 	auto bigFont{ dae::ResourceManager::GetInstance().LoadFont( "Lingua.otf", 48 ) };
 	auto fps{ std::make_unique<dae::GameObject>() };
-	fps->AddComponent<dae::TTFTextComponent>( ".", bigFont );
+	const std::string typefacePath{ "./Data/Typeface.png" };
+	const std::string typefaceMapping{ "0123456789abcdefghijklmnopqrstuvwxyz-%.!" };
+	fps->AddComponent<dae::PixelTextComponent>( typefacePath, typefaceMapping, glm::vec2{ 8.f, 8.f } )
+		.SetIgnore( true );
 	fps->AddComponent<dae::FpsComponent>();
 	//
 
 	// Player Characters
-	auto operaBird{ std::make_unique<dae::GameObject>() };
-	operaBird->AddComponent<dae::TextureComponent>( "./opera-bird.png" );
-	operaBird->AddComponent<dae::HealthComponent>( 3u );
-	operaBird->AddComponent<dae::ScoreComponent>();
-	operaBird
-		->AddComponent<dae::ReactiveSoundComponent>() // Easy to add sounds thanks to chaining
-		.AddSound( { "e_SmallPelletPickup"_hash, operaBird.get(), "Data/wow.mp3" } )
-		.AddSound( { "e_BigPelletPickup"_hash, operaBird.get(), "Data/wow.mp3" } )
-		.AddSound( { "e_EntityDied"_hash, operaBird.get(), "Data/fuku2.mp3" } );
-
-	auto dotoSheep{ std::make_unique<dae::GameObject>() };
-	dotoSheep->AddComponent<dae::TextureComponent>( "./doto-sheep.png" );
-	dotoSheep->AddComponent<dae::HealthComponent>( 3 );
-	dotoSheep->AddComponent<dae::ScoreComponent>();
-	dotoSheep->AddComponent<dae::ReactiveSoundComponent>()
-		.AddSound( { "e_SmallPelletPickup"_hash, dotoSheep.get(), "Data/wow.mp3" } )
-		.AddSound( { "e_BigPelletPickup"_hash, dotoSheep.get(), "Data/wow.mp3" } )
-		.AddSound( { "e_EntityDied"_hash, dotoSheep.get(), "Data/fuku1.mp3" } );
 	//
 
 	// Scoreboard
-	auto smallFont{ dae::ResourceManager::GetInstance().LoadFont( "Lingua.otf", 18 ) };
-
-	auto operaInfoText{ std::make_unique<dae::GameObject>() };
-	operaInfoText->AddComponent<dae::TTFTextComponent>(
-		"Use the D-Pad to move TM Opera O (bird), X to inflict damage, A and B to pick up pellets",
-		smallFont,
-		SDL_Color{ 255, 255, 255, 255 } );
-	auto dotoInfoText{ std::make_unique<dae::GameObject>() };
-	dotoInfoText->AddComponent<dae::TTFTextComponent>(
-		"Use WASD to move Meisho Doto (sheep), C to inflict damage, Z and X to pick up pellets ",
-		smallFont,
-		SDL_Color{ 255, 255, 255, 255 } );
-
-	auto operaHealthDisplay{ std::make_unique<dae::GameObject>() };
-	operaHealthDisplay->AddComponent<dae::TTFTextComponent>( ".", smallFont, SDL_Color{ 255, 255, 255, 255 } );
-	operaHealthDisplay->AddComponent<dae::HealthDisplayComponent>( operaBird->GetComponent<dae::HealthComponent>() );
-
-	auto operaScoreDisplay{ std::make_unique<dae::GameObject>() };
-	operaScoreDisplay->AddComponent<dae::TTFTextComponent>( ".", smallFont, SDL_Color{ 255, 255, 255, 255 } );
-	operaScoreDisplay->AddComponent<dae::ScoreDisplayComponent>( operaBird->GetComponent<dae::ScoreComponent>() );
-
-	auto dotoHealthDisplay{ std::make_unique<dae::GameObject>() };
-	dotoHealthDisplay->AddComponent<dae::TTFTextComponent>( ".", smallFont, SDL_Color{ 255, 255, 255, 255 } );
-	dotoHealthDisplay->AddComponent<dae::HealthDisplayComponent>( dotoSheep->GetComponent<dae::HealthComponent>() );
-
-	auto dotoScoreDisplay{ std::make_unique<dae::GameObject>() };
-	dotoScoreDisplay->AddComponent<dae::TTFTextComponent>( ".", smallFont, SDL_Color{ 255, 255, 255, 255 } );
-	dotoScoreDisplay->AddComponent<dae::ScoreDisplayComponent>( dotoSheep->GetComponent<dae::ScoreComponent>() );
 	//
 
 	// Create SceneGraph
-	dotoInfoText->SetParent( operaInfoText.get() );
-	operaHealthDisplay->SetParent( operaInfoText.get() );
-	operaScoreDisplay->SetParent( operaInfoText.get() );
-	dotoHealthDisplay->SetParent( operaInfoText.get() );
-	dotoScoreDisplay->SetParent( operaInfoText.get() );
 	//
 
 	// Set Starting Positions
-	dotoSheep->GetComponent<dae::TransformComponent>()->MoveTo( glm::vec2{ 150.f, 200.f } );
-	operaBird->GetComponent<dae::TransformComponent>()->MoveTo( glm::vec2{ 500.f, 200.f } );
-
-	operaInfoText->GetComponent<dae::TransformComponent>()->MoveTo( glm::vec2{ 10.f, 100.f } );
-	dotoInfoText->GetComponent<dae::TransformComponent>()->MoveTo( glm::vec2{ 0.f, 24.f } );
-	operaHealthDisplay->GetComponent<dae::TransformComponent>()->MoveTo( glm::vec2{ 0.f, 64.f } );
-	operaScoreDisplay->GetComponent<dae::TransformComponent>()->MoveTo( glm::vec2{ 0.f, 88.f } );
-	dotoHealthDisplay->GetComponent<dae::TransformComponent>()->MoveTo( glm::vec2{ 0.f, 112.f } );
-	dotoScoreDisplay->GetComponent<dae::TransformComponent>()->MoveTo( glm::vec2{ 0.f, 136.f } );
 	//
 
 	// Create bindings
-	constexpr float moveSpeed{ 150.f };
-	// Opera Bird using controller
-	const auto dUpKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::up ) };
-	const auto dDownKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::down ) };
-	const auto dLeftKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::left ) };
-	const auto dRightKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::right ) };
-
-	const auto southKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::south ) };
-	const auto eastKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::east ) };
-	const auto northKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::north ) };
-
-	const auto pOperaTransform{ operaBird->GetComponent<dae::TransformComponent>() };
-	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
-		dUpKey, dae::InputManager::KeyState::held, pOperaTransform, glm::vec2{ 0.f, -moveSpeed * 2.f } );
-	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
-		dDownKey, dae::InputManager::KeyState::held, pOperaTransform, glm::vec2{ 0.f, moveSpeed * 2.f } );
-	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
-		dLeftKey, dae::InputManager::KeyState::held, pOperaTransform, glm::vec2{ -moveSpeed * 2.f, 0.f } );
-	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
-		dRightKey, dae::InputManager::KeyState::held, pOperaTransform, glm::vec2{ moveSpeed * 2.f, 0.f } );
-
-	dae::InputManager::GetInstance().BindCommand<dae::DamageCommand>(
-		northKey, dae::InputManager::KeyState::down, operaBird->GetComponent<dae::HealthComponent>(), 1 );
-
-	dae::InputManager::GetInstance().BindCommand<dae::EventCommand>(
-		southKey, dae::InputManager::KeyState::down, dae::Event{ "e_SmallPelletPickup"_hash, operaBird.get() } );
-	dae::InputManager::GetInstance().BindCommand<dae::EventCommand>(
-		eastKey, dae::InputManager::KeyState::down, dae::Event{ "e_BigPelletPickup"_hash, operaBird.get() } );
-	//
-
-	// Doto Sheep using keyboard
-	auto pDotoTransform{ dotoSheep->GetComponent<dae::TransformComponent>() };
-	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
-		SDL_SCANCODE_W, dae::InputManager::KeyState::held, pDotoTransform, glm::vec2{ 0.f, -moveSpeed } );
-	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
-		SDL_SCANCODE_S, dae::InputManager::KeyState::held, pDotoTransform, glm::vec2{ 0.f, moveSpeed } );
-	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
-		SDL_SCANCODE_A, dae::InputManager::KeyState::held, pDotoTransform, glm::vec2{ -moveSpeed, 0.f } );
-	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
-		SDL_SCANCODE_D, dae::InputManager::KeyState::held, pDotoTransform, glm::vec2{ moveSpeed, 0.f } );
-
-	dae::InputManager::GetInstance().BindCommand<dae::DamageCommand>(
-		SDL_SCANCODE_C, dae::InputManager::KeyState::down, dotoSheep->GetComponent<dae::HealthComponent>(), 1 );
-
-	dae::InputManager::GetInstance().BindCommand<dae::EventCommand>(
-		SDL_SCANCODE_Z, dae::InputManager::KeyState::down, dae::Event{ "e_SmallPelletPickup"_hash, dotoSheep.get() } );
-	dae::InputManager::GetInstance().BindCommand<dae::EventCommand>(
-		SDL_SCANCODE_X, dae::InputManager::KeyState::down, dae::Event{ "e_BigPelletPickup"_hash, dotoSheep.get() } );
 	//
 
 #ifndef NDEBUG
 	//  Attach names to objects when debugging
 	background->AddComponent<dae::DebugComponent>( "background" );
-	dotoSheep->AddComponent<dae::DebugComponent>( "dotoSheep" );
-	operaBird->AddComponent<dae::DebugComponent>( "operaBird" );
-	operaInfoText->AddComponent<dae::DebugComponent>( "operaInfoText" );
-	dotoInfoText->AddComponent<dae::DebugComponent>( "dotoInfoText" );
-	operaHealthDisplay->AddComponent<dae::DebugComponent>( "operaHealthDisplay" );
-	dotoHealthDisplay->AddComponent<dae::DebugComponent>( "dotoHealthDisplay" );
 	fps->AddComponent<dae::DebugComponent>( "fps" );
 //
 #endif
