@@ -1,6 +1,5 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
-#include "Sound/SDLSoundService.h"
 #if _DEBUG && __has_include( <vld.h>)
 #	include <vld.h>
 #endif
@@ -13,7 +12,7 @@
 #include "Components/ScoreComponent.h"
 #include "Components/ScoreDisplayComponent.h"
 #include "Components/ReactiveSoundComponent.h"
-#include "Components/TextComponent.h"
+#include "Components/TTFTextComponent.h"
 #include "Components/TextureComponent.h"
 
 #include "Commands/EventCommand.h"
@@ -39,13 +38,9 @@ static void load()
 	// Base
 	auto background{ std::make_unique<dae::GameObject>() };
 	background->AddComponent<dae::TextureComponent>( "./BG.png" );
-	auto logo{ std::make_unique<dae::GameObject>() };
-	logo->AddComponent<dae::TextureComponent>( "./logo.png" );
-	auto text{ std::make_unique<dae::GameObject>() };
-	auto bigFont{ dae::ResourceManager::GetInstance().LoadFont( "Lingua.otf", 36 ) };
-	text->AddComponent<dae::TextComponent>( "Programming 4 Assignment", bigFont, SDL_Color{ 255, 255, 0, 255 } );
+	auto bigFont{ dae::ResourceManager::GetInstance().LoadFont( "Lingua.otf", 48 ) };
 	auto fps{ std::make_unique<dae::GameObject>() };
-	fps->AddComponent<dae::TextComponent>( ".", bigFont );
+	fps->AddComponent<dae::TTFTextComponent>( ".", bigFont );
 	fps->AddComponent<dae::FpsComponent>();
 	//
 
@@ -74,30 +69,30 @@ static void load()
 	auto smallFont{ dae::ResourceManager::GetInstance().LoadFont( "Lingua.otf", 18 ) };
 
 	auto operaInfoText{ std::make_unique<dae::GameObject>() };
-	operaInfoText->AddComponent<dae::TextComponent>(
+	operaInfoText->AddComponent<dae::TTFTextComponent>(
 		"Use the D-Pad to move TM Opera O (bird), X to inflict damage, A and B to pick up pellets",
 		smallFont,
 		SDL_Color{ 255, 255, 255, 255 } );
 	auto dotoInfoText{ std::make_unique<dae::GameObject>() };
-	dotoInfoText->AddComponent<dae::TextComponent>(
+	dotoInfoText->AddComponent<dae::TTFTextComponent>(
 		"Use WASD to move Meisho Doto (sheep), C to inflict damage, Z and X to pick up pellets ",
 		smallFont,
 		SDL_Color{ 255, 255, 255, 255 } );
 
 	auto operaHealthDisplay{ std::make_unique<dae::GameObject>() };
-	operaHealthDisplay->AddComponent<dae::TextComponent>( ".", smallFont, SDL_Color{ 255, 255, 255, 255 } );
+	operaHealthDisplay->AddComponent<dae::TTFTextComponent>( ".", smallFont, SDL_Color{ 255, 255, 255, 255 } );
 	operaHealthDisplay->AddComponent<dae::HealthDisplayComponent>( operaBird->GetComponent<dae::HealthComponent>() );
 
 	auto operaScoreDisplay{ std::make_unique<dae::GameObject>() };
-	operaScoreDisplay->AddComponent<dae::TextComponent>( ".", smallFont, SDL_Color{ 255, 255, 255, 255 } );
+	operaScoreDisplay->AddComponent<dae::TTFTextComponent>( ".", smallFont, SDL_Color{ 255, 255, 255, 255 } );
 	operaScoreDisplay->AddComponent<dae::ScoreDisplayComponent>( operaBird->GetComponent<dae::ScoreComponent>() );
 
 	auto dotoHealthDisplay{ std::make_unique<dae::GameObject>() };
-	dotoHealthDisplay->AddComponent<dae::TextComponent>( ".", smallFont, SDL_Color{ 255, 255, 255, 255 } );
+	dotoHealthDisplay->AddComponent<dae::TTFTextComponent>( ".", smallFont, SDL_Color{ 255, 255, 255, 255 } );
 	dotoHealthDisplay->AddComponent<dae::HealthDisplayComponent>( dotoSheep->GetComponent<dae::HealthComponent>() );
 
 	auto dotoScoreDisplay{ std::make_unique<dae::GameObject>() };
-	dotoScoreDisplay->AddComponent<dae::TextComponent>( ".", smallFont, SDL_Color{ 255, 255, 255, 255 } );
+	dotoScoreDisplay->AddComponent<dae::TTFTextComponent>( ".", smallFont, SDL_Color{ 255, 255, 255, 255 } );
 	dotoScoreDisplay->AddComponent<dae::ScoreDisplayComponent>( dotoSheep->GetComponent<dae::ScoreComponent>() );
 	//
 
@@ -110,9 +105,6 @@ static void load()
 	//
 
 	// Set Starting Positions
-	logo->GetComponent<dae::TransformComponent>()->MoveTo( 358.f, 180.f );
-	text->GetComponent<dae::TransformComponent>()->MoveTo( 292.f, 20.f );
-
 	dotoSheep->GetComponent<dae::TransformComponent>()->MoveTo( glm::vec2{ 150.f, 200.f } );
 	operaBird->GetComponent<dae::TransformComponent>()->MoveTo( glm::vec2{ 500.f, 200.f } );
 
@@ -178,8 +170,6 @@ static void load()
 #ifndef NDEBUG
 	//  Attach names to objects when debugging
 	background->AddComponent<dae::DebugComponent>( "background" );
-	logo->AddComponent<dae::DebugComponent>( "logo" );
-	text->AddComponent<dae::DebugComponent>( "text" );
 	dotoSheep->AddComponent<dae::DebugComponent>( "dotoSheep" );
 	operaBird->AddComponent<dae::DebugComponent>( "operaBird" );
 	operaInfoText->AddComponent<dae::DebugComponent>( "operaInfoText" );
@@ -192,16 +182,6 @@ static void load()
 
 	// Add to scene
 	scene.Add( std::move( background ) );
-	scene.Add( std::move( logo ) );
-	scene.Add( std::move( text ) );
-	scene.Add( std::move( dotoSheep ) );
-	scene.Add( std::move( operaBird ) );
-	scene.Add( std::move( operaInfoText ) );
-	scene.Add( std::move( dotoInfoText ) );
-	scene.Add( std::move( operaHealthDisplay ) );
-	scene.Add( std::move( operaScoreDisplay ) );
-	scene.Add( std::move( dotoHealthDisplay ) );
-	scene.Add( std::move( dotoScoreDisplay ) );
 	scene.Add( std::move( fps ) );
 	//
 
