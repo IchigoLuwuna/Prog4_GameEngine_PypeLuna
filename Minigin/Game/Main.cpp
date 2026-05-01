@@ -38,7 +38,7 @@ static void load()
 	// Initialize objects
 	// Base
 	auto background{ std::make_unique<dae::GameObject>() };
-	background->AddComponent<dae::TextureComponent>( "./background.png" );
+	background->AddComponent<dae::TextureComponent>( "./BG.png" );
 	auto logo{ std::make_unique<dae::GameObject>() };
 	logo->AddComponent<dae::TextureComponent>( "./logo.png" );
 	auto text{ std::make_unique<dae::GameObject>() };
@@ -224,7 +224,8 @@ int main( int, char*[] )
 	std::cout << "Game is running in debug mode, extra info will be displayed in the console\n";
 #endif
 
-	dae::Minigin engine( data_location );
+	// https://www.arcade-museum.com/tech-center/machine/galaga
+	dae::Minigin engine( { "Galaga", { 1388, 1080 }, { 288, 224 } }, data_location );
 	engine.Run( load );
 
 	return 0;
