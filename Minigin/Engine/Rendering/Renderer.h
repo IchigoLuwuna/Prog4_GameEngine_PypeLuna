@@ -33,6 +33,6 @@ public:
 private:
 	SDL_Renderer* m_Renderer{};
 	SDL_Window* m_Window{};
-	SDL_Color m_ClearColor{};
+	SDL_Color m_ClearColor{ 255, 0, 255, 255 };
 };
 } // namespace dae
