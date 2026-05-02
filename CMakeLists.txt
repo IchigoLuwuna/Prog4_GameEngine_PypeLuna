@@ -36,6 +36,7 @@ add_library(engine ${LIBRARY_TYPE}
     # Helpers
         Minigin/Engine/Helpers/Font.cpp
         Minigin/Engine/Helpers/PixelFont.cpp
+        Minigin/Engine/Helpers/SpriteSheet.cpp
         Minigin/Engine/Helpers/Subscription.cpp
         Minigin/Engine/Helpers/Texture2D.cpp
         Minigin/Engine/Helpers/Timer.cpp
@@ -83,6 +84,7 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
         Minigin/Game/Components/ScoreComponent.cpp
         Minigin/Game/Components/ScoreDisplayComponent.cpp
         Minigin/Game/Components/ScrollingBGComponent.cpp
+        Minigin/Game/Components/SpriteSheetComponent.cpp
         Minigin/Game/Components/TTFTextComponent.cpp
         Minigin/Game/Components/TextureComponent.cpp
 
