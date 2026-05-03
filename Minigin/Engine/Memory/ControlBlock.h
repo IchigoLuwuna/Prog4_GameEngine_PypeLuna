@@ -1,5 +1,6 @@
 #ifndef REFERENCECONTROLBLOCK_H
 #define REFERENCECONTROLBLOCK_H
+#include <cassert>
 #include <memory>
 
 // The control block from is a self-managing object, meaning that it controls its own lifetime after construction
@@ -39,6 +40,7 @@ public:
 	}
 	void RemoveReference()
 	{
+		assert( m_RefCount > 0 && "Tried to remove reference when refcount is 0" );
 		--m_RefCount;
 		SelfDestructIfPossible();
 	}
