@@ -81,6 +81,7 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
         Minigin/Game/Components/ImGuiComponents.cpp
         Minigin/Game/Components/MovementComponents.cpp
         Minigin/Game/Components/PixelTextComponent.cpp
+        Minigin/Game/Components/ProjectileComponent.cpp
         Minigin/Game/Components/ReactiveSoundComponent.cpp
         Minigin/Game/Components/ScoreComponent.cpp
         Minigin/Game/Components/ScoreDisplayComponent.cpp
