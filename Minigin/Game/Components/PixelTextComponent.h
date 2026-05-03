@@ -38,6 +38,8 @@ public:
 private:
 	PixelFont m_Font;
 	std::string m_Text{};
+	mutable glm::vec2 m_Size{};
+	mutable bool m_SizeDirty{};
 };
 } // namespace dae
 #endif

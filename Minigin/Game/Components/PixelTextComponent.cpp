@@ -26,6 +26,11 @@ void dae::PixelTextComponent::Render() const
 
 glm::vec2 dae::PixelTextComponent::GetSize() const
 {
+	if ( !m_SizeDirty )
+	{
+		return m_Size;
+	}
+
 	int columns{};
 	int rows{};
 	int charsInLine{};
@@ -45,12 +50,15 @@ glm::vec2 dae::PixelTextComponent::GetSize() const
 		}
 	}
 	glm::vec2 size{ columns * m_Font.GetCharSize().x, rows * m_Font.GetCharSize().y };
-	return size;
+	m_Size = size;
+	m_SizeDirty = false;
+	return m_Size;
 }
 
 void dae::PixelTextComponent::SetText( const std::string& text )
 {
 	m_Text = text;
+	m_SizeDirty = true;
 }
 
 dae::PixelTextComponent& dae::PixelTextComponent::SetIgnore( bool ignore )
