@@ -89,6 +89,7 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
         Minigin/Game/Components/ScrollingBGComponent.cpp
         Minigin/Game/Components/SpriteSheetComponent.cpp
         Minigin/Game/Components/TTFTextComponent.cpp
+        Minigin/Game/Components/TextAllignmentComponent.cpp
         Minigin/Game/Components/TextureComponent.cpp
 
     # Commands
