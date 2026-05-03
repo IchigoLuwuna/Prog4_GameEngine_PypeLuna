@@ -17,6 +17,8 @@ public:
 						std::string&& mapping,
 						const glm::vec2& dimensions );
 
+	virtual ~PixelTextComponent() = default;
+
 	virtual void Update() override
 	{
 		; // No behaviour (; for auto-formatting)
