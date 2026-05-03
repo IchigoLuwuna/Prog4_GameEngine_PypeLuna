@@ -12,7 +12,10 @@
 #include "Game/Components/SpriteSheetComponent.h"
 #include "Components/HealthComponent.h"
 #include "Components/ProjectileComponent.h"
+#include "Game/Components/ScoreComponent.h"
 #include "Components/ProjectileAmmoComponent.h"
+#include "Game/Components/TextAllignmentComponent.h"
+#include "Game/Components/ScoreDisplayComponent.h"
 
 #include "Commands/DamageCommand.h"
 
@@ -52,20 +55,28 @@ static void load()
 
 	// Player Characters
 	auto ship{ std::make_unique<dae::GameObject>() };
-	ship->GetComponent<dae::TransformComponent>()->MoveTo( 136.f, 200.f );
 	ship->AddComponent<dae::SpriteSheetComponent>( "Ship.png", dae::SpriteSheet::SpriteSheetInfo{ 8, 3 } )
 		.SetIndex( 6, 0 );
 	ship->AddComponent<dae::HealthComponent>( 3 );
+	std::vector<std::pair<size_t, uint32_t>> shipScoreGainOnEvent{ { "e_InsectDied"_hash, 100 } };
+	ship->AddComponent<dae::ScoreComponent>( std::move( shipScoreGainOnEvent ) );
 	ship->AddComponent<dae::ProjectileAmmoComponent>( 2 );
 	//
 
 	// Scoreboard
+	auto playerScoreBoard{ std::make_unique<dae::GameObject>() };
+	playerScoreBoard->AddComponent<dae::PixelTextComponent>( typefacePath, typefaceMapping, glm::vec2{ 8.f, 8.f } );
+	playerScoreBoard->AddComponent<dae::ScoreDisplayComponent>().SetSubjectScore(
+		ship->GetComponent<dae::ScoreComponent>() );
 	//
 
 	// Create SceneGraph
 	//
 
 	// Set Starting Positions
+	ship->GetComponent<dae::TransformComponent>()->MoveTo( 136.f, 200.f );
+	playerScoreBoard->AddComponent<dae::TextAllignmentComponent>( glm::vec2{ 288.f, 0.f },
+																  dae::TextAllignmentComponent::Allignment::topRight );
 	//
 
 	// Create bindings
@@ -143,6 +154,9 @@ static void load()
 		SDL_SCANCODE_J, dae::InputManager::KeyState::down, shoot );
 	dae::InputManager::GetInstance().BindCommand<dae::FunctionCommand>(
 		SDL_SCANCODE_K, dae::InputManager::KeyState::down, shoot );
+
+	dae::InputManager::GetInstance().BindCommand<dae::EventCommand>(
+		SDL_SCANCODE_Z, dae::InputManager::KeyState::down, dae::Event{ "e_InsectDied"_hash, nullptr } );
 	//
 
 #ifndef NDEBUG
@@ -150,6 +164,7 @@ static void load()
 	background->AddComponent<dae::DebugComponent>( "background" );
 	ship->AddComponent<dae::DebugComponent>( "ship" );
 	fps->AddComponent<dae::DebugComponent>( "fps" );
+	playerScoreBoard->AddComponent<dae::DebugComponent>( "playerScoreBoard" );
 //
 #endif
 
@@ -157,6 +172,7 @@ static void load()
 	bgScene.Add( std::move( background ) );
 	gameScene.Add( std::move( ship ) );
 	uiScene.Add( std::move( fps ) );
+	uiScene.Add( std::move( playerScoreBoard ) );
 	//
 
 	// Attach achievement handler
