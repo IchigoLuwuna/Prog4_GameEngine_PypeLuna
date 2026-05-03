@@ -13,6 +13,13 @@ public:
 
 	virtual void Update() override;
 
+	template <typename T>
+	void RegisterObserver( ReferencePtr<T> pObserver )
+	{
+		m_Messenger.RegisterObserver( pObserver );
+	}
+	void RemoveObserver( Observer<ProjectileComponent>* pObserver );
+
 private:
 	glm::vec2 m_Velocity{};
 	float m_Lifetime{};

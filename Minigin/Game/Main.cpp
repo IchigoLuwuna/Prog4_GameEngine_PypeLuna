@@ -9,6 +9,12 @@
 #include "Components/FpsComponent.h"
 #include "Components/PixelTextComponent.h"
 #include "Game/Components/ScrollingBGComponent.h"
+#include "Game/Components/SpriteSheetComponent.h"
+#include "Components/HealthComponent.h"
+#include "Components/ProjectileComponent.h"
+#include "Components/ProjectileAmmoComponent.h"
+
+#include "Commands/DamageCommand.h"
 
 #include "Achievement/Achievement.h"
 
@@ -23,7 +29,12 @@ static void load()
 	dae::ServiceLocator<dae::SoundService>::GetInstance().AddLayer<dae::DebugSoundService>();
 #endif
 
-	auto& scene{ dae::SceneManager::GetInstance().CreateScene() };
+	[[maybe_unused]] constexpr size_t bgIdx{ 0 };
+	[[maybe_unused]] constexpr size_t gameIdx{ 1 };
+	[[maybe_unused]] constexpr size_t uiIdx{ 2 };
+	auto& bgScene{ dae::SceneManager::GetInstance().CreateScene() };
+	auto& gameScene{ dae::SceneManager::GetInstance().CreateScene() };
+	auto& uiScene{ dae::SceneManager::GetInstance().CreateScene() };
 
 	// Initialize objects
 	// Base
@@ -40,6 +51,12 @@ static void load()
 	//
 
 	// Player Characters
+	auto ship{ std::make_unique<dae::GameObject>() };
+	ship->GetComponent<dae::TransformComponent>()->MoveTo( 136.f, 200.f );
+	ship->AddComponent<dae::SpriteSheetComponent>( "Ship.png", dae::SpriteSheet::SpriteSheetInfo{ 8, 3 } )
+		.SetIndex( 6, 0 );
+	ship->AddComponent<dae::HealthComponent>( 3 );
+	ship->AddComponent<dae::ProjectileAmmoComponent>( 2 );
 	//
 
 	// Scoreboard
@@ -52,18 +69,94 @@ static void load()
 	//
 
 	// Create bindings
+	// Functions
+	auto shipPosRef{ ship->GetComponent<dae::TransformComponent>() };
+	auto shipAmmoRef{ ship->GetComponent<dae::ProjectileAmmoComponent>() };
+	auto moveLeft{ [=]() mutable {
+		constexpr float movement{ -96.f };
+
+		if ( !shipPosRef.Validate() )
+		{
+			return;
+		}
+		if ( shipPosRef->GetPosition().x + movement * dae::Timer::GetInstance().GetElapsed() <= 0.f )
+		{
+			shipPosRef->MoveTo( 0.f, shipPosRef->GetPosition().y );
+			return;
+		}
+		shipPosRef->Move( movement * dae::Timer::GetInstance().GetElapsed(), 0.f );
+	} };
+	auto moveRight{ [=]() mutable {
+		constexpr float movement{ 96.f };
+
+		if ( !shipPosRef.Validate() )
+		{
+			return;
+		}
+		if ( shipPosRef->GetPosition().x + 15.f + movement * dae::Timer::GetInstance().GetElapsed() >= 288.f )
+		{
+			shipPosRef->MoveTo( 288.f - 15.f, shipPosRef->GetPosition().y );
+			return;
+		}
+		shipPosRef->Move( movement * dae::Timer::GetInstance().GetElapsed(), 0.f );
+	} };
+	auto shoot{ [=]() mutable {
+		if ( !shipPosRef.Validate() )
+		{
+			return;
+		}
+		if ( !shipAmmoRef.Validate() )
+		{
+			return;
+		}
+		if ( !shipAmmoRef->HasAmmo() )
+		{
+			return;
+		}
+
+		shipAmmoRef->DecreaseAmmo();
+
+		auto projectile{ std::make_unique<dae::GameObject>() };
+		projectile
+			->AddComponent<dae::SpriteSheetComponent>( "Projectile.png", dae::SpriteSheet::SpriteSheetInfo{ 7, 1 } )
+			.SetIndex( 3 );
+		projectile->AddComponent<dae::ProjectileComponent>( glm::vec2{ 0.f, -256.f }, 0.8f )
+			.RegisterObserver( shipAmmoRef );
+		projectile->GetComponent<dae::TransformComponent>()->MoveTo( shipPosRef->GetPosition() + glm::vec2{ 4, 0 } );
+
+		dae::SceneManager::GetInstance().GetScene( gameIdx ).Add( std::move( projectile ) );
+	} };
+
+	// Bindings
+	dae::InputManager::GetInstance().BindCommand<dae::FunctionCommand>(
+		SDL_SCANCODE_A, dae::InputManager::KeyState::held, moveLeft );
+	dae::InputManager::GetInstance().BindCommand<dae::FunctionCommand>(
+		SDL_SCANCODE_LEFT, dae::InputManager::KeyState::held, moveLeft );
+	dae::InputManager::GetInstance().BindCommand<dae::FunctionCommand>(
+		SDL_SCANCODE_D, dae::InputManager::KeyState::held, moveRight );
+	dae::InputManager::GetInstance().BindCommand<dae::FunctionCommand>(
+		SDL_SCANCODE_RIGHT, dae::InputManager::KeyState::held, moveRight );
+
+	dae::InputManager::GetInstance().BindCommand<dae::FunctionCommand>(
+		SDL_SCANCODE_SPACE, dae::InputManager::KeyState::down, shoot );
+	dae::InputManager::GetInstance().BindCommand<dae::FunctionCommand>(
+		SDL_SCANCODE_J, dae::InputManager::KeyState::down, shoot );
+	dae::InputManager::GetInstance().BindCommand<dae::FunctionCommand>(
+		SDL_SCANCODE_K, dae::InputManager::KeyState::down, shoot );
 	//
 
 #ifndef NDEBUG
 	//  Attach names to objects when debugging
 	background->AddComponent<dae::DebugComponent>( "background" );
+	ship->AddComponent<dae::DebugComponent>( "ship" );
 	fps->AddComponent<dae::DebugComponent>( "fps" );
 //
 #endif
 
 	// Add to scene
-	scene.Add( std::move( background ) );
-	scene.Add( std::move( fps ) );
+	bgScene.Add( std::move( background ) );
+	gameScene.Add( std::move( ship ) );
+	uiScene.Add( std::move( fps ) );
 	//
 
 	// Attach achievement handler
