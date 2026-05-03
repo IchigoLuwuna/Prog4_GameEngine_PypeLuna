@@ -30,6 +30,7 @@ add_library(engine ${LIBRARY_TYPE}
         Minigin/Engine/Components/TransformComponent.cpp
     # Commands
         Minigin/Engine/Commands/EventCommand.cpp
+        Minigin/Engine/Commands/FunctionCommand.cpp
         Minigin/Engine/Commands/LogCommand.cpp
     # Achievement
         Minigin/Engine/Achievement/SteamAchievements.cpp
