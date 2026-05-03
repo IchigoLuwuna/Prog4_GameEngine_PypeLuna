@@ -49,6 +49,11 @@ void dae::TTFTextComponent::Render() const
 	SDL_SetRenderScale( Renderer::GetInstance().GetSDLRenderer(), renderScale.x, renderScale.y );
 }
 
+glm::vec2 dae::TTFTextComponent::GetSize() const
+{
+	return m_TextTexture->GetSize();
+}
+
 void dae::TTFTextComponent::SetText( const std::string& text )
 {
 	m_Text = text;

@@ -25,6 +25,8 @@ public:
 	};
 	virtual void Render() const override;
 
+	virtual glm::vec2 GetSize() const override;
+
 	virtual void SetText( const std::string& text ) override;
 	virtual void SetColor( const SDL_Color& ) override
 	{

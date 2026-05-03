@@ -1,5 +1,5 @@
 #include "PixelFont.h"
-#include "Rendering.h"
+#include <Rendering.h>
 #include <iostream>
 #include "Core/ResourceManager.h"
 
@@ -19,6 +19,10 @@ dae::PixelFont::PixelFont( const std::string& path, std::string&& mapping, const
 
 void dae::PixelFont::Render( const std::string& text, const glm::vec2& position ) const
 {
+#ifndef NDEBUG
+	bool hasComplained{};
+#endif
+
 	glm::vec2 printHead{ position };
 
 	// For every character
@@ -53,7 +57,11 @@ void dae::PixelFont::Render( const std::string& text, const glm::vec2& position 
 		if ( !mappingFound )
 		{
 #ifndef NDEBUG
-			std::cout << "Tried to print unmapped character '" << character << "'\n";
+			if ( !m_HasComplained ) // Slightly clunky way of preventing spam in console
+			{
+				std::cout << "Tried to print unmapped character '" << character << "'\n";
+				hasComplained = true;
+			}
 #endif
 			printHead.x += m_CharDimensions.x;
 			continue;
@@ -64,9 +72,21 @@ void dae::PixelFont::Render( const std::string& text, const glm::vec2& position 
 		Renderer::GetInstance().RenderTexture( *m_TypeFace, srcRect, dstRect );
 		printHead.x += m_CharDimensions.x;
 	}
+
+#ifndef NDEBUG
+	if ( hasComplained )
+	{
+		m_HasComplained = true;
+	}
+#endif
 }
 
 void dae::PixelFont::SetIgnoreCapital( bool ignore )
 {
 	m_IgnoreCapital = ignore;
+}
+
+glm::vec2 dae::PixelFont::GetCharSize() const
+{
+	return m_CharDimensions;
 }
