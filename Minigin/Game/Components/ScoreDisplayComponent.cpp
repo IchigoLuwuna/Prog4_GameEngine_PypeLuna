@@ -11,6 +11,7 @@ dae::ScoreDisplayComponent::ScoreDisplayComponent( GameObject* pParent )
 	{
 		m_pText = GetParent()->GetComponent<TextComponent>();
 		assert( m_pText.Validate() && "ScoreDisplayComponent requires parent to have a text component" );
+		m_pText->SetText( "score 0" );
 	}
 }
 
@@ -36,6 +37,6 @@ void dae::ScoreDisplayComponent::Notify( size_t eventHash, ScoreComponent* pSubj
 void dae::ScoreDisplayComponent::UpdateText( ScoreComponent* pScore )
 {
 	auto score{ pScore->GetScore() };
-	const std::string displayString{ std::format( "score: {}", score ) };
+	const std::string displayString{ std::format( "score {}", score ) };
 	m_pText->SetText( displayString );
 }

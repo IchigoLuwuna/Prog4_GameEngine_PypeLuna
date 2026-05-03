@@ -9,7 +9,12 @@ namespace dae
 class ScoreComponent : public Component
 {
 public:
-	ScoreComponent( GameObject* pParent, uint32_t startingScore = 0 );
+	ScoreComponent( GameObject* pParent,
+					const std::vector<std::pair<size_t, uint32_t>>& scoreGainOnEvents,
+					uint32_t startingScore = 0 );
+	ScoreComponent( GameObject* pParent,
+					std::vector<std::pair<size_t, uint32_t>>&& scoreGainOnEvents,
+					uint32_t startingScore = 0 );
 	virtual ~ScoreComponent() = default;
 
 	virtual void Update() override
@@ -27,9 +32,10 @@ public:
 	void RemoveObserver( Observer<ScoreComponent>* pObserver );
 
 private:
-	uint32_t m_Score{};
 	Messenger<ScoreComponent> m_Messenger;
 	Subscription m_Subscription;
+	std::vector<std::pair<size_t, uint32_t>> m_ScoreGainOnEvents{};
+	uint32_t m_Score{};
 
 	void HandleEvent( Event& event );
 };
