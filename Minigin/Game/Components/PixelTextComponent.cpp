@@ -32,7 +32,7 @@ glm::vec2 dae::PixelTextComponent::GetSize() const
 	}
 
 	int columns{};
-	int rows{};
+	int rows{ 1 };
 	int charsInLine{};
 	for ( auto& character : m_Text )
 	{
