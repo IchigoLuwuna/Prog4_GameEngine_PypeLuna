@@ -40,7 +40,8 @@ public:
 private:
 	friend class Singleton<ServiceLocator<ServiceType>>;
 
-	std::unique_ptr<ServiceType> m_pService{};
+	// Base service class also serves as null-service as a byproduct of how the locator works
+	std::unique_ptr<ServiceType> m_pService{ std::make_unique<ServiceType>() };
 };
 } // namespace dae
 #endif
