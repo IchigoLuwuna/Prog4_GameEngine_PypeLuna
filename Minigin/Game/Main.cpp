@@ -72,14 +72,32 @@ static void load()
 	//
 
 	// Enemies
-	auto zako{ std::make_unique<dae::GameObject>() };
-	zako->AddComponent<dae::SpriteSheetComponent>( "Enemy.png", dae::SpriteSheet::SpriteSheetInfo{ 24, 3 } );
-	zako->AddComponent<dae::AnimationComponent>()
+	auto zako1{ std::make_unique<dae::GameObject>() };
+	zako1->AddComponent<dae::SpriteSheetComponent>( "Enemy.png", dae::SpriteSheet::SpriteSheetInfo{ 24, 3 } );
+	zako1->AddComponent<dae::AnimationComponent>()
 		.AddAnimation( "anim_Idle"_hash, { 6, 7, 0.25f, true } )
 		.SetAnimation( "anim_Idle"_hash );
-	zako->AddComponent<dae::HealthComponent>( 1 );
-	zako->AddComponent<dae::StateComponent<dae::ZakoState>>().SetState<dae::ZakoIdlingState>();
-	zako->AddComponent<dae::ReactiveSoundComponent>().AddSound( { "e_EntityDied"_hash, zako.get(), "zako_destroy" } );
+	zako1->AddComponent<dae::HealthComponent>( 1 );
+	zako1->AddComponent<dae::StateComponent<dae::ZakoState>>().SetState<dae::ZakoReturningState>();
+	zako1->AddComponent<dae::ReactiveSoundComponent>().AddSound( { "e_EntityDied"_hash, zako1.get(), "zako_destroy" } );
+
+	auto zako2{ std::make_unique<dae::GameObject>() };
+	zako2->AddComponent<dae::SpriteSheetComponent>( "Enemy.png", dae::SpriteSheet::SpriteSheetInfo{ 24, 3 } );
+	zako2->AddComponent<dae::AnimationComponent>()
+		.AddAnimation( "anim_Idle"_hash, { 6, 7, 0.25f, true } )
+		.SetAnimation( "anim_Idle"_hash );
+	zako2->AddComponent<dae::HealthComponent>( 1 );
+	zako2->AddComponent<dae::StateComponent<dae::ZakoState>>().SetState<dae::ZakoReturningState>();
+	zako2->AddComponent<dae::ReactiveSoundComponent>().AddSound( { "e_EntityDied"_hash, zako2.get(), "zako_destroy" } );
+
+	auto zako3{ std::make_unique<dae::GameObject>() };
+	zako3->AddComponent<dae::SpriteSheetComponent>( "Enemy.png", dae::SpriteSheet::SpriteSheetInfo{ 24, 3 } );
+	zako3->AddComponent<dae::AnimationComponent>()
+		.AddAnimation( "anim_Idle"_hash, { 6, 7, 0.25f, true } )
+		.SetAnimation( "anim_Idle"_hash );
+	zako3->AddComponent<dae::HealthComponent>( 1 );
+	zako3->AddComponent<dae::StateComponent<dae::ZakoState>>().SetState<dae::ZakoReturningState>();
+	zako3->AddComponent<dae::ReactiveSoundComponent>().AddSound( { "e_EntityDied"_hash, zako3.get(), "zako_destroy" } );
 	//
 
 	// Scoreboard
@@ -94,7 +112,9 @@ static void load()
 
 	// Set Starting Positions
 	ship->GetComponent<dae::TransformComponent>()->MoveTo( 136.f, 200.f );
-	zako->GetComponent<dae::TransformComponent>()->MoveTo( 136.f, 8.f );
+	zako1->GetComponent<dae::TransformComponent>()->MoveTo( 68.f, -64.f );
+	zako2->GetComponent<dae::TransformComponent>()->MoveTo( 136.f, -64.f );
+	zako3->GetComponent<dae::TransformComponent>()->MoveTo( 204.f, -64.f );
 	playerScoreBoard->AddComponent<dae::TextAllignmentComponent>( glm::vec2{ 288.f, 0.f },
 																  dae::TextAllignmentComponent::Allignment::topRight );
 	//
@@ -187,7 +207,9 @@ static void load()
 	//  Attach names to objects when debugging
 	background->AddComponent<dae::DebugComponent>( "background" );
 	ship->AddComponent<dae::DebugComponent>( "ship" );
-	zako->AddComponent<dae::DebugComponent>( "zako" );
+	zako1->AddComponent<dae::DebugComponent>( "zako" );
+	zako2->AddComponent<dae::DebugComponent>( "zako" );
+	zako3->AddComponent<dae::DebugComponent>( "zako" );
 	fps->AddComponent<dae::DebugComponent>( "fps" );
 	playerScoreBoard->AddComponent<dae::DebugComponent>( "playerScoreBoard" );
 //
@@ -196,7 +218,9 @@ static void load()
 	// Add to scene
 	bgScene.Add( std::move( background ) );
 	gameScene.Add( std::move( ship ) );
-	gameScene.Add( std::move( zako ) );
+	gameScene.Add( std::move( zako1 ) );
+	gameScene.Add( std::move( zako2 ) );
+	gameScene.Add( std::move( zako3 ) );
 	uiScene.Add( std::move( fps ) );
 	uiScene.Add( std::move( playerScoreBoard ) );
 	//
