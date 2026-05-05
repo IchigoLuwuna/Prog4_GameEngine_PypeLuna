@@ -6,6 +6,7 @@
 
 #include <Engine.h>
 
+#include "Game/Components/AnimationComponent.h"
 #include "Components/FpsComponent.h"
 #include "Components/PixelTextComponent.h"
 #include "Components/ScrollingBGComponent.h"
@@ -16,8 +17,8 @@
 #include "Components/ProjectileAmmoComponent.h"
 #include "Components/TextAllignmentComponent.h"
 #include "Components/ScoreDisplayComponent.h"
-#include "Game/Components/ReactiveSoundComponent.h"
-#include "Game/Components/StateComponent.h"
+#include "Components/ReactiveSoundComponent.h"
+#include "Components/StateComponent.h"
 
 #include "Commands/DamageCommand.h"
 
@@ -72,8 +73,10 @@ static void load()
 
 	// Enemies
 	auto zako{ std::make_unique<dae::GameObject>() };
-	zako->AddComponent<dae::SpriteSheetComponent>( "Enemy.png", dae::SpriteSheet::SpriteSheetInfo{ 24, 3 } )
-		.SetIndex( 7, 0 );
+	zako->AddComponent<dae::SpriteSheetComponent>( "Enemy.png", dae::SpriteSheet::SpriteSheetInfo{ 24, 3 } );
+	zako->AddComponent<dae::AnimationComponent>()
+		.AddAnimation( "anim_Idle"_hash, { 6, 7, 0.25f, true } )
+		.SetAnimation( "anim_Idle"_hash );
 	zako->AddComponent<dae::HealthComponent>( 1 );
 	zako->AddComponent<dae::StateComponent<dae::ZakoState>>().SetState<dae::ZakoIdlingState>();
 	zako->AddComponent<dae::ReactiveSoundComponent>().AddSound( { "e_EntityDied"_hash, zako.get(), "zako_destroy" } );
