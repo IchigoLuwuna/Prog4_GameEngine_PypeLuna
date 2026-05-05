@@ -34,5 +34,12 @@ public:
 	ZakoDivingState( void* pParent );
 	virtual void Update( GameObject* pObject ) override;
 };
+
+class ZakoReturningState final : public ZakoState
+{
+public:
+	ZakoReturningState( void* pParent );
+	virtual void Update( GameObject* pObject ) override;
+};
 } // namespace dae
 #endif
