@@ -6,7 +6,7 @@
 
 dae::ZakoIdlingState::ZakoIdlingState( void* pParent )
 	: ZakoState( pParent )
-	, m_RemainingStateTime( static_cast<float>( rand() ) / RAND_MAX * m_MaxStateTime )
+	, m_RemainingStateTime( static_cast<float>( rand() ) / static_cast<float>( RAND_MAX ) * m_MaxStateTime )
 {
 }
 

@@ -13,6 +13,7 @@ public:
 		: State( pParent )
 	{
 	}
+	virtual ~ZakoState() = default;
 	virtual void Update( GameObject* pParent ) = 0;
 };
 
