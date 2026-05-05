@@ -8,6 +8,7 @@
 #include <SDL3/SDL_audio.h>
 #include <SDL3/SDL_gamepad.h>
 #include <SDL3_mixer/SDL_mixer.h>
+#include <Core.h>
 
 // SOURCES: https://wiki.libsdl.org/SDL3_mixer/CategorySDLMixer
 // Thank you Mr. and Mr. SDL
@@ -113,7 +114,9 @@ void dae::SDLSoundService::Impl::HandleRequests( std::stop_token stopToken )
 
 MIX_Audio* dae::SDLSoundService::Impl::LoadAudio( const char* path )
 {
-	auto audio{ MIX_LoadAudio( m_pMixer, path, true ) };
+	auto fullPath{ ResourceManager::GetInstance().GetDataPath() / path };
+
+	auto audio{ MIX_LoadAudio( m_pMixer, fullPath.c_str(), true ) };
 	if ( !audio )
 	{
 		std::cout << SDL_GetError() << "\n";
