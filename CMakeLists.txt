@@ -59,6 +59,7 @@ add_library(engine ${LIBRARY_TYPE}
 )
 target_include_directories(engine PUBLIC Minigin/Engine/.)
 set_target_properties(engine PROPERTIES PUBLIC_HEADER
+    "
     Minigin/Engine/Engine.h
     Minigin/Engine/Core.h
     Minigin/Engine/Achievement.h
@@ -70,6 +71,8 @@ set_target_properties(engine PROPERTIES PUBLIC_HEADER
     Minigin/Engine/Rendering.h
     Minigin/Engine/Scene.h
     Minigin/Engine/Sound.h
+    Minigin/Engine/States.h
+    "
 )
 
 # list source files here
@@ -95,6 +98,9 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
     # Commands
         Minigin/Game/Commands/DamageCommand.cpp
         Minigin/Game/Commands/MoveCommand.cpp
+
+    # States
+        Minigin/Game/States/ZakoStates.cpp
 
     # Achievement
         Minigin/Game/Achievement/Achievement.cpp
