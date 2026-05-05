@@ -8,16 +8,20 @@
 
 #include "Components/FpsComponent.h"
 #include "Components/PixelTextComponent.h"
-#include "Game/Components/ScrollingBGComponent.h"
-#include "Game/Components/SpriteSheetComponent.h"
+#include "Components/ScrollingBGComponent.h"
+#include "Components/SpriteSheetComponent.h"
 #include "Components/HealthComponent.h"
 #include "Components/ProjectileComponent.h"
-#include "Game/Components/ScoreComponent.h"
+#include "Components/ScoreComponent.h"
 #include "Components/ProjectileAmmoComponent.h"
-#include "Game/Components/TextAllignmentComponent.h"
-#include "Game/Components/ScoreDisplayComponent.h"
+#include "Components/TextAllignmentComponent.h"
+#include "Components/ScoreDisplayComponent.h"
+#include "Game/Components/ReactiveSoundComponent.h"
+#include "Game/Components/StateComponent.h"
 
 #include "Commands/DamageCommand.h"
+
+#include "Game/States/ZakoStates.h"
 
 #include "Achievement/Achievement.h"
 
@@ -31,6 +35,8 @@ static void load()
 #ifndef NDEBUG
 	dae::ServiceLocator<dae::SoundService>::GetInstance().AddLayer<dae::DebugSoundService>();
 #endif
+
+	dae::ServiceLocator<dae::SoundService>::GetInstance().GetService().Play( "start.wav", 1.f );
 
 	[[maybe_unused]] constexpr size_t bgIdx{ 0 };
 	[[maybe_unused]] constexpr size_t gameIdx{ 1 };
@@ -61,6 +67,16 @@ static void load()
 	std::vector<std::pair<size_t, uint32_t>> shipScoreGainOnEvent{ { "e_InsectDied"_hash, 100 } };
 	ship->AddComponent<dae::ScoreComponent>( std::move( shipScoreGainOnEvent ) );
 	ship->AddComponent<dae::ProjectileAmmoComponent>( 2 );
+	ship->AddComponent<dae::ReactiveSoundComponent>().AddSound( { "e_EntityDied"_hash, ship.get(), "explosion.wav" } );
+	//
+
+	// Enemies
+	auto zako{ std::make_unique<dae::GameObject>() };
+	zako->AddComponent<dae::SpriteSheetComponent>( "Enemy.png", dae::SpriteSheet::SpriteSheetInfo{ 24, 3 } )
+		.SetIndex( 7, 0 );
+	zako->AddComponent<dae::HealthComponent>( 1 );
+	zako->AddComponent<dae::StateComponent<dae::ZakoState>>().SetState<dae::ZakoIdlingState>();
+	zako->AddComponent<dae::ReactiveSoundComponent>().AddSound( { "e_EntityDied"_hash, zako.get(), "zako_destroy" } );
 	//
 
 	// Scoreboard
@@ -75,6 +91,7 @@ static void load()
 
 	// Set Starting Positions
 	ship->GetComponent<dae::TransformComponent>()->MoveTo( 136.f, 200.f );
+	zako->GetComponent<dae::TransformComponent>()->MoveTo( 136.f, 8.f );
 	playerScoreBoard->AddComponent<dae::TextAllignmentComponent>( glm::vec2{ 288.f, 0.f },
 																  dae::TextAllignmentComponent::Allignment::topRight );
 	//
@@ -126,6 +143,7 @@ static void load()
 		}
 
 		shipAmmoRef->DecreaseAmmo();
+		dae::ServiceLocator<dae::SoundService>::GetInstance().GetService().Play( "fire.wav", 1.f );
 
 		auto projectile{ std::make_unique<dae::GameObject>() };
 		projectile
@@ -157,12 +175,16 @@ static void load()
 
 	dae::InputManager::GetInstance().BindCommand<dae::EventCommand>(
 		SDL_SCANCODE_Z, dae::InputManager::KeyState::down, dae::Event{ "e_InsectDied"_hash, nullptr } );
+
+	dae::InputManager::GetInstance().BindCommand<dae::DamageCommand>(
+		SDL_SCANCODE_U, dae::InputManager::KeyState::down, ship->GetComponent<dae::HealthComponent>(), 1 );
 	//
 
 #ifndef NDEBUG
 	//  Attach names to objects when debugging
 	background->AddComponent<dae::DebugComponent>( "background" );
 	ship->AddComponent<dae::DebugComponent>( "ship" );
+	zako->AddComponent<dae::DebugComponent>( "zako" );
 	fps->AddComponent<dae::DebugComponent>( "fps" );
 	playerScoreBoard->AddComponent<dae::DebugComponent>( "playerScoreBoard" );
 //
@@ -171,9 +193,35 @@ static void load()
 	// Add to scene
 	bgScene.Add( std::move( background ) );
 	gameScene.Add( std::move( ship ) );
+	gameScene.Add( std::move( zako ) );
 	uiScene.Add( std::move( fps ) );
 	uiScene.Add( std::move( playerScoreBoard ) );
 	//
+
+#ifndef NDEBUG
+	// Control for debug mode
+	auto controlHints{ std::make_unique<dae::GameObject>() };
+	controlHints->AddComponent<dae::PixelTextComponent>( typefacePath, typefaceMapping, glm::vec2{ 8.f, 8.f } )
+		.SetIgnore( true )
+		.SetText( "WASD or arrows for movement\nSPACE J and K for shooting\nZ to give yourself points\nENTER to hide "
+				  "this message" );
+
+	controlHints->GetComponent<dae::TransformComponent>()->MoveTo( glm::vec2{ 0.f, 8.f } );
+	controlHints->AddComponent<dae::DebugComponent>( "controlHints" );
+
+	dae::Validator controlHintsValidator{ controlHints->GetComponent<dae::TransformComponent>().GetControlBlock() };
+	auto* pControlHints{ controlHints.get() };
+	dae::InputManager::GetInstance().BindCommand<dae::FunctionCommand>(
+		SDL_SCANCODE_RETURN, dae::InputManager::KeyState::down, [=]() mutable {
+			if ( !controlHintsValidator.Validate() )
+			{
+				return;
+			}
+			pControlHints->MarkForRemoval();
+		} );
+
+	uiScene.Add( std::move( controlHints ) );
+#endif
 
 	// Attach achievement handler
 	dae::Minigin::eventManager.AttachListener( nullptr, dae::achievements::HandleEvent );
