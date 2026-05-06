@@ -27,7 +27,7 @@ public:
 	}
 
 private:
-	StateManager<StateType> m_State{};
+	StateMachine<StateType> m_State{};
 };
 } // namespace dae
 #endif

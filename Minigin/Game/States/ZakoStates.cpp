@@ -16,7 +16,7 @@ void dae::ZakoIdlingState::Update( GameObject* )
 
 	if ( m_RemainingStateTime < 0.f )
 	{
-		reinterpret_cast<StateManager<ZakoState>*>( GetParent() )->SetState<ZakoDivingState>();
+		reinterpret_cast<StateMachine<ZakoState>*>( GetParent() )->SetState<ZakoDivingState>();
 		return;
 	}
 }
@@ -36,7 +36,7 @@ void dae::ZakoDivingState::Update( GameObject* pObject )
 	if ( transform->GetPosition().y >= 224.f )
 	{
 		transform->MoveTo( transform->GetPosition().x, -64.f );
-		reinterpret_cast<StateManager<ZakoState>*>( GetParent() )->SetState<ZakoReturningState>();
+		reinterpret_cast<StateMachine<ZakoState>*>( GetParent() )->SetState<ZakoReturningState>();
 		return;
 	}
 }
@@ -55,7 +55,7 @@ void dae::ZakoReturningState::Update( GameObject* pObject )
 	if ( transform->GetPosition().y >= 8.f )
 	{
 		transform->MoveTo( transform->GetPosition().x, 8.f );
-		reinterpret_cast<StateManager<ZakoState>*>( GetParent() )->SetState<ZakoIdlingState>();
+		reinterpret_cast<StateMachine<ZakoState>*>( GetParent() )->SetState<ZakoIdlingState>();
 		return;
 	}
 }

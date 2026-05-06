@@ -1,5 +1,5 @@
-#ifndef STATEMANAGER_H
-#define STATEMANAGER_H
+#ifndef STATEMACHINE_H
+#define STATEMACHINE_H
 #include <memory>
 #include "State.h"
 
@@ -7,7 +7,7 @@ namespace dae
 {
 template <typename BaseState>
 	requires std::derived_from<BaseState, State>
-class StateManager
+class StateMachine
 {
 public:
 	template <typename DerivedState>
