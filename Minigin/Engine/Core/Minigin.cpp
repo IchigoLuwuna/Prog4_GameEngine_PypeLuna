@@ -19,6 +19,7 @@
 #include "Patterns/ServiceLocator.h"
 #include "Sound/SoundService.h"
 #include "ResourceManager.h"
+#include "Hitboxes/HitboxRegistry.h"
 
 #if USE_STEAMWORKS
 #	if WIN32
@@ -167,6 +168,7 @@ void dae::Minigin::RunOneFrame()
 	SteamAPI_RunCallbacks();
 #endif
 	SceneManager::GetInstance().Update();
+	HitboxRegistry::GetInstance().DoCollisions();
 	eventManager.ProcessEvents();
 	SceneManager::GetInstance().CleanUpRemovableObjects();
 	ResourceManager::GetInstance().UnloadUnusedResources();

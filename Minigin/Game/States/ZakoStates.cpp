@@ -31,11 +31,11 @@ void dae::ZakoIdlingState::Exit()
 dae::ZakoDivingState::ZakoDivingState( StateMachine<ZakoState>* pParent )
 	: ZakoState( pParent )
 {
-	ServiceLocator<SoundService>::GetInstance().GetService().Play( "dive.wav", 1.f );
 }
 
 void dae::ZakoDivingState::Enter()
 {
+	ServiceLocator<SoundService>::GetInstance().GetService().Play( "dive.wav", 1.f );
 }
 void dae::ZakoDivingState::Exit()
 {

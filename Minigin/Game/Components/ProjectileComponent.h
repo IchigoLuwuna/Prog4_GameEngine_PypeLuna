@@ -1,6 +1,7 @@
 #ifndef PROJECTILECOMPONENT_H
 #define PROJECTILECOMPONENT_H
 #include <Patterns.h>
+#include <Hitboxes.h>
 #include <glm/glm.hpp>
 
 namespace dae
@@ -21,6 +22,7 @@ public:
 	void RemoveObserver( Observer<ProjectileComponent>* pObserver );
 
 private:
+	Hitbox m_Hitbox{};
 	glm::vec2 m_Velocity{};
 	float m_Lifetime{};
 	Messenger<ProjectileComponent> m_Messenger;

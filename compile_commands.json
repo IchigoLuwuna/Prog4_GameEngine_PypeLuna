@@ -127,6 +127,24 @@
 },
 {
   "directory": "/home/luna/Gamedev/Prog4/minigin/build",
+  "command": "/usr/bin/c++ -Dengine_EXPORTS -I/home/luna/Gamedev/Prog4/minigin/Minigin/Engine/. -I/home/luna/Gamedev/Prog4/minigin/build/_deps/imgui-src -std=gnu++20 -fPIC -o CMakeFiles/engine.dir/Minigin/Engine/Hitboxes/Hitbox.cpp.o -c /home/luna/Gamedev/Prog4/minigin/Minigin/Engine/Hitboxes/Hitbox.cpp",
+  "file": "/home/luna/Gamedev/Prog4/minigin/Minigin/Engine/Hitboxes/Hitbox.cpp",
+  "output": "CMakeFiles/engine.dir/Minigin/Engine/Hitboxes/Hitbox.cpp.o"
+},
+{
+  "directory": "/home/luna/Gamedev/Prog4/minigin/build",
+  "command": "/usr/bin/c++ -Dengine_EXPORTS -I/home/luna/Gamedev/Prog4/minigin/Minigin/Engine/. -I/home/luna/Gamedev/Prog4/minigin/build/_deps/imgui-src -std=gnu++20 -fPIC -o CMakeFiles/engine.dir/Minigin/Engine/Hitboxes/HitboxRegistry.cpp.o -c /home/luna/Gamedev/Prog4/minigin/Minigin/Engine/Hitboxes/HitboxRegistry.cpp",
+  "file": "/home/luna/Gamedev/Prog4/minigin/Minigin/Engine/Hitboxes/HitboxRegistry.cpp",
+  "output": "CMakeFiles/engine.dir/Minigin/Engine/Hitboxes/HitboxRegistry.cpp.o"
+},
+{
+  "directory": "/home/luna/Gamedev/Prog4/minigin/build",
+  "command": "/usr/bin/c++ -Dengine_EXPORTS -I/home/luna/Gamedev/Prog4/minigin/Minigin/Engine/. -I/home/luna/Gamedev/Prog4/minigin/build/_deps/imgui-src -std=gnu++20 -fPIC -o CMakeFiles/engine.dir/Minigin/Engine/Hitboxes/Hurtbox.cpp.o -c /home/luna/Gamedev/Prog4/minigin/Minigin/Engine/Hitboxes/Hurtbox.cpp",
+  "file": "/home/luna/Gamedev/Prog4/minigin/Minigin/Engine/Hitboxes/Hurtbox.cpp",
+  "output": "CMakeFiles/engine.dir/Minigin/Engine/Hitboxes/Hurtbox.cpp.o"
+},
+{
+  "directory": "/home/luna/Gamedev/Prog4/minigin/build",
   "command": "/usr/bin/c++ -Dengine_EXPORTS -I/home/luna/Gamedev/Prog4/minigin/Minigin/Engine/. -I/home/luna/Gamedev/Prog4/minigin/build/_deps/imgui-src -std=gnu++20 -fPIC -o CMakeFiles/engine.dir/Minigin/Engine/Input/Gamepad.cpp.o -c /home/luna/Gamedev/Prog4/minigin/Minigin/Engine/Input/Gamepad.cpp",
   "file": "/home/luna/Gamedev/Prog4/minigin/Minigin/Engine/Input/Gamepad.cpp",
   "output": "CMakeFiles/engine.dir/Minigin/Engine/Input/Gamepad.cpp.o"

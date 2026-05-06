@@ -1,5 +1,6 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
+#include "Hitboxes/Hurtbox.h"
 #if _DEBUG && __has_include( <vld.h>)
 #	include <vld.h>
 #endif
@@ -22,7 +23,7 @@
 
 #include "Commands/DamageCommand.h"
 
-#include "Game/States/ZakoStates.h"
+#include "States/ZakoStates.h"
 
 #include "Achievement/Achievement.h"
 
@@ -64,11 +65,15 @@ static void load()
 	auto ship{ std::make_unique<dae::GameObject>() };
 	ship->AddComponent<dae::SpriteSheetComponent>( "Ship.png", dae::SpriteSheet::SpriteSheetInfo{ 8, 3 } )
 		.SetIndex( 6, 0 );
-	ship->AddComponent<dae::HealthComponent>( 3 );
+	ship->AddComponent<dae::HealthComponent>( 1 );
 	std::vector<std::pair<size_t, uint32_t>> shipScoreGainOnEvent{ { "e_InsectDied"_hash, 100 } };
 	ship->AddComponent<dae::ScoreComponent>( std::move( shipScoreGainOnEvent ) );
 	ship->AddComponent<dae::ProjectileAmmoComponent>( 2 );
 	ship->AddComponent<dae::ReactiveSoundComponent>().AddSound( { "e_EntityDied"_hash, ship.get(), "explosion.wav" } );
+	ship->AddComponent<dae::HurtboxComponent>(
+		glm::vec4{ 0.f, 0.f, 16.f, 16.f }, "target_Player"_hash, []( dae::GameObject* pParent, auto ) {
+			pParent->GetComponent<dae::HealthComponent>()->Damage( 3 );
+		} );
 	//
 
 	// Enemies
@@ -79,7 +84,14 @@ static void load()
 		.SetAnimation( "anim_Idle"_hash );
 	zako1->AddComponent<dae::HealthComponent>( 1 );
 	zako1->AddComponent<dae::StateComponent<dae::ZakoState>>().SetState<dae::ZakoReturningState>();
-	zako1->AddComponent<dae::ReactiveSoundComponent>().AddSound( { "e_EntityDied"_hash, zako1.get(), "zako_destroy" } );
+	zako1->AddComponent<dae::ReactiveSoundComponent>().AddSound(
+		{ "e_EntityDied"_hash, zako1.get(), "zako_destroy.wav" } );
+	zako1->AddComponent<dae::HitboxComponent>(
+		glm::vec4{ 2.f, 3.f, 13.f, 10.f }, std::vector{ "target_Player"_hash }, nullptr );
+	zako1->AddComponent<dae::HurtboxComponent>(
+		glm::vec4{ 2.f, 3.f, 13.f, 10.f }, "target_Enemy"_hash, []( dae::GameObject* pParent, dae::Hitbox* ) {
+			pParent->GetComponent<dae::HealthComponent>()->Damage( 1 );
+		} );
 
 	auto zako2{ std::make_unique<dae::GameObject>() };
 	zako2->AddComponent<dae::SpriteSheetComponent>( "Enemy.png", dae::SpriteSheet::SpriteSheetInfo{ 24, 3 } );
@@ -88,7 +100,14 @@ static void load()
 		.SetAnimation( "anim_Idle"_hash );
 	zako2->AddComponent<dae::HealthComponent>( 1 );
 	zako2->AddComponent<dae::StateComponent<dae::ZakoState>>().SetState<dae::ZakoReturningState>();
-	zako2->AddComponent<dae::ReactiveSoundComponent>().AddSound( { "e_EntityDied"_hash, zako2.get(), "zako_destroy" } );
+	zako2->AddComponent<dae::ReactiveSoundComponent>().AddSound(
+		{ "e_EntityDied"_hash, zako2.get(), "zako_destroy.wav" } );
+	zako2->AddComponent<dae::HitboxComponent>(
+		glm::vec4{ 2.f, 3.f, 13.f, 10.f }, std::vector{ "target_Player"_hash }, nullptr );
+	zako2->AddComponent<dae::HurtboxComponent>(
+		glm::vec4{ 2.f, 3.f, 13.f, 10.f }, "target_Enemy"_hash, []( dae::GameObject* pParent, dae::Hitbox* ) {
+			pParent->GetComponent<dae::HealthComponent>()->Damage( 1 );
+		} );
 
 	auto zako3{ std::make_unique<dae::GameObject>() };
 	zako3->AddComponent<dae::SpriteSheetComponent>( "Enemy.png", dae::SpriteSheet::SpriteSheetInfo{ 24, 3 } );
@@ -97,7 +116,15 @@ static void load()
 		.SetAnimation( "anim_Idle"_hash );
 	zako3->AddComponent<dae::HealthComponent>( 1 );
 	zako3->AddComponent<dae::StateComponent<dae::ZakoState>>().SetState<dae::ZakoReturningState>();
-	zako3->AddComponent<dae::ReactiveSoundComponent>().AddSound( { "e_EntityDied"_hash, zako3.get(), "zako_destroy" } );
+	zako3->AddComponent<dae::ReactiveSoundComponent>().AddSound(
+		{ "e_EntityDied"_hash, zako3.get(), "zako_destroy.wav" } );
+	zako3->AddComponent<dae::HitboxComponent>(
+		glm::vec4{ 2.f, 3.f, 13.f, 10.f }, std::vector{ "target_Player"_hash }, nullptr );
+	zako3->AddComponent<dae::HurtboxComponent>(
+		glm::vec4{ 2.f, 3.f, 13.f, 10.f }, "target_Enemy"_hash, []( dae::GameObject* pParent, dae::Hitbox* ) {
+			pParent->GetComponent<dae::HealthComponent>()->Damage( 1 );
+		} );
+
 	//
 
 	// Scoreboard
@@ -111,7 +138,7 @@ static void load()
 	//
 
 	// Set Starting Positions
-	ship->GetComponent<dae::TransformComponent>()->MoveTo( 136.f, 200.f );
+	ship->GetComponent<dae::TransformComponent>()->MoveTo( 100.f, 200.f );
 	zako1->GetComponent<dae::TransformComponent>()->MoveTo( 68.f, -64.f );
 	zako2->GetComponent<dae::TransformComponent>()->MoveTo( 136.f, -64.f );
 	zako3->GetComponent<dae::TransformComponent>()->MoveTo( 204.f, -64.f );

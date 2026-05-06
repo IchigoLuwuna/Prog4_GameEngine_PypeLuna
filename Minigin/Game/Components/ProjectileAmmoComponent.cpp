@@ -31,6 +31,7 @@ void dae::ProjectileAmmoComponent::Notify( size_t eventHash, ProjectileComponent
 {
 	switch ( eventHash )
 	{
+	case "e_ProjectileHit"_hash:
 	case "e_ProjectileTimeout"_hash: {
 		AddAmmo();
 		break;
