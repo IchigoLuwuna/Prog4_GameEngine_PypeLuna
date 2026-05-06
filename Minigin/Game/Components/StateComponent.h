@@ -6,7 +6,7 @@
 namespace dae
 {
 template <typename StateType>
-	requires std::derived_from<StateType, State>
+	requires std::derived_from<StateType, State<StateType>>
 class StateComponent final : public Component
 {
 public:

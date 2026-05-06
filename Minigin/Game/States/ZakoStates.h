@@ -6,10 +6,10 @@ namespace dae
 {
 // The bee guys
 class GameObject;
-class ZakoState : public State
+class ZakoState : public State<ZakoState>
 {
 public:
-	ZakoState( void* pParent )
+	ZakoState( StateMachine<ZakoState>* pParent )
 		: State( pParent )
 	{
 	}
@@ -20,7 +20,7 @@ public:
 class ZakoIdlingState final : public ZakoState
 {
 public:
-	ZakoIdlingState( void* pParent );
+	ZakoIdlingState( StateMachine<ZakoState>* pParent );
 	virtual void Update( GameObject* pObject ) override;
 
 private:
@@ -32,14 +32,14 @@ private:
 class ZakoDivingState final : public ZakoState
 {
 public:
-	ZakoDivingState( void* pParent );
+	ZakoDivingState( StateMachine<ZakoState>* pParent );
 	virtual void Update( GameObject* pObject ) override;
 };
 
 class ZakoReturningState final : public ZakoState
 {
 public:
-	ZakoReturningState( void* pParent );
+	ZakoReturningState( StateMachine<ZakoState>* pParent );
 	virtual void Update( GameObject* pObject ) override;
 };
 } // namespace dae

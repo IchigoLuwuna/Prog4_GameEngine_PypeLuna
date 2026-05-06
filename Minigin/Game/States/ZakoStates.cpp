@@ -4,7 +4,7 @@
 #include <Components.h>
 #include <Sound.h>
 
-dae::ZakoIdlingState::ZakoIdlingState( void* pParent )
+dae::ZakoIdlingState::ZakoIdlingState( StateMachine<ZakoState>* pParent )
 	: ZakoState( pParent )
 	, m_RemainingStateTime( static_cast<float>( rand() ) / static_cast<float>( RAND_MAX ) * m_MaxStateTime )
 {
@@ -16,12 +16,12 @@ void dae::ZakoIdlingState::Update( GameObject* )
 
 	if ( m_RemainingStateTime < 0.f )
 	{
-		reinterpret_cast<StateMachine<ZakoState>*>( GetParent() )->SetState<ZakoDivingState>();
+		GetParent()->SetState<ZakoDivingState>();
 		return;
 	}
 }
 
-dae::ZakoDivingState::ZakoDivingState( void* pParent )
+dae::ZakoDivingState::ZakoDivingState( StateMachine<ZakoState>* pParent )
 	: ZakoState( pParent )
 {
 	ServiceLocator<SoundService>::GetInstance().GetService().Play( "dive.wav", 1.f );
@@ -36,12 +36,12 @@ void dae::ZakoDivingState::Update( GameObject* pObject )
 	if ( transform->GetPosition().y >= 224.f )
 	{
 		transform->MoveTo( transform->GetPosition().x, -64.f );
-		reinterpret_cast<StateMachine<ZakoState>*>( GetParent() )->SetState<ZakoReturningState>();
+		GetParent()->SetState<ZakoReturningState>();
 		return;
 	}
 }
 
-dae::ZakoReturningState::ZakoReturningState( void* pParent )
+dae::ZakoReturningState::ZakoReturningState( StateMachine<ZakoState>* pParent )
 	: ZakoState( pParent )
 {
 }
@@ -55,7 +55,7 @@ void dae::ZakoReturningState::Update( GameObject* pObject )
 	if ( transform->GetPosition().y >= 8.f )
 	{
 		transform->MoveTo( transform->GetPosition().x, 8.f );
-		reinterpret_cast<StateMachine<ZakoState>*>( GetParent() )->SetState<ZakoIdlingState>();
+		GetParent()->SetState<ZakoIdlingState>();
 		return;
 	}
 }

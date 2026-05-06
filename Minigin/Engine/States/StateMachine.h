@@ -6,7 +6,6 @@
 namespace dae
 {
 template <typename BaseState>
-	requires std::derived_from<BaseState, State>
 class StateMachine
 {
 public:
