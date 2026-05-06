@@ -116,7 +116,7 @@ MIX_Audio* dae::SDLSoundService::Impl::LoadAudio( const char* path )
 {
 	auto fullPath{ ResourceManager::GetInstance().GetDataPath() / path };
 
-	auto audio{ MIX_LoadAudio( m_pMixer, fullPath.c_str(), true ) };
+	auto audio{ MIX_LoadAudio( m_pMixer, fullPath.string().c_str(), true ) };
 	if ( !audio )
 	{
 		std::cout << SDL_GetError() << "\n";
