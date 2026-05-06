@@ -1,7 +1,5 @@
 #ifndef STATE_H
 #define STATE_H
-#include <concepts>
-
 namespace dae
 {
 template <typename DerivedState>

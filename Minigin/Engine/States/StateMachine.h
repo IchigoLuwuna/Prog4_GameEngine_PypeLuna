@@ -1,7 +1,6 @@
 #ifndef STATEMACHINE_H
 #define STATEMACHINE_H
 #include <memory>
-#include "State.h"
 
 namespace dae
 {
