@@ -8,6 +8,7 @@
 #include <Engine.h>
 
 #include "Game/Components/AnimationComponent.h"
+#include "Game/Components/DeathCallbackComponent.h"
 #include "Components/FpsComponent.h"
 #include "Components/PixelTextComponent.h"
 #include "Components/ScrollingBGComponent.h"
@@ -92,6 +93,8 @@ static void load()
 		glm::vec4{ 2.f, 3.f, 13.f, 10.f }, "target_Enemy"_hash, []( dae::GameObject* pParent, dae::Hitbox* ) {
 			pParent->GetComponent<dae::HealthComponent>()->Damage( 1 );
 		} );
+	zako1->AddComponent<dae::DeathCallbackComponent>(
+		[&]() { dae::Minigin::eventManager.SendEvent( { "e_InsectDied"_hash, nullptr } ); } );
 
 	auto zako2{ std::make_unique<dae::GameObject>() };
 	zako2->AddComponent<dae::SpriteSheetComponent>( "Enemy.png", dae::SpriteSheet::SpriteSheetInfo{ 24, 3 } );
@@ -108,6 +111,8 @@ static void load()
 		glm::vec4{ 2.f, 3.f, 13.f, 10.f }, "target_Enemy"_hash, []( dae::GameObject* pParent, dae::Hitbox* ) {
 			pParent->GetComponent<dae::HealthComponent>()->Damage( 1 );
 		} );
+	zako2->AddComponent<dae::DeathCallbackComponent>(
+		[&]() { dae::Minigin::eventManager.SendEvent( { "e_InsectDied"_hash, nullptr } ); } );
 
 	auto zako3{ std::make_unique<dae::GameObject>() };
 	zako3->AddComponent<dae::SpriteSheetComponent>( "Enemy.png", dae::SpriteSheet::SpriteSheetInfo{ 24, 3 } );
@@ -124,7 +129,8 @@ static void load()
 		glm::vec4{ 2.f, 3.f, 13.f, 10.f }, "target_Enemy"_hash, []( dae::GameObject* pParent, dae::Hitbox* ) {
 			pParent->GetComponent<dae::HealthComponent>()->Damage( 1 );
 		} );
-
+	zako3->AddComponent<dae::DeathCallbackComponent>(
+		[&]() { dae::Minigin::eventManager.SendEvent( { "e_InsectDied"_hash, nullptr } ); } );
 	//
 
 	// Scoreboard
@@ -202,6 +208,10 @@ static void load()
 		projectile->AddComponent<dae::ProjectileComponent>( glm::vec2{ 0.f, -256.f }, 0.8f )
 			.RegisterObserver( shipAmmoRef );
 		projectile->GetComponent<dae::TransformComponent>()->MoveTo( shipPosRef->GetPosition() + glm::vec2{ 4, 0 } );
+		projectile->AddComponent<dae::HitboxComponent>(
+			glm::vec4{ 0.f, 0.f, 8.f, 8.f }, std::vector{ "target_Enemy"_hash }, []( dae::GameObject* pParent, auto ) {
+				pParent->MarkForRemoval();
+			} );
 
 		dae::SceneManager::GetInstance().GetScene( gameIdx ).Add( std::move( projectile ) );
 	} };
