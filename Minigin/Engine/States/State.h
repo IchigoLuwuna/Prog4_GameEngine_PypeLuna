@@ -14,6 +14,9 @@ public:
 	{
 	}
 
+	virtual void Enter() = 0;
+	virtual void Exit() = 0;
+
 	StateMachine<DerivedState>* GetParent()
 	{
 		return m_pParent;

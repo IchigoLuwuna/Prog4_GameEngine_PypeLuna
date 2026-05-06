@@ -6,7 +6,6 @@
 
 dae::ZakoIdlingState::ZakoIdlingState( StateMachine<ZakoState>* pParent )
 	: ZakoState( pParent )
-	, m_RemainingStateTime( static_cast<float>( rand() ) / static_cast<float>( RAND_MAX ) * m_MaxStateTime )
 {
 }
 
@@ -21,10 +20,25 @@ void dae::ZakoIdlingState::Update( GameObject* )
 	}
 }
 
+void dae::ZakoIdlingState::Enter()
+{
+	m_RemainingStateTime = static_cast<float>( rand() ) / static_cast<float>( RAND_MAX ) * m_MaxStateTime;
+}
+void dae::ZakoIdlingState::Exit()
+{
+}
+
 dae::ZakoDivingState::ZakoDivingState( StateMachine<ZakoState>* pParent )
 	: ZakoState( pParent )
 {
 	ServiceLocator<SoundService>::GetInstance().GetService().Play( "dive.wav", 1.f );
+}
+
+void dae::ZakoDivingState::Enter()
+{
+}
+void dae::ZakoDivingState::Exit()
+{
 }
 
 void dae::ZakoDivingState::Update( GameObject* pObject )
@@ -58,4 +72,11 @@ void dae::ZakoReturningState::Update( GameObject* pObject )
 		GetParent()->SetState<ZakoIdlingState>();
 		return;
 	}
+}
+
+void dae::ZakoReturningState::Enter()
+{
+}
+void dae::ZakoReturningState::Exit()
+{
 }

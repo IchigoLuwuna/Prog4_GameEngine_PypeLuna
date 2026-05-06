@@ -14,7 +14,7 @@ public:
 	{
 	}
 	virtual ~ZakoState() = default;
-	virtual void Update( GameObject* pParent ) = 0;
+	virtual void Update( GameObject* ) = 0;
 };
 
 class ZakoIdlingState final : public ZakoState
@@ -22,6 +22,9 @@ class ZakoIdlingState final : public ZakoState
 public:
 	ZakoIdlingState( StateMachine<ZakoState>* pParent );
 	virtual void Update( GameObject* pObject ) override;
+
+	virtual void Enter() override;
+	virtual void Exit() override;
 
 private:
 	float m_RemainingStateTime{};
@@ -34,6 +37,9 @@ class ZakoDivingState final : public ZakoState
 public:
 	ZakoDivingState( StateMachine<ZakoState>* pParent );
 	virtual void Update( GameObject* pObject ) override;
+
+	virtual void Enter() override;
+	virtual void Exit() override;
 };
 
 class ZakoReturningState final : public ZakoState
@@ -41,6 +47,9 @@ class ZakoReturningState final : public ZakoState
 public:
 	ZakoReturningState( StateMachine<ZakoState>* pParent );
 	virtual void Update( GameObject* pObject ) override;
+
+	virtual void Enter() override;
+	virtual void Exit() override;
 };
 } // namespace dae
 #endif
