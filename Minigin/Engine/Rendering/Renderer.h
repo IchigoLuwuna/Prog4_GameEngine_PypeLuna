@@ -17,6 +17,7 @@ public:
 
 	void RenderTexture( const Texture2D& texture, float x, float y ) const;
 	void RenderTexture( const Texture2D& texture, float x, float y, float width, float height ) const;
+	void RenderTexture( const Texture2D& texture, const SDL_FRect& srcRect, const SDL_FRect& dstRect ) const;
 
 	SDL_Renderer* GetSDLRenderer() const;
 
@@ -32,6 +33,6 @@ public:
 private:
 	SDL_Renderer* m_Renderer{};
 	SDL_Window* m_Window{};
-	SDL_Color m_ClearColor{};
+	SDL_Color m_ClearColor{ 255, 0, 255, 255 };
 };
 } // namespace dae

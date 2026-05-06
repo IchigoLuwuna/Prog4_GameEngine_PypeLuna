@@ -1,24 +1,30 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
-#include "Sound/SDLSoundService.h"
+#include "Hitboxes/Hurtbox.h"
 #if _DEBUG && __has_include( <vld.h>)
 #	include <vld.h>
 #endif
 
 #include <Engine.h>
 
+#include "Game/Components/AnimationComponent.h"
+#include "Game/Components/DeathCallbackComponent.h"
 #include "Components/FpsComponent.h"
+#include "Components/PixelTextComponent.h"
+#include "Components/ScrollingBGComponent.h"
+#include "Components/SpriteSheetComponent.h"
 #include "Components/HealthComponent.h"
-#include "Components/HealthDisplayComponent.h"
+#include "Components/ProjectileComponent.h"
 #include "Components/ScoreComponent.h"
+#include "Components/ProjectileAmmoComponent.h"
+#include "Components/TextAllignmentComponent.h"
 #include "Components/ScoreDisplayComponent.h"
 #include "Components/ReactiveSoundComponent.h"
-#include "Components/TextComponent.h"
-#include "Components/TextureComponent.h"
+#include "Components/StateComponent.h"
 
-#include "Commands/EventCommand.h"
 #include "Commands/DamageCommand.h"
-#include "Commands/MoveCommand.h"
+
+#include "States/ZakoStates.h"
 
 #include "Achievement/Achievement.h"
 
@@ -33,177 +39,253 @@ static void load()
 	dae::ServiceLocator<dae::SoundService>::GetInstance().AddLayer<dae::DebugSoundService>();
 #endif
 
-	auto& scene{ dae::SceneManager::GetInstance().CreateScene() };
+	dae::ServiceLocator<dae::SoundService>::GetInstance().GetService().Play( "start.wav", 1.f );
+
+	[[maybe_unused]] constexpr size_t bgIdx{ 0 };
+	[[maybe_unused]] constexpr size_t gameIdx{ 1 };
+	[[maybe_unused]] constexpr size_t uiIdx{ 2 };
+	auto& bgScene{ dae::SceneManager::GetInstance().CreateScene() };
+	auto& gameScene{ dae::SceneManager::GetInstance().CreateScene() };
+	auto& uiScene{ dae::SceneManager::GetInstance().CreateScene() };
 
 	// Initialize objects
 	// Base
 	auto background{ std::make_unique<dae::GameObject>() };
-	background->AddComponent<dae::TextureComponent>( "./background.png" );
-	auto logo{ std::make_unique<dae::GameObject>() };
-	logo->AddComponent<dae::TextureComponent>( "./logo.png" );
-	auto text{ std::make_unique<dae::GameObject>() };
-	auto bigFont{ dae::ResourceManager::GetInstance().LoadFont( "Lingua.otf", 36 ) };
-	text->AddComponent<dae::TextComponent>( "Programming 4 Assignment", bigFont, SDL_Color{ 255, 255, 0, 255 } );
+	background->AddComponent<dae::ScrollingBGComponent>(
+		"BG.png", 64.f, dae::ScrollingBGComponent::ScrollingDir::down );
+	auto bigFont{ dae::ResourceManager::GetInstance().LoadFont( "Lingua.otf", 48 ) };
 	auto fps{ std::make_unique<dae::GameObject>() };
-	fps->AddComponent<dae::TextComponent>( ".", bigFont );
+	const std::string typefacePath{ "Typeface.png" };
+	const std::string typefaceMapping{ "0123456789abcdefghijklmnopqrstuvwxyz-%.!" };
+	fps->AddComponent<dae::PixelTextComponent>( typefacePath, typefaceMapping, glm::vec2{ 8.f, 8.f } )
+		.SetIgnore( true );
 	fps->AddComponent<dae::FpsComponent>();
 	//
 
 	// Player Characters
-	auto operaBird{ std::make_unique<dae::GameObject>() };
-	operaBird->AddComponent<dae::TextureComponent>( "./opera-bird.png" );
-	operaBird->AddComponent<dae::HealthComponent>( 3u );
-	operaBird->AddComponent<dae::ScoreComponent>();
-	operaBird
-		->AddComponent<dae::ReactiveSoundComponent>() // Easy to add sounds thanks to chaining
-		.AddSound( { "e_SmallPelletPickup"_hash, operaBird.get(), "Data/wow.mp3" } )
-		.AddSound( { "e_BigPelletPickup"_hash, operaBird.get(), "Data/wow.mp3" } )
-		.AddSound( { "e_EntityDied"_hash, operaBird.get(), "Data/fuku2.mp3" } );
+	auto ship{ std::make_unique<dae::GameObject>() };
+	ship->AddComponent<dae::SpriteSheetComponent>( "Ship.png", dae::SpriteSheet::SpriteSheetInfo{ 8, 3 } )
+		.SetIndex( 6, 0 );
+	ship->AddComponent<dae::HealthComponent>( 1 );
+	std::vector<std::pair<size_t, uint32_t>> shipScoreGainOnEvent{ { "e_InsectDied"_hash, 100 } };
+	ship->AddComponent<dae::ScoreComponent>( std::move( shipScoreGainOnEvent ) );
+	ship->AddComponent<dae::ProjectileAmmoComponent>( 2 );
+	ship->AddComponent<dae::ReactiveSoundComponent>().AddSound( { "e_EntityDied"_hash, ship.get(), "explosion.wav" } );
+	ship->AddComponent<dae::HurtboxComponent>(
+		glm::vec4{ 0.f, 0.f, 16.f, 16.f }, "target_Player"_hash, []( dae::GameObject* pParent, auto ) {
+			pParent->GetComponent<dae::HealthComponent>()->Damage( 3 );
+		} );
+	//
 
-	auto dotoSheep{ std::make_unique<dae::GameObject>() };
-	dotoSheep->AddComponent<dae::TextureComponent>( "./doto-sheep.png" );
-	dotoSheep->AddComponent<dae::HealthComponent>( 3 );
-	dotoSheep->AddComponent<dae::ScoreComponent>();
-	dotoSheep->AddComponent<dae::ReactiveSoundComponent>()
-		.AddSound( { "e_SmallPelletPickup"_hash, dotoSheep.get(), "Data/wow.mp3" } )
-		.AddSound( { "e_BigPelletPickup"_hash, dotoSheep.get(), "Data/wow.mp3" } )
-		.AddSound( { "e_EntityDied"_hash, dotoSheep.get(), "Data/fuku1.mp3" } );
+	// Enemies
+	auto zako1{ std::make_unique<dae::GameObject>() };
+	zako1->AddComponent<dae::SpriteSheetComponent>( "Enemy.png", dae::SpriteSheet::SpriteSheetInfo{ 24, 3 } );
+	zako1->AddComponent<dae::AnimationComponent>()
+		.AddAnimation( "anim_Idle"_hash, { 6, 7, 0.25f, true } )
+		.SetAnimation( "anim_Idle"_hash );
+	zako1->AddComponent<dae::HealthComponent>( 1 );
+	zako1->AddComponent<dae::StateComponent<dae::ZakoState>>().SetState<dae::ZakoReturningState>();
+	zako1->AddComponent<dae::ReactiveSoundComponent>().AddSound(
+		{ "e_EntityDied"_hash, zako1.get(), "zako_destroy.wav" } );
+	zako1->AddComponent<dae::HitboxComponent>(
+		glm::vec4{ 2.f, 3.f, 13.f, 10.f }, std::vector{ "target_Player"_hash }, nullptr );
+	zako1->AddComponent<dae::HurtboxComponent>(
+		glm::vec4{ 2.f, 3.f, 13.f, 10.f }, "target_Enemy"_hash, []( dae::GameObject* pParent, dae::Hitbox* ) {
+			pParent->GetComponent<dae::HealthComponent>()->Damage( 1 );
+		} );
+	zako1->AddComponent<dae::DeathCallbackComponent>(
+		[&]() { dae::Minigin::eventManager.SendEvent( { "e_InsectDied"_hash, nullptr } ); } );
+
+	auto zako2{ std::make_unique<dae::GameObject>() };
+	zako2->AddComponent<dae::SpriteSheetComponent>( "Enemy.png", dae::SpriteSheet::SpriteSheetInfo{ 24, 3 } );
+	zako2->AddComponent<dae::AnimationComponent>()
+		.AddAnimation( "anim_Idle"_hash, { 6, 7, 0.25f, true } )
+		.SetAnimation( "anim_Idle"_hash );
+	zako2->AddComponent<dae::HealthComponent>( 1 );
+	zako2->AddComponent<dae::StateComponent<dae::ZakoState>>().SetState<dae::ZakoReturningState>();
+	zako2->AddComponent<dae::ReactiveSoundComponent>().AddSound(
+		{ "e_EntityDied"_hash, zako2.get(), "zako_destroy.wav" } );
+	zako2->AddComponent<dae::HitboxComponent>(
+		glm::vec4{ 2.f, 3.f, 13.f, 10.f }, std::vector{ "target_Player"_hash }, nullptr );
+	zako2->AddComponent<dae::HurtboxComponent>(
+		glm::vec4{ 2.f, 3.f, 13.f, 10.f }, "target_Enemy"_hash, []( dae::GameObject* pParent, dae::Hitbox* ) {
+			pParent->GetComponent<dae::HealthComponent>()->Damage( 1 );
+		} );
+	zako2->AddComponent<dae::DeathCallbackComponent>(
+		[&]() { dae::Minigin::eventManager.SendEvent( { "e_InsectDied"_hash, nullptr } ); } );
+
+	auto zako3{ std::make_unique<dae::GameObject>() };
+	zako3->AddComponent<dae::SpriteSheetComponent>( "Enemy.png", dae::SpriteSheet::SpriteSheetInfo{ 24, 3 } );
+	zako3->AddComponent<dae::AnimationComponent>()
+		.AddAnimation( "anim_Idle"_hash, { 6, 7, 0.25f, true } )
+		.SetAnimation( "anim_Idle"_hash );
+	zako3->AddComponent<dae::HealthComponent>( 1 );
+	zako3->AddComponent<dae::StateComponent<dae::ZakoState>>().SetState<dae::ZakoReturningState>();
+	zako3->AddComponent<dae::ReactiveSoundComponent>().AddSound(
+		{ "e_EntityDied"_hash, zako3.get(), "zako_destroy.wav" } );
+	zako3->AddComponent<dae::HitboxComponent>(
+		glm::vec4{ 2.f, 3.f, 13.f, 10.f }, std::vector{ "target_Player"_hash }, nullptr );
+	zako3->AddComponent<dae::HurtboxComponent>(
+		glm::vec4{ 2.f, 3.f, 13.f, 10.f }, "target_Enemy"_hash, []( dae::GameObject* pParent, dae::Hitbox* ) {
+			pParent->GetComponent<dae::HealthComponent>()->Damage( 1 );
+		} );
+	zako3->AddComponent<dae::DeathCallbackComponent>(
+		[&]() { dae::Minigin::eventManager.SendEvent( { "e_InsectDied"_hash, nullptr } ); } );
 	//
 
 	// Scoreboard
-	auto smallFont{ dae::ResourceManager::GetInstance().LoadFont( "Lingua.otf", 18 ) };
-
-	auto operaInfoText{ std::make_unique<dae::GameObject>() };
-	operaInfoText->AddComponent<dae::TextComponent>(
-		"Use the D-Pad to move TM Opera O (bird), X to inflict damage, A and B to pick up pellets",
-		smallFont,
-		SDL_Color{ 255, 255, 255, 255 } );
-	auto dotoInfoText{ std::make_unique<dae::GameObject>() };
-	dotoInfoText->AddComponent<dae::TextComponent>(
-		"Use WASD to move Meisho Doto (sheep), C to inflict damage, Z and X to pick up pellets ",
-		smallFont,
-		SDL_Color{ 255, 255, 255, 255 } );
-
-	auto operaHealthDisplay{ std::make_unique<dae::GameObject>() };
-	operaHealthDisplay->AddComponent<dae::TextComponent>( ".", smallFont, SDL_Color{ 255, 255, 255, 255 } );
-	operaHealthDisplay->AddComponent<dae::HealthDisplayComponent>( operaBird->GetComponent<dae::HealthComponent>() );
-
-	auto operaScoreDisplay{ std::make_unique<dae::GameObject>() };
-	operaScoreDisplay->AddComponent<dae::TextComponent>( ".", smallFont, SDL_Color{ 255, 255, 255, 255 } );
-	operaScoreDisplay->AddComponent<dae::ScoreDisplayComponent>( operaBird->GetComponent<dae::ScoreComponent>() );
-
-	auto dotoHealthDisplay{ std::make_unique<dae::GameObject>() };
-	dotoHealthDisplay->AddComponent<dae::TextComponent>( ".", smallFont, SDL_Color{ 255, 255, 255, 255 } );
-	dotoHealthDisplay->AddComponent<dae::HealthDisplayComponent>( dotoSheep->GetComponent<dae::HealthComponent>() );
-
-	auto dotoScoreDisplay{ std::make_unique<dae::GameObject>() };
-	dotoScoreDisplay->AddComponent<dae::TextComponent>( ".", smallFont, SDL_Color{ 255, 255, 255, 255 } );
-	dotoScoreDisplay->AddComponent<dae::ScoreDisplayComponent>( dotoSheep->GetComponent<dae::ScoreComponent>() );
+	auto playerScoreBoard{ std::make_unique<dae::GameObject>() };
+	playerScoreBoard->AddComponent<dae::PixelTextComponent>( typefacePath, typefaceMapping, glm::vec2{ 8.f, 8.f } );
+	playerScoreBoard->AddComponent<dae::ScoreDisplayComponent>().SetSubjectScore(
+		ship->GetComponent<dae::ScoreComponent>() );
 	//
 
 	// Create SceneGraph
-	dotoInfoText->SetParent( operaInfoText.get() );
-	operaHealthDisplay->SetParent( operaInfoText.get() );
-	operaScoreDisplay->SetParent( operaInfoText.get() );
-	dotoHealthDisplay->SetParent( operaInfoText.get() );
-	dotoScoreDisplay->SetParent( operaInfoText.get() );
 	//
 
 	// Set Starting Positions
-	logo->GetComponent<dae::TransformComponent>()->MoveTo( 358.f, 180.f );
-	text->GetComponent<dae::TransformComponent>()->MoveTo( 292.f, 20.f );
-
-	dotoSheep->GetComponent<dae::TransformComponent>()->MoveTo( glm::vec2{ 150.f, 200.f } );
-	operaBird->GetComponent<dae::TransformComponent>()->MoveTo( glm::vec2{ 500.f, 200.f } );
-
-	operaInfoText->GetComponent<dae::TransformComponent>()->MoveTo( glm::vec2{ 10.f, 100.f } );
-	dotoInfoText->GetComponent<dae::TransformComponent>()->MoveTo( glm::vec2{ 0.f, 24.f } );
-	operaHealthDisplay->GetComponent<dae::TransformComponent>()->MoveTo( glm::vec2{ 0.f, 64.f } );
-	operaScoreDisplay->GetComponent<dae::TransformComponent>()->MoveTo( glm::vec2{ 0.f, 88.f } );
-	dotoHealthDisplay->GetComponent<dae::TransformComponent>()->MoveTo( glm::vec2{ 0.f, 112.f } );
-	dotoScoreDisplay->GetComponent<dae::TransformComponent>()->MoveTo( glm::vec2{ 0.f, 136.f } );
+	ship->GetComponent<dae::TransformComponent>()->MoveTo( 100.f, 200.f );
+	zako1->GetComponent<dae::TransformComponent>()->MoveTo( 68.f, -64.f );
+	zako2->GetComponent<dae::TransformComponent>()->MoveTo( 136.f, -64.f );
+	zako3->GetComponent<dae::TransformComponent>()->MoveTo( 204.f, -64.f );
+	playerScoreBoard->AddComponent<dae::TextAllignmentComponent>( glm::vec2{ 288.f, 0.f },
+																  dae::TextAllignmentComponent::Allignment::topRight );
 	//
 
 	// Create bindings
-	constexpr float moveSpeed{ 150.f };
-	// Opera Bird using controller
-	const auto dUpKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::up ) };
-	const auto dDownKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::down ) };
-	const auto dLeftKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::left ) };
-	const auto dRightKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::right ) };
+	// Functions
+	auto shipPosRef{ ship->GetComponent<dae::TransformComponent>() };
+	auto shipAmmoRef{ ship->GetComponent<dae::ProjectileAmmoComponent>() };
+	auto moveLeft{ [=]() mutable {
+		constexpr float movement{ -96.f };
 
-	const auto southKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::south ) };
-	const auto eastKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::east ) };
-	const auto northKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::north ) };
+		if ( !shipPosRef.Validate() )
+		{
+			return;
+		}
+		if ( shipPosRef->GetPosition().x + movement * dae::Timer::GetInstance().GetElapsed() <= 0.f )
+		{
+			shipPosRef->MoveTo( 0.f, shipPosRef->GetPosition().y );
+			return;
+		}
+		shipPosRef->Move( movement * dae::Timer::GetInstance().GetElapsed(), 0.f );
+	} };
+	auto moveRight{ [=]() mutable {
+		constexpr float movement{ 96.f };
 
-	const auto pOperaTransform{ operaBird->GetComponent<dae::TransformComponent>() };
-	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
-		dUpKey, dae::InputManager::KeyState::held, pOperaTransform, glm::vec2{ 0.f, -moveSpeed * 2.f } );
-	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
-		dDownKey, dae::InputManager::KeyState::held, pOperaTransform, glm::vec2{ 0.f, moveSpeed * 2.f } );
-	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
-		dLeftKey, dae::InputManager::KeyState::held, pOperaTransform, glm::vec2{ -moveSpeed * 2.f, 0.f } );
-	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
-		dRightKey, dae::InputManager::KeyState::held, pOperaTransform, glm::vec2{ moveSpeed * 2.f, 0.f } );
+		if ( !shipPosRef.Validate() )
+		{
+			return;
+		}
+		if ( shipPosRef->GetPosition().x + 15.f + movement * dae::Timer::GetInstance().GetElapsed() >= 288.f )
+		{
+			shipPosRef->MoveTo( 288.f - 15.f, shipPosRef->GetPosition().y );
+			return;
+		}
+		shipPosRef->Move( movement * dae::Timer::GetInstance().GetElapsed(), 0.f );
+	} };
+	auto shoot{ [=]() mutable {
+		if ( !shipPosRef.Validate() )
+		{
+			return;
+		}
+		if ( !shipAmmoRef.Validate() )
+		{
+			return;
+		}
+		if ( !shipAmmoRef->HasAmmo() )
+		{
+			return;
+		}
+
+		shipAmmoRef->DecreaseAmmo();
+		dae::ServiceLocator<dae::SoundService>::GetInstance().GetService().Play( "fire.wav", 1.f );
+
+		auto projectile{ std::make_unique<dae::GameObject>() };
+		projectile
+			->AddComponent<dae::SpriteSheetComponent>( "Projectile.png", dae::SpriteSheet::SpriteSheetInfo{ 7, 1 } )
+			.SetIndex( 3 );
+		projectile->AddComponent<dae::ProjectileComponent>( glm::vec2{ 0.f, -256.f }, 0.8f )
+			.RegisterObserver( shipAmmoRef );
+		projectile->GetComponent<dae::TransformComponent>()->MoveTo( shipPosRef->GetPosition() + glm::vec2{ 4, 0 } );
+		projectile->AddComponent<dae::HitboxComponent>(
+			glm::vec4{ 0.f, 0.f, 8.f, 8.f }, std::vector{ "target_Enemy"_hash }, []( dae::GameObject* pParent, auto ) {
+				pParent->MarkForRemoval();
+			} );
+
+		dae::SceneManager::GetInstance().GetScene( gameIdx ).Add( std::move( projectile ) );
+	} };
+
+	// Bindings
+	dae::InputManager::GetInstance().BindCommand<dae::FunctionCommand>(
+		SDL_SCANCODE_A, dae::InputManager::KeyState::held, moveLeft );
+	dae::InputManager::GetInstance().BindCommand<dae::FunctionCommand>(
+		SDL_SCANCODE_LEFT, dae::InputManager::KeyState::held, moveLeft );
+	dae::InputManager::GetInstance().BindCommand<dae::FunctionCommand>(
+		SDL_SCANCODE_D, dae::InputManager::KeyState::held, moveRight );
+	dae::InputManager::GetInstance().BindCommand<dae::FunctionCommand>(
+		SDL_SCANCODE_RIGHT, dae::InputManager::KeyState::held, moveRight );
+
+	dae::InputManager::GetInstance().BindCommand<dae::FunctionCommand>(
+		SDL_SCANCODE_SPACE, dae::InputManager::KeyState::down, shoot );
+	dae::InputManager::GetInstance().BindCommand<dae::FunctionCommand>(
+		SDL_SCANCODE_J, dae::InputManager::KeyState::down, shoot );
+	dae::InputManager::GetInstance().BindCommand<dae::FunctionCommand>(
+		SDL_SCANCODE_K, dae::InputManager::KeyState::down, shoot );
+
+	dae::InputManager::GetInstance().BindCommand<dae::EventCommand>(
+		SDL_SCANCODE_Z, dae::InputManager::KeyState::down, dae::Event{ "e_InsectDied"_hash, nullptr } );
 
 	dae::InputManager::GetInstance().BindCommand<dae::DamageCommand>(
-		northKey, dae::InputManager::KeyState::down, operaBird->GetComponent<dae::HealthComponent>(), 1 );
-
-	dae::InputManager::GetInstance().BindCommand<dae::EventCommand>(
-		southKey, dae::InputManager::KeyState::down, dae::Event{ "e_SmallPelletPickup"_hash, operaBird.get() } );
-	dae::InputManager::GetInstance().BindCommand<dae::EventCommand>(
-		eastKey, dae::InputManager::KeyState::down, dae::Event{ "e_BigPelletPickup"_hash, operaBird.get() } );
-	//
-
-	// Doto Sheep using keyboard
-	auto pDotoTransform{ dotoSheep->GetComponent<dae::TransformComponent>() };
-	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
-		SDL_SCANCODE_W, dae::InputManager::KeyState::held, pDotoTransform, glm::vec2{ 0.f, -moveSpeed } );
-	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
-		SDL_SCANCODE_S, dae::InputManager::KeyState::held, pDotoTransform, glm::vec2{ 0.f, moveSpeed } );
-	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
-		SDL_SCANCODE_A, dae::InputManager::KeyState::held, pDotoTransform, glm::vec2{ -moveSpeed, 0.f } );
-	dae::InputManager::GetInstance().BindCommand<dae::MoveCommand>(
-		SDL_SCANCODE_D, dae::InputManager::KeyState::held, pDotoTransform, glm::vec2{ moveSpeed, 0.f } );
-
-	dae::InputManager::GetInstance().BindCommand<dae::DamageCommand>(
-		SDL_SCANCODE_C, dae::InputManager::KeyState::down, dotoSheep->GetComponent<dae::HealthComponent>(), 1 );
-
-	dae::InputManager::GetInstance().BindCommand<dae::EventCommand>(
-		SDL_SCANCODE_Z, dae::InputManager::KeyState::down, dae::Event{ "e_SmallPelletPickup"_hash, dotoSheep.get() } );
-	dae::InputManager::GetInstance().BindCommand<dae::EventCommand>(
-		SDL_SCANCODE_X, dae::InputManager::KeyState::down, dae::Event{ "e_BigPelletPickup"_hash, dotoSheep.get() } );
+		SDL_SCANCODE_U, dae::InputManager::KeyState::down, ship->GetComponent<dae::HealthComponent>(), 1 );
 	//
 
 #ifndef NDEBUG
 	//  Attach names to objects when debugging
 	background->AddComponent<dae::DebugComponent>( "background" );
-	logo->AddComponent<dae::DebugComponent>( "logo" );
-	text->AddComponent<dae::DebugComponent>( "text" );
-	dotoSheep->AddComponent<dae::DebugComponent>( "dotoSheep" );
-	operaBird->AddComponent<dae::DebugComponent>( "operaBird" );
-	operaInfoText->AddComponent<dae::DebugComponent>( "operaInfoText" );
-	dotoInfoText->AddComponent<dae::DebugComponent>( "dotoInfoText" );
-	operaHealthDisplay->AddComponent<dae::DebugComponent>( "operaHealthDisplay" );
-	dotoHealthDisplay->AddComponent<dae::DebugComponent>( "dotoHealthDisplay" );
+	ship->AddComponent<dae::DebugComponent>( "ship" );
+	zako1->AddComponent<dae::DebugComponent>( "zako" );
+	zako2->AddComponent<dae::DebugComponent>( "zako" );
+	zako3->AddComponent<dae::DebugComponent>( "zako" );
 	fps->AddComponent<dae::DebugComponent>( "fps" );
+	playerScoreBoard->AddComponent<dae::DebugComponent>( "playerScoreBoard" );
 //
 #endif
 
 	// Add to scene
-	scene.Add( std::move( background ) );
-	scene.Add( std::move( logo ) );
-	scene.Add( std::move( text ) );
-	scene.Add( std::move( dotoSheep ) );
-	scene.Add( std::move( operaBird ) );
-	scene.Add( std::move( operaInfoText ) );
-	scene.Add( std::move( dotoInfoText ) );
-	scene.Add( std::move( operaHealthDisplay ) );
-	scene.Add( std::move( operaScoreDisplay ) );
-	scene.Add( std::move( dotoHealthDisplay ) );
-	scene.Add( std::move( dotoScoreDisplay ) );
-	scene.Add( std::move( fps ) );
+	bgScene.Add( std::move( background ) );
+	gameScene.Add( std::move( ship ) );
+	gameScene.Add( std::move( zako1 ) );
+	gameScene.Add( std::move( zako2 ) );
+	gameScene.Add( std::move( zako3 ) );
+	uiScene.Add( std::move( fps ) );
+	uiScene.Add( std::move( playerScoreBoard ) );
 	//
+
+#ifndef NDEBUG
+	// Control for debug mode
+	auto controlHints{ std::make_unique<dae::GameObject>() };
+	controlHints->AddComponent<dae::PixelTextComponent>( typefacePath, typefaceMapping, glm::vec2{ 8.f, 8.f } )
+		.SetIgnore( true )
+		.SetText( "WASD or arrows for movement\nSPACE J and K for shooting\nZ to give yourself points\nENTER to hide "
+				  "this message" );
+
+	controlHints->GetComponent<dae::TransformComponent>()->MoveTo( glm::vec2{ 0.f, 8.f } );
+	controlHints->AddComponent<dae::DebugComponent>( "controlHints" );
+
+	dae::Validator controlHintsValidator{ controlHints->GetComponent<dae::TransformComponent>().GetControlBlock() };
+	auto* pControlHints{ controlHints.get() };
+	dae::InputManager::GetInstance().BindCommand<dae::FunctionCommand>(
+		SDL_SCANCODE_RETURN, dae::InputManager::KeyState::down, [=]() mutable {
+			if ( !controlHintsValidator.Validate() )
+			{
+				return;
+			}
+			pControlHints->MarkForRemoval();
+		} );
+
+	uiScene.Add( std::move( controlHints ) );
+#endif
 
 	// Attach achievement handler
 	dae::Minigin::eventManager.AttachListener( nullptr, dae::achievements::HandleEvent );
@@ -224,7 +306,8 @@ int main( int, char*[] )
 	std::cout << "Game is running in debug mode, extra info will be displayed in the console\n";
 #endif
 
-	dae::Minigin engine( data_location );
+	// https://www.arcade-museum.com/tech-center/machine/galaga
+	dae::Minigin engine( { "Galaga", { 1388, 1080 }, { 288, 224 } }, data_location );
 	engine.Run( load );
 
 	return 0;

@@ -1,6 +1,7 @@
 #ifndef OBSERVER_H
 #define OBSERVER_H
 #include <vector>
+#include <Memory.h>
 
 namespace dae
 {
@@ -22,25 +23,31 @@ public:
 	}
 	~Messenger() = default;
 
-	void RegisterObserver( Observer<SubjectType>* pObserver )
+	template <typename T>
+	void RegisterObserver( ReferencePtr<T> pObserver )
 	{
-		m_Observers.push_back( pObserver );
+		m_Observers.push_back( { pObserver.Get(), pObserver.GetControlBlock() } );
 	}
 	void RemoveObserver( Observer<SubjectType>* pObserver )
 	{
-		m_Observers.erase( std::ranges::find( m_Observers.begin(), m_Observers.end(), pObserver ) );
+		m_Observers.erase( std::ranges::find_if(
+			m_Observers.begin(), m_Observers.end(), [&]( auto& observer ) { return observer.first == pObserver; } ) );
 	}
 
 	void NotifyObservers( size_t eventHash )
 	{
-		for ( auto* observer : m_Observers )
+		for ( auto& observer : m_Observers )
 		{
-			observer->Notify( eventHash, m_pSubject );
+			if ( !observer.second.Validate() )
+			{
+				return;
+			}
+			observer.first->Notify( eventHash, m_pSubject );
 		}
 	}
 
 private:
-	std::vector<Observer<SubjectType>*> m_Observers{};
+	std::vector<std::pair<Observer<SubjectType>*, Validator>> m_Observers{};
 	SubjectType* m_pSubject{};
 };
 } // namespace dae

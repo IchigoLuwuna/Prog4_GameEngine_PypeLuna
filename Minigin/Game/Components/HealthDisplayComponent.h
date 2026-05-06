@@ -10,8 +10,10 @@ class TextComponent;
 class HealthDisplayComponent : public Component, public Observer<HealthComponent>
 {
 public:
-	HealthDisplayComponent( GameObject* pParent, const ReferencePtr<HealthComponent>& pHealth );
-	virtual ~HealthDisplayComponent();
+	HealthDisplayComponent( GameObject* pParent ); // Initialization needs to be two-stage
+	virtual ~HealthDisplayComponent() = default;
+
+	HealthDisplayComponent& SetSubjectHealth( const ReferencePtr<HealthComponent>& subject );
 
 	virtual void Update() override
 	{
@@ -21,7 +23,6 @@ public:
 
 private:
 	ReferencePtr<TextComponent> m_pText{};
-	ReferencePtr<HealthComponent> m_pSubject{};
 
 	void UpdateText( HealthComponent* pHealth );
 	void HandleEvent( Event& event );

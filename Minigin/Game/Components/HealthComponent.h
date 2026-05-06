@@ -24,14 +24,18 @@ public:
 	uint32_t GetMaxHealth() const;
 	bool IsDead() const;
 
-	void RegisterObserver( Observer<HealthComponent>* pObserver );
+	template <typename T>
+	void RegisterObserver( ReferencePtr<T> pObserver )
+	{
+		m_Messenger.RegisterObserver( pObserver );
+	}
 	void RemoveObserver( Observer<HealthComponent>* pObserver );
 
 private:
 	uint32_t m_Health{};
 	uint32_t m_MaxHealth{};
 
-	Messenger<HealthComponent> m_Subject;
+	Messenger<HealthComponent> m_Messenger;
 };
 } // namespace dae
 #endif

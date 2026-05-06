@@ -1,4 +1,5 @@
 #include <SDL3/SDL.h>
+#include <SDL3/SDL_surface.h>
 #include "Texture2D.h"
 #include "Rendering/Renderer.h"
 #include <stdexcept>
@@ -36,6 +37,8 @@ dae::Texture2D::Texture2D( const std::string& fullPath )
 	{
 		throw std::runtime_error( std::string( "Failed to create texture from surface: " ) + SDL_GetError() );
 	}
+
+	SDL_SetTextureScaleMode( m_Texture, SDL_SCALEMODE_PIXELART );
 }
 
 dae::Texture2D::Texture2D( SDL_Texture* texture )

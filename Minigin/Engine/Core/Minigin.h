@@ -2,6 +2,7 @@
 #define MINIGIN_H
 #include <functional>
 #include <filesystem>
+#include <glm/glm.hpp>
 #include "EventManager.h"
 #include "Achievement/SteamAchievements.h"
 
@@ -10,7 +11,14 @@ namespace dae
 class Minigin final
 {
 public:
-	explicit Minigin( const std::filesystem::path& dataPath );
+	struct WindowSettings
+	{
+		const char* name{};
+		glm::vec2 resolution{};
+		glm::vec2 internalResolution{};
+	};
+
+	explicit Minigin( const WindowSettings& settings, const std::filesystem::path& dataPath );
 	~Minigin();
 	void Run( const std::function<void()>& load );
 	void RunOneFrame();

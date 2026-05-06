@@ -1,4 +1,3 @@
-#include <iostream>
 #include <stdexcept>
 #include <SDL3_ttf/SDL_ttf.h>
 #include "ResourceManager.h"
@@ -47,6 +46,11 @@ dae::ReferencePtr<dae::Font> dae::ResourceManager::LoadFont( const std::string& 
 		m_LoadedFonts.insert( std::pair( key, std::move( font ) ) );
 	}
 	return ReferencePtr( m_LoadedFonts.at( key ) );
+}
+
+const std::filesystem::path& dae::ResourceManager::GetDataPath() const
+{
+	return m_dataPath;
 }
 
 void dae::ResourceManager::UnloadUnusedResources()

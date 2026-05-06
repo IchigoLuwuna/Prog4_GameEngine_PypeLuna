@@ -3,27 +3,21 @@
 #include <cassert>
 #include <format>
 
-dae::HealthDisplayComponent::HealthDisplayComponent( GameObject* pParent, const ReferencePtr<HealthComponent>& pHealth )
+dae::HealthDisplayComponent::HealthDisplayComponent( GameObject* pParent )
 	: Component( pParent )
-	, m_pSubject( pHealth )
 {
-	pHealth->RegisterObserver( this );
-
 	if ( !m_pText.Validate() )
 	{
 		m_pText = GetParent()->GetComponent<TextComponent>();
 		assert( m_pText.Validate() && "HealthDisplayComponent requires parent to have a text component" );
 	}
-
-	UpdateText( pHealth.Get() );
 }
 
-dae::HealthDisplayComponent::~HealthDisplayComponent()
+dae::HealthDisplayComponent& dae::HealthDisplayComponent::SetSubjectHealth(
+	const ReferencePtr<HealthComponent>& subject )
 {
-	if ( m_pSubject.Validate() )
-	{
-		m_pSubject->RemoveObserver( this );
-	}
+	subject->RegisterObserver( GetParent()->GetComponent<HealthDisplayComponent>() );
+	return *this;
 }
 
 void dae::HealthDisplayComponent::Notify( size_t eventHash, HealthComponent* pHealth )

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.26)
-project(Minigin)
+project(Galaga)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(CMAKE_CXX_STANDARD 20)
@@ -10,14 +10,14 @@ if(EMSCRIPTEN)
 endif()
 
 if(EMSCRIPTEN)
-  set(TARGET_NAME minigin_web)
+  set(TARGET_NAME galaga_web)
   set(TARGET_PARAM )
   set(LIBRARY_TYPE STATIC)
 elseif(WIN32)
-  set(TARGET_NAME minigin)
+  set(TARGET_NAME galaga)
   set(LIBRARY_TYPE STATIC)
 else()
-  set(TARGET_NAME minigin)
+  set(TARGET_NAME galaga)
   set(LIBRARY_TYPE SHARED)
 endif()
 
@@ -27,17 +27,26 @@ add_library(engine ${LIBRARY_TYPE}
         Minigin/Engine/Core/EventManager.cpp
         Minigin/Engine/Core/ResourceManager.cpp
     # Components
+        Minigin/Engine/Components/HitboxComponent.cpp
+        Minigin/Engine/Components/HurtboxComponent.cpp
         Minigin/Engine/Components/TransformComponent.cpp
     # Commands
         Minigin/Engine/Commands/EventCommand.cpp
+        Minigin/Engine/Commands/FunctionCommand.cpp
         Minigin/Engine/Commands/LogCommand.cpp
     # Achievement
         Minigin/Engine/Achievement/SteamAchievements.cpp
     # Helpers
         Minigin/Engine/Helpers/Font.cpp
+        Minigin/Engine/Helpers/PixelFont.cpp
+        Minigin/Engine/Helpers/SpriteSheet.cpp
         Minigin/Engine/Helpers/Subscription.cpp
         Minigin/Engine/Helpers/Texture2D.cpp
         Minigin/Engine/Helpers/Timer.cpp
+    # Hitboxes
+        Minigin/Engine/Hitboxes/Hitbox.cpp
+        Minigin/Engine/Hitboxes/HitboxRegistry.cpp
+        Minigin/Engine/Hitboxes/Hurtbox.cpp
     # Input
         Minigin/Engine/Input/Gamepad.cpp
         Minigin/Engine/Input/InputManager.cpp
@@ -56,36 +65,50 @@ add_library(engine ${LIBRARY_TYPE}
 )
 target_include_directories(engine PUBLIC Minigin/Engine/.)
 set_target_properties(engine PROPERTIES PUBLIC_HEADER
+    "
     Minigin/Engine/Engine.h
     Minigin/Engine/Core.h
     Minigin/Engine/Achievement.h
     Minigin/Engine/Commands.h
     Minigin/Engine/Helpers.h
+    Minigin/Engine/Hitboxes.h
     Minigin/Engine/Input.h
     Minigin/Engine/Memory.h
     Minigin/Engine/Patterns.h
     Minigin/Engine/Rendering.h
     Minigin/Engine/Scene.h
     Minigin/Engine/Sound.h
+    Minigin/Engine/States.h
+    "
 )
 
 # list source files here
 add_executable(${TARGET_NAME} ${TARGET_PARAM}
     # Components
+        Minigin/Game/Components/AnimationComponent.cpp
         Minigin/Game/Components/FpsComponent.cpp
         Minigin/Game/Components/HealthComponent.cpp
         Minigin/Game/Components/HealthDisplayComponent.cpp
         Minigin/Game/Components/ImGuiComponents.cpp
         Minigin/Game/Components/MovementComponents.cpp
+        Minigin/Game/Components/PixelTextComponent.cpp
+        Minigin/Game/Components/ProjectileAmmoComponent.cpp
+        Minigin/Game/Components/ProjectileComponent.cpp
         Minigin/Game/Components/ReactiveSoundComponent.cpp
         Minigin/Game/Components/ScoreComponent.cpp
         Minigin/Game/Components/ScoreDisplayComponent.cpp
-        Minigin/Game/Components/TextComponent.cpp
+        Minigin/Game/Components/ScrollingBGComponent.cpp
+        Minigin/Game/Components/SpriteSheetComponent.cpp
+        Minigin/Game/Components/TTFTextComponent.cpp
+        Minigin/Game/Components/TextAllignmentComponent.cpp
         Minigin/Game/Components/TextureComponent.cpp
 
     # Commands
         Minigin/Game/Commands/DamageCommand.cpp
         Minigin/Game/Commands/MoveCommand.cpp
+
+    # States
+        Minigin/Game/States/ZakoStates.cpp
 
     # Achievement
         Minigin/Game/Achievement/Achievement.cpp

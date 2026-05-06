@@ -15,7 +15,39 @@ public:
 	}
 	~Validator()
 	{
+		if ( !m_pControlBlock )
+		{
+			return;
+		}
 		m_pControlBlock->RemoveReference();
+	}
+
+	Validator( const Validator& other )
+	{
+		m_pControlBlock = other.m_pControlBlock;
+		if ( m_pControlBlock )
+		{
+			m_pControlBlock->AddReference();
+		}
+	}
+	Validator& operator=( const Validator& other )
+	{
+		if ( &other == this )
+		{
+			return *this;
+		}
+
+		if ( m_pControlBlock )
+		{
+			m_pControlBlock->RemoveReference();
+		}
+		m_pControlBlock = other.m_pControlBlock;
+		if ( m_pControlBlock )
+		{
+			m_pControlBlock->AddReference();
+		}
+
+		return *this;
 	}
 
 	void* Get()

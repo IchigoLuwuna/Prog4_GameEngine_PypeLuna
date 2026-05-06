@@ -7,11 +7,13 @@ namespace dae
 {
 class ScoreComponent;
 class TextComponent;
-class ScoreDisplayComponent : public Component, Observer<ScoreComponent>
+class ScoreDisplayComponent : public Component, public Observer<ScoreComponent>
 {
 public:
-	ScoreDisplayComponent( GameObject* pParent, const ReferencePtr<ScoreComponent>& pScore );
-	virtual ~ScoreDisplayComponent();
+	ScoreDisplayComponent( GameObject* pParent );
+	virtual ~ScoreDisplayComponent() = default;
+
+	ScoreDisplayComponent& SetSubjectScore( const ReferencePtr<ScoreComponent>& subject );
 
 	virtual void Update() override
 	{
@@ -21,7 +23,6 @@ public:
 
 private:
 	ReferencePtr<TextComponent> m_pText{};
-	ReferencePtr<ScoreComponent> m_pSubject{};
 
 	void UpdateText( ScoreComponent* pScore );
 	void HandleEvent( Event& event );

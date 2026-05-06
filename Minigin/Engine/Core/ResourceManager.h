@@ -21,6 +21,8 @@ public:
 	ReferencePtr<Texture2D> LoadTexture( const std::string& file );
 	ReferencePtr<Font> LoadFont( const std::string& file, uint8_t size );
 
+	const std::filesystem::path& GetDataPath() const;
+
 	void UnloadUnusedResources();
 
 private:
