@@ -10,7 +10,7 @@ class ProjectileComponent : public Component
 {
 public:
 	ProjectileComponent( GameObject* pParent, const glm::vec2& velocity, float lifetime );
-	virtual ~ProjectileComponent() = default;
+	virtual ~ProjectileComponent();
 
 	virtual void Update() override;
 
@@ -21,8 +21,9 @@ public:
 	}
 	void RemoveObserver( Observer<ProjectileComponent>* pObserver );
 
+	void Hit();
+
 private:
-	Hitbox m_Hitbox{};
 	glm::vec2 m_Velocity{};
 	float m_Lifetime{};
 	Messenger<ProjectileComponent> m_Messenger;
