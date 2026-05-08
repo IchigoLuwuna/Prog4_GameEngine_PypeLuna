@@ -40,6 +40,12 @@ public:
 
 	virtual void Enter() override;
 	virtual void Exit() override;
+
+private:
+	GameObject* m_pParent{};
+	float m_StartingX{};
+	bool m_StartingXSet{};
+	float m_DivingTime{};
 };
 
 class ZakoReturningState final : public ZakoState

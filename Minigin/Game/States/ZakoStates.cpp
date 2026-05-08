@@ -39,12 +39,28 @@ void dae::ZakoDivingState::Enter()
 }
 void dae::ZakoDivingState::Exit()
 {
+	if ( m_pParent )
+	{
+		auto transform{ m_pParent->GetComponent<dae::TransformComponent>() };
+		transform->MoveTo( m_StartingX, transform->GetPosition().y );
+	}
+
+	m_DivingTime = 0.f;
+	m_StartingXSet = false;
 }
 
 void dae::ZakoDivingState::Update( GameObject* pObject )
 {
+	m_DivingTime += Timer::GetInstance().GetElapsed();
+
+	m_pParent = pObject;
 	auto transform{ pObject->GetComponent<dae::TransformComponent>() };
-	auto movement{ glm::vec2{ 0.f, 128.f } * Timer::GetInstance().GetElapsed() };
+	if ( !m_StartingXSet )
+	{
+		m_StartingX = transform->GetPosition().x;
+		m_StartingXSet = true;
+	}
+	auto movement{ glm::vec2{ std::cos( m_DivingTime * 6.28f ) * 64.f, 128.f } * Timer::GetInstance().GetElapsed() };
 
 	transform->Move( movement );
 	if ( transform->GetPosition().y >= 224.f )
