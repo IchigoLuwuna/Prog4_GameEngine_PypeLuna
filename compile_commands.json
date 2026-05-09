@@ -349,6 +349,12 @@
 },
 {
   "directory": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build",
+  "command": "/usr/sbin/c++  -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build/_deps/imgui-src -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin/Engine/. -std=gnu++20 -Wall -Wextra -Werror -o CMakeFiles/galaga.dir/Minigin/Game/Functions/UI.cpp.o -c /home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin/Game/Functions/UI.cpp",
+  "file": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin/Game/Functions/UI.cpp",
+  "output": "CMakeFiles/galaga.dir/Minigin/Game/Functions/UI.cpp.o"
+},
+{
+  "directory": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build",
   "command": "/usr/sbin/c++  -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build/_deps/imgui-src -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin/Engine/. -std=gnu++20 -Wall -Wextra -Werror -o CMakeFiles/galaga.dir/Minigin/Game/States/ZakoStates.cpp.o -c /home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin/Game/States/ZakoStates.cpp",
   "file": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin/Game/States/ZakoStates.cpp",
   "output": "CMakeFiles/galaga.dir/Minigin/Game/States/ZakoStates.cpp.o"

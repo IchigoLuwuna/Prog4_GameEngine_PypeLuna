@@ -1,13 +1,11 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
-#include "Game/Functions/Player.h"
 #if _DEBUG && __has_include( <vld.h>)
 #	include <vld.h>
 #endif
 
 #include <Engine.h>
 
-#include "Components/FpsComponent.h"
 #include "Components/PixelTextComponent.h"
 #include "Components/ScrollingBGComponent.h"
 #include "Components/ScoreComponent.h"
@@ -15,6 +13,8 @@
 #include "Components/ScoreDisplayComponent.h"
 
 #include "Functions/Enemy.h"
+#include "Game/Functions/Player.h"
+#include "Game/Functions/UI.h"
 
 #include "States/ZakoStates.h"
 
@@ -42,13 +42,7 @@ static void load()
 	auto background{ std::make_unique<dae::GameObject>() };
 	background->AddComponent<dae::ScrollingBGComponent>(
 		"BG.png", 64.f, dae::ScrollingBGComponent::ScrollingDir::down );
-	auto bigFont{ dae::ResourceManager::GetInstance().LoadFont( "Lingua.otf", 48 ) };
-	auto fps{ std::make_unique<dae::GameObject>() };
-	const std::string typefacePath{ "Typeface.png" };
-	const std::string typefaceMapping{ "0123456789abcdefghijklmnopqrstuvwxyz-%.!" };
-	fps->AddComponent<dae::PixelTextComponent>( typefacePath, typefaceMapping, glm::vec2{ 8.f, 8.f } )
-		.SetIgnore( true );
-	fps->AddComponent<dae::FpsComponent>();
+	auto fps{ dae::functions::ui::MakeFpsCounter() };
 	//
 
 	// Player Characters
@@ -63,6 +57,8 @@ static void load()
 
 	// Scoreboard
 	auto playerScoreBoard{ std::make_unique<dae::GameObject>() };
+	const std::string typefacePath{ "Typeface.png" };
+	const std::string typefaceMapping{ "0123456789abcdefghijklmnopqrstuvwxyz-%.!" };
 	playerScoreBoard->AddComponent<dae::PixelTextComponent>( typefacePath, typefaceMapping, glm::vec2{ 8.f, 8.f } );
 	playerScoreBoard->AddComponent<dae::ScoreDisplayComponent>().SetSubjectScore(
 		ship->GetComponent<dae::ScoreComponent>() );
