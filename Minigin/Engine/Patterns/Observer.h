@@ -5,12 +5,11 @@
 
 namespace dae
 {
-template <typename SubjectType>
 class Observer
 {
 public:
 	virtual ~Observer() = default;
-	virtual void Notify( size_t eventHash, SubjectType* pSubject ) = 0;
+	virtual void Notify( size_t eventHash, void* pSubject ) = 0;
 };
 
 template <typename SubjectType>
@@ -26,9 +25,9 @@ public:
 	template <typename T>
 	void RegisterObserver( ReferencePtr<T> pObserver )
 	{
-		m_Observers.push_back( { pObserver.Get(), pObserver.GetControlBlock() } );
+		m_Observers.push_back( { pObserver.Get(), Validator{ pObserver.GetControlBlock() } } );
 	}
-	void RemoveObserver( Observer<SubjectType>* pObserver )
+	void RemoveObserver( Observer* pObserver )
 	{
 		m_Observers.erase( std::ranges::find_if(
 			m_Observers.begin(), m_Observers.end(), [&]( auto& observer ) { return observer.first == pObserver; } ) );
@@ -47,7 +46,7 @@ public:
 	}
 
 private:
-	std::vector<std::pair<Observer<SubjectType>*, Validator>> m_Observers{};
+	std::vector<std::pair<Observer*, Validator>> m_Observers{};
 	SubjectType* m_pSubject{};
 };
 } // namespace dae

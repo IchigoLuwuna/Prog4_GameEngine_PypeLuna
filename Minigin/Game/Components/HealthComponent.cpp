@@ -67,7 +67,7 @@ bool dae::HealthComponent::IsDead() const
 	return m_Health == 0;
 }
 
-void dae::HealthComponent::RemoveObserver( Observer<HealthComponent>* pObserver )
+void dae::HealthComponent::RemoveObserver( Observer* pObserver )
 {
 	m_Messenger.RemoveObserver( pObserver );
 }

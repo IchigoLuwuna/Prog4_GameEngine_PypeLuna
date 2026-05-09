@@ -27,7 +27,7 @@ void dae::ProjectileAmmoComponent::DecreaseAmmo()
 	--m_Count;
 }
 
-void dae::ProjectileAmmoComponent::Notify( size_t eventHash, ProjectileComponent* )
+void dae::ProjectileAmmoComponent::Notify( size_t eventHash, void* )
 {
 	switch ( eventHash )
 	{

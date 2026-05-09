@@ -34,7 +34,7 @@ uint32_t dae::ScoreComponent::GetScore() const
 	return m_Score;
 }
 
-void dae::ScoreComponent::RemoveObserver( Observer<ScoreComponent>* pObserver )
+void dae::ScoreComponent::RemoveObserver( Observer* pObserver )
 {
 	m_Messenger.RemoveObserver( pObserver );
 }

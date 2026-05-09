@@ -2,6 +2,7 @@
 #include "TextComponent.h"
 #include <cassert>
 #include <format>
+#include <Memory.h>
 
 dae::HealthDisplayComponent::HealthDisplayComponent( GameObject* pParent )
 	: Component( pParent )
@@ -20,12 +21,12 @@ dae::HealthDisplayComponent& dae::HealthDisplayComponent::SetSubjectHealth(
 	return *this;
 }
 
-void dae::HealthDisplayComponent::Notify( size_t eventHash, HealthComponent* pHealth )
+void dae::HealthDisplayComponent::Notify( size_t eventHash, void* pHealth )
 {
 	switch ( eventHash )
 	{
 	case "e_HealthChanged"_hash: {
-		UpdateText( pHealth );
+		UpdateText( reinterpret_cast<HealthComponent*>( pHealth ) );
 		return;
 	}
 	case "e_EntityDied"_hash: {

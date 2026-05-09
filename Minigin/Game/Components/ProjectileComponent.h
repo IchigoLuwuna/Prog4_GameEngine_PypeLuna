@@ -19,7 +19,7 @@ public:
 	{
 		m_Messenger.RegisterObserver( pObserver );
 	}
-	void RemoveObserver( Observer<ProjectileComponent>* pObserver );
+	void RemoveObserver( Observer* pObserver );
 
 	void Hit();
 

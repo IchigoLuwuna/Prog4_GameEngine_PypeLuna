@@ -29,7 +29,7 @@ public:
 	{
 		m_Messenger.RegisterObserver( pObserver );
 	}
-	void RemoveObserver( Observer<ScoreComponent>* pObserver );
+	void RemoveObserver( Observer* pObserver );
 
 private:
 	Messenger<ScoreComponent> m_Messenger;

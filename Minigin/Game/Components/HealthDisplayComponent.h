@@ -7,7 +7,7 @@
 namespace dae
 {
 class TextComponent;
-class HealthDisplayComponent : public Component, public Observer<HealthComponent>
+class HealthDisplayComponent : public Component, public Observer
 {
 public:
 	HealthDisplayComponent( GameObject* pParent ); // Initialization needs to be two-stage
@@ -19,7 +19,7 @@ public:
 	{
 	}
 
-	virtual void Notify( size_t eventHash, HealthComponent* pSubject ) override;
+	virtual void Notify( size_t eventHash, void* pSubject ) override;
 
 private:
 	ReferencePtr<TextComponent> m_pText{};

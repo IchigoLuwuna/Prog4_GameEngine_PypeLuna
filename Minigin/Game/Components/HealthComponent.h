@@ -29,7 +29,7 @@ public:
 	{
 		m_Messenger.RegisterObserver( pObserver );
 	}
-	void RemoveObserver( Observer<HealthComponent>* pObserver );
+	void RemoveObserver( Observer* pObserver );
 
 private:
 	uint32_t m_Health{};

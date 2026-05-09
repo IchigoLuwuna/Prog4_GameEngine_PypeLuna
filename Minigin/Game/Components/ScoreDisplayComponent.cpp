@@ -21,12 +21,12 @@ dae::ScoreDisplayComponent& dae::ScoreDisplayComponent::SetSubjectScore( const R
 	return *this;
 }
 
-void dae::ScoreDisplayComponent::Notify( size_t eventHash, ScoreComponent* pSubject )
+void dae::ScoreDisplayComponent::Notify( size_t eventHash, void* pSubject )
 {
 	switch ( eventHash )
 	{
 	case "e_ScoreChanged"_hash: {
-		UpdateText( pSubject );
+		UpdateText( reinterpret_cast<ScoreComponent*>( pSubject ) );
 	}
 	default: {
 		return;
