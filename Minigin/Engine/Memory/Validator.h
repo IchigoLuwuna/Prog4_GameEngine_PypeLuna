@@ -1,6 +1,7 @@
 #ifndef VALIDATOR_H
 #define VALIDATOR_H
 #include "Memory/ControlBlock.h"
+#include <cstdint>
 
 namespace dae
 {

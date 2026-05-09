@@ -72,7 +72,7 @@ static void load()
 	ship->AddComponent<dae::ProjectileAmmoComponent>( 2 );
 	ship->AddComponent<dae::ReactiveSoundComponent>().AddSound( { "e_EntityDied"_hash, ship.get(), "explosion.wav" } );
 	ship->AddComponent<dae::HurtboxComponent>(
-		glm::vec4{ 0.f, 0.f, 16.f, 16.f }, "target_Player"_hash, []( dae::GameObject* pParent, auto ) {
+		glm::vec4{ 0.f, 0.f, 16.f, 15.f }, "target_Player"_hash, []( dae::GameObject* pParent, auto ) {
 			pParent->GetComponent<dae::HealthComponent>()->Damage( 3 );
 		} );
 	//
@@ -81,7 +81,7 @@ static void load()
 	auto zako1{ std::make_unique<dae::GameObject>() };
 	zako1->AddComponent<dae::SpriteSheetComponent>( "Enemy.png", dae::SpriteSheet::SpriteSheetInfo{ 24, 3 } );
 	zako1->AddComponent<dae::AnimationComponent>()
-		.AddAnimation( "anim_Idle"_hash, { 6, 7, 0.25f, true } )
+		.AddAnimation( "anim_Idle"_hash, { 6, 7, 0.25f, dae::AnimationComponent::LoopingMode::repeat } )
 		.SetAnimation( "anim_Idle"_hash );
 	zako1->AddComponent<dae::HealthComponent>( 1 );
 	zako1->AddComponent<dae::StateComponent<dae::ZakoState>>().SetState<dae::ZakoReturningState>();
@@ -99,7 +99,7 @@ static void load()
 	auto zako2{ std::make_unique<dae::GameObject>() };
 	zako2->AddComponent<dae::SpriteSheetComponent>( "Enemy.png", dae::SpriteSheet::SpriteSheetInfo{ 24, 3 } );
 	zako2->AddComponent<dae::AnimationComponent>()
-		.AddAnimation( "anim_Idle"_hash, { 6, 7, 0.25f, true } )
+		.AddAnimation( "anim_Idle"_hash, { 6, 7, 0.25f, dae::AnimationComponent::LoopingMode::repeat } )
 		.SetAnimation( "anim_Idle"_hash );
 	zako2->AddComponent<dae::HealthComponent>( 1 );
 	zako2->AddComponent<dae::StateComponent<dae::ZakoState>>().SetState<dae::ZakoReturningState>();
@@ -117,7 +117,7 @@ static void load()
 	auto zako3{ std::make_unique<dae::GameObject>() };
 	zako3->AddComponent<dae::SpriteSheetComponent>( "Enemy.png", dae::SpriteSheet::SpriteSheetInfo{ 24, 3 } );
 	zako3->AddComponent<dae::AnimationComponent>()
-		.AddAnimation( "anim_Idle"_hash, { 6, 7, 0.25f, true } )
+		.AddAnimation( "anim_Idle"_hash, { 6, 7, 0.25f, dae::AnimationComponent::LoopingMode::repeat } )
 		.SetAnimation( "anim_Idle"_hash );
 	zako3->AddComponent<dae::HealthComponent>( 1 );
 	zako3->AddComponent<dae::StateComponent<dae::ZakoState>>().SetState<dae::ZakoReturningState>();
@@ -209,7 +209,7 @@ static void load()
 			.RegisterObserver( shipAmmoRef );
 		projectile->GetComponent<dae::TransformComponent>()->MoveTo( shipPosRef->GetPosition() + glm::vec2{ 4, 0 } );
 		projectile->AddComponent<dae::HitboxComponent>(
-			glm::vec4{ 0.f, 0.f, 8.f, 8.f }, std::vector{ "target_Enemy"_hash }, []( dae::GameObject* pParent, auto ) {
+			glm::vec4{ 2.f, 0.f, 3.f, 8.f }, std::vector{ "target_Enemy"_hash }, []( dae::GameObject* pParent, auto ) {
 				pParent->MarkForRemoval();
 			} );
 

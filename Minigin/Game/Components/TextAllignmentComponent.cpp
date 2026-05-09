@@ -7,7 +7,7 @@ dae::TextAllignmentComponent::TextAllignmentComponent( GameObject* pParent, glm:
 	, m_Origin( origin )
 	, m_Allignment( allignment )
 {
-	assert( m_TextRef.Get() && "Could not find text component to allign" );
+	assert( m_TextRef.Validate() && "Could not find text component to allign" );
 }
 
 void dae::TextAllignmentComponent::Update()
