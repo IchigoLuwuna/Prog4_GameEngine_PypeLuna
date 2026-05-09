@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "Game/Context.h"
 
 #include <Components.h>
 #include <Scene.h>
@@ -48,7 +49,7 @@ std::unique_ptr<dae::GameObject> dae::functions::player::MakePlayer()
 						   { 0, 3, 0.15f, dae::AnimationComponent::LoopingMode::singleAndTerminate } )
 			.SetAnimation( "anim_ShipExplosion"_hash );
 
-		dae::SceneManager::GetInstance().GetScene( 1 ).Add( std::move( explosion ) );
+		dae::SceneManager::GetInstance().GetScene( gameIdx ).Add( std::move( explosion ) );
 	} );
 	auto shipObserverRef{ ship->GetComponent<dae::ObserverComponent>() };
 	shipHealthRef->RegisterObserver( shipObserverRef );
@@ -120,7 +121,7 @@ void dae::functions::player::BindInputForPlayer( GameObject* pPlayer )
 				pParent->MarkForRemoval();
 			} );
 
-		dae::SceneManager::GetInstance().GetScene( 1 ).Add( std::move( projectile ) );
+		dae::SceneManager::GetInstance().GetScene( gameIdx ).Add( std::move( projectile ) );
 	} };
 
 	// Bindings

@@ -7,23 +7,12 @@
 
 #include <Engine.h>
 
-#include "Game/Components/AnimationComponent.h"
-#include "Game/Components/DeathCallbackComponent.h"
 #include "Components/FpsComponent.h"
 #include "Components/PixelTextComponent.h"
 #include "Components/ScrollingBGComponent.h"
-#include "Components/SpriteSheetComponent.h"
-#include "Components/HealthComponent.h"
-#include "Components/ProjectileComponent.h"
 #include "Components/ScoreComponent.h"
-#include "Components/ProjectileAmmoComponent.h"
 #include "Components/TextAllignmentComponent.h"
 #include "Components/ScoreDisplayComponent.h"
-#include "Components/ReactiveSoundComponent.h"
-#include "Components/StateComponent.h"
-#include "Components/ObserverComponent.h"
-
-#include "Commands/DamageCommand.h"
 
 #include "Functions/Enemy.h"
 
@@ -44,9 +33,6 @@ static void load()
 
 	dae::ServiceLocator<dae::SoundService>::GetInstance().GetService().Play( "start.wav", 1.f );
 
-	[[maybe_unused]] constexpr size_t bgIdx{ 0 };
-	[[maybe_unused]] constexpr size_t gameIdx{ 1 };
-	[[maybe_unused]] constexpr size_t uiIdx{ 2 };
 	auto& bgScene{ dae::SceneManager::GetInstance().CreateScene() };
 	auto& gameScene{ dae::SceneManager::GetInstance().CreateScene() };
 	auto& uiScene{ dae::SceneManager::GetInstance().CreateScene() };
@@ -71,9 +57,7 @@ static void load()
 
 	// Enemies
 	auto zako1{ dae::functions::enemy::MakeZako() };
-
 	auto zako2{ dae::functions::enemy::MakeZako() };
-
 	auto zako3{ dae::functions::enemy::MakeZako() };
 	//
 
