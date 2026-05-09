@@ -7,9 +7,7 @@
 #include <Engine.h>
 
 #include "Components/PixelTextComponent.h"
-#include "Components/ScoreComponent.h"
 #include "Components/TextAllignmentComponent.h"
-#include "Components/ScoreDisplayComponent.h"
 
 #include "Functions/Enemy.h"
 #include "Game/Functions/Player.h"

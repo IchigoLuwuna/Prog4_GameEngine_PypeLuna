@@ -51,6 +51,7 @@ std::unique_ptr<dae::GameObject> dae::functions::player::MakePlayer()
 
 		dae::SceneManager::GetInstance().GetScene( gameIdx ).Add( std::move( explosion ) );
 	} );
+
 	auto shipObserverRef{ ship->GetComponent<dae::ObserverComponent>() };
 	shipHealthRef->RegisterObserver( shipObserverRef );
 
