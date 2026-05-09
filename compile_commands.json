@@ -157,12 +157,6 @@
 },
 {
   "directory": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build",
-  "command": "/usr/sbin/c++ -Dengine_EXPORTS -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin/Engine/. -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build/_deps/imgui-src -std=gnu++20 -fPIC -o CMakeFiles/engine.dir/Minigin/Engine/Memory/Functions.cpp.o -c /home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin/Engine/Memory/Functions.cpp",
-  "file": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin/Engine/Memory/Functions.cpp",
-  "output": "CMakeFiles/engine.dir/Minigin/Engine/Memory/Functions.cpp.o"
-},
-{
-  "directory": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build",
   "command": "/usr/sbin/c++ -Dengine_EXPORTS -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin/Engine/. -I/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/build/_deps/imgui-src -std=gnu++20 -fPIC -o CMakeFiles/engine.dir/Minigin/Engine/Input/Gamepad.cpp.o -c /home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin/Engine/Input/Gamepad.cpp",
   "file": "/home/luna/Gamedev/Prog4/Prog4_GameEngine_PypeLuna/Minigin/Engine/Input/Gamepad.cpp",
   "output": "CMakeFiles/engine.dir/Minigin/Engine/Input/Gamepad.cpp.o"

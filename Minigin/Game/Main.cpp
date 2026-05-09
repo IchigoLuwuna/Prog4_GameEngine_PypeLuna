@@ -1,6 +1,5 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
-#include "Hitboxes/Hurtbox.h"
 #if _DEBUG && __has_include( <vld.h>)
 #	include <vld.h>
 #endif
@@ -24,6 +23,8 @@
 #include "Components/ObserverComponent.h"
 
 #include "Commands/DamageCommand.h"
+
+#include "Functions/Enemy.h"
 
 #include "States/ZakoStates.h"
 
@@ -101,59 +102,11 @@ static void load()
 	//
 
 	// Enemies
-	auto zako1{ std::make_unique<dae::GameObject>() };
-	zako1->AddComponent<dae::SpriteSheetComponent>( "Enemy.png", dae::SpriteSheet::SpriteSheetInfo{ 24, 3 } );
-	zako1->AddComponent<dae::AnimationComponent>()
-		.AddAnimation( "anim_Idle"_hash, { 6, 7, 0.5f, dae::AnimationComponent::LoopingMode::repeat } )
-		.SetAnimation( "anim_Idle"_hash );
-	zako1->AddComponent<dae::HealthComponent>( 1 );
-	zako1->AddComponent<dae::StateComponent<dae::ZakoState>>().SetState<dae::ZakoReturningState>();
-	zako1->AddComponent<dae::ReactiveSoundComponent>().AddSound(
-		{ "e_EntityDied"_hash, zako1.get(), "zako_destroy.wav" } );
-	zako1->AddComponent<dae::HitboxComponent>(
-		glm::vec4{ 2.f, 3.f, 13.f, 10.f }, std::vector{ "target_Player"_hash }, nullptr );
-	zako1->AddComponent<dae::HurtboxComponent>(
-		glm::vec4{ 2.f, 3.f, 13.f, 10.f }, "target_Enemy"_hash, []( dae::GameObject* pParent, dae::Hitbox* ) {
-			pParent->GetComponent<dae::HealthComponent>()->Damage( 1 );
-		} );
-	zako1->AddComponent<dae::DeathCallbackComponent>(
-		[=]() { dae::Minigin::eventManager.SendEvent( { "e_InsectDied"_hash, nullptr } ); } );
+	auto zako1{ dae::functions::enemy::MakeZako() };
 
-	auto zako2{ std::make_unique<dae::GameObject>() };
-	zako2->AddComponent<dae::SpriteSheetComponent>( "Enemy.png", dae::SpriteSheet::SpriteSheetInfo{ 24, 3 } );
-	zako2->AddComponent<dae::AnimationComponent>()
-		.AddAnimation( "anim_Idle"_hash, { 6, 7, 0.5f, dae::AnimationComponent::LoopingMode::repeat } )
-		.SetAnimation( "anim_Idle"_hash );
-	zako2->AddComponent<dae::HealthComponent>( 1 );
-	zako2->AddComponent<dae::StateComponent<dae::ZakoState>>().SetState<dae::ZakoReturningState>();
-	zako2->AddComponent<dae::ReactiveSoundComponent>().AddSound(
-		{ "e_EntityDied"_hash, zako2.get(), "zako_destroy.wav" } );
-	zako2->AddComponent<dae::HitboxComponent>(
-		glm::vec4{ 2.f, 3.f, 13.f, 10.f }, std::vector{ "target_Player"_hash }, nullptr );
-	zako2->AddComponent<dae::HurtboxComponent>(
-		glm::vec4{ 2.f, 3.f, 13.f, 10.f }, "target_Enemy"_hash, []( dae::GameObject* pParent, dae::Hitbox* ) {
-			pParent->GetComponent<dae::HealthComponent>()->Damage( 1 );
-		} );
-	zako2->AddComponent<dae::DeathCallbackComponent>(
-		[=]() { dae::Minigin::eventManager.SendEvent( { "e_InsectDied"_hash, nullptr } ); } );
+	auto zako2{ dae::functions::enemy::MakeZako() };
 
-	auto zako3{ std::make_unique<dae::GameObject>() };
-	zako3->AddComponent<dae::SpriteSheetComponent>( "Enemy.png", dae::SpriteSheet::SpriteSheetInfo{ 24, 3 } );
-	zako3->AddComponent<dae::AnimationComponent>()
-		.AddAnimation( "anim_Idle"_hash, { 6, 7, 0.5f, dae::AnimationComponent::LoopingMode::repeat } )
-		.SetAnimation( "anim_Idle"_hash );
-	zako3->AddComponent<dae::HealthComponent>( 1 );
-	zako3->AddComponent<dae::StateComponent<dae::ZakoState>>().SetState<dae::ZakoReturningState>();
-	zako3->AddComponent<dae::ReactiveSoundComponent>().AddSound(
-		{ "e_EntityDied"_hash, zako3.get(), "zako_destroy.wav" } );
-	zako3->AddComponent<dae::HitboxComponent>(
-		glm::vec4{ 2.f, 3.f, 13.f, 10.f }, std::vector{ "target_Player"_hash }, nullptr );
-	zako3->AddComponent<dae::HurtboxComponent>(
-		glm::vec4{ 2.f, 3.f, 13.f, 10.f }, "target_Enemy"_hash, []( dae::GameObject* pParent, dae::Hitbox* ) {
-			pParent->GetComponent<dae::HealthComponent>()->Damage( 1 );
-		} );
-	zako3->AddComponent<dae::DeathCallbackComponent>(
-		[=]() { dae::Minigin::eventManager.SendEvent( { "e_InsectDied"_hash, nullptr } ); } );
+	auto zako3{ dae::functions::enemy::MakeZako() };
 	//
 
 	// Scoreboard

@@ -108,6 +108,9 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
         Minigin/Game/Commands/DamageCommand.cpp
         Minigin/Game/Commands/MoveCommand.cpp
 
+    # Functions
+        Minigin/Game/Functions/Enemy.cpp
+
     # States
         Minigin/Game/States/ZakoStates.cpp
 
