@@ -110,6 +110,7 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
 
     # Functions
         Minigin/Game/Functions/Enemy.cpp
+        Minigin/Game/Functions/Player.cpp
 
     # States
         Minigin/Game/States/ZakoStates.cpp
