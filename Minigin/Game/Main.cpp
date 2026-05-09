@@ -21,6 +21,7 @@
 #include "Components/ScoreDisplayComponent.h"
 #include "Components/ReactiveSoundComponent.h"
 #include "Components/StateComponent.h"
+#include "Components/ObserverComponent.h"
 
 #include "Commands/DamageCommand.h"
 
@@ -67,6 +68,7 @@ static void load()
 	ship->AddComponent<dae::SpriteSheetComponent>( "Ship.png", dae::SpriteSheet::SpriteSheetInfo{ 8, 3 } )
 		.SetIndex( 6, 0 );
 	ship->AddComponent<dae::HealthComponent>( 1 );
+	auto shipHealthRef{ ship->GetComponent<dae::HealthComponent>() };
 	std::vector<std::pair<size_t, uint32_t>> shipScoreGainOnEvent{ { "e_InsectDied"_hash, 100 } };
 	ship->AddComponent<dae::ScoreComponent>( std::move( shipScoreGainOnEvent ) );
 	ship->AddComponent<dae::ProjectileAmmoComponent>( 2 );
@@ -75,13 +77,34 @@ static void load()
 		glm::vec4{ 0.f, 0.f, 16.f, 15.f }, "target_Player"_hash, []( dae::GameObject* pParent, auto ) {
 			pParent->GetComponent<dae::HealthComponent>()->Damage( 3 );
 		} );
+	auto shipPosRef{ ship->GetComponent<dae::TransformComponent>() };
+	ship->AddComponent<dae::ObserverComponent>().AddCallback( "e_EntityDied"_hash, [=]( void* ) mutable {
+		if ( !shipPosRef.Validate() )
+		{
+			assert( false && "Failed to validate ship position" );
+			return;
+		}
+
+		auto explosion{ std::make_unique<dae::GameObject>() };
+		explosion->GetComponent<dae::TransformComponent>()->MoveTo( shipPosRef->GetPosition() - glm::vec2{ 8.f, 8.f } );
+		explosion->AddComponent<dae::SpriteSheetComponent>( "Effect32x32.png",
+															dae::SpriteSheet::SpriteSheetInfo{ 5, 2 } );
+		explosion->AddComponent<dae::AnimationComponent>()
+			.AddAnimation( "anim_ShipExplosion"_hash,
+						   { 0, 3, 0.15f, dae::AnimationComponent::LoopingMode::singleAndTerminate } )
+			.SetAnimation( "anim_ShipExplosion"_hash );
+
+		dae::SceneManager::GetInstance().GetScene( gameIdx ).Add( std::move( explosion ) );
+	} );
+	auto shipObserverRef{ ship->GetComponent<dae::ObserverComponent>() };
+	shipHealthRef->RegisterObserver( shipObserverRef );
 	//
 
 	// Enemies
 	auto zako1{ std::make_unique<dae::GameObject>() };
 	zako1->AddComponent<dae::SpriteSheetComponent>( "Enemy.png", dae::SpriteSheet::SpriteSheetInfo{ 24, 3 } );
 	zako1->AddComponent<dae::AnimationComponent>()
-		.AddAnimation( "anim_Idle"_hash, { 6, 7, 0.25f, dae::AnimationComponent::LoopingMode::repeat } )
+		.AddAnimation( "anim_Idle"_hash, { 6, 7, 0.5f, dae::AnimationComponent::LoopingMode::repeat } )
 		.SetAnimation( "anim_Idle"_hash );
 	zako1->AddComponent<dae::HealthComponent>( 1 );
 	zako1->AddComponent<dae::StateComponent<dae::ZakoState>>().SetState<dae::ZakoReturningState>();
@@ -94,12 +117,12 @@ static void load()
 			pParent->GetComponent<dae::HealthComponent>()->Damage( 1 );
 		} );
 	zako1->AddComponent<dae::DeathCallbackComponent>(
-		[&]() { dae::Minigin::eventManager.SendEvent( { "e_InsectDied"_hash, nullptr } ); } );
+		[=]() { dae::Minigin::eventManager.SendEvent( { "e_InsectDied"_hash, nullptr } ); } );
 
 	auto zako2{ std::make_unique<dae::GameObject>() };
 	zako2->AddComponent<dae::SpriteSheetComponent>( "Enemy.png", dae::SpriteSheet::SpriteSheetInfo{ 24, 3 } );
 	zako2->AddComponent<dae::AnimationComponent>()
-		.AddAnimation( "anim_Idle"_hash, { 6, 7, 0.25f, dae::AnimationComponent::LoopingMode::repeat } )
+		.AddAnimation( "anim_Idle"_hash, { 6, 7, 0.5f, dae::AnimationComponent::LoopingMode::repeat } )
 		.SetAnimation( "anim_Idle"_hash );
 	zako2->AddComponent<dae::HealthComponent>( 1 );
 	zako2->AddComponent<dae::StateComponent<dae::ZakoState>>().SetState<dae::ZakoReturningState>();
@@ -112,12 +135,12 @@ static void load()
 			pParent->GetComponent<dae::HealthComponent>()->Damage( 1 );
 		} );
 	zako2->AddComponent<dae::DeathCallbackComponent>(
-		[&]() { dae::Minigin::eventManager.SendEvent( { "e_InsectDied"_hash, nullptr } ); } );
+		[=]() { dae::Minigin::eventManager.SendEvent( { "e_InsectDied"_hash, nullptr } ); } );
 
 	auto zako3{ std::make_unique<dae::GameObject>() };
 	zako3->AddComponent<dae::SpriteSheetComponent>( "Enemy.png", dae::SpriteSheet::SpriteSheetInfo{ 24, 3 } );
 	zako3->AddComponent<dae::AnimationComponent>()
-		.AddAnimation( "anim_Idle"_hash, { 6, 7, 0.25f, dae::AnimationComponent::LoopingMode::repeat } )
+		.AddAnimation( "anim_Idle"_hash, { 6, 7, 0.5f, dae::AnimationComponent::LoopingMode::repeat } )
 		.SetAnimation( "anim_Idle"_hash );
 	zako3->AddComponent<dae::HealthComponent>( 1 );
 	zako3->AddComponent<dae::StateComponent<dae::ZakoState>>().SetState<dae::ZakoReturningState>();
@@ -130,7 +153,7 @@ static void load()
 			pParent->GetComponent<dae::HealthComponent>()->Damage( 1 );
 		} );
 	zako3->AddComponent<dae::DeathCallbackComponent>(
-		[&]() { dae::Minigin::eventManager.SendEvent( { "e_InsectDied"_hash, nullptr } ); } );
+		[=]() { dae::Minigin::eventManager.SendEvent( { "e_InsectDied"_hash, nullptr } ); } );
 	//
 
 	// Scoreboard
@@ -154,7 +177,6 @@ static void load()
 
 	// Create bindings
 	// Functions
-	auto shipPosRef{ ship->GetComponent<dae::TransformComponent>() };
 	auto shipAmmoRef{ ship->GetComponent<dae::ProjectileAmmoComponent>() };
 	auto moveLeft{ [=]() mutable {
 		constexpr float movement{ -96.f };
@@ -260,6 +282,10 @@ static void load()
 	gameScene.Add( std::move( zako3 ) );
 	uiScene.Add( std::move( fps ) );
 	uiScene.Add( std::move( playerScoreBoard ) );
+
+	bgScene.AddRequested();
+	gameScene.AddRequested();
+	uiScene.AddRequested();
 	//
 
 #ifndef NDEBUG
