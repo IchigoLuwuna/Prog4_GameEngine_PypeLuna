@@ -11,6 +11,7 @@ public:
 	Scene() = default;
 
 	void Add( std::unique_ptr<GameObject> object );
+	void AddRequested();
 	void Remove( const GameObject& object );
 	void RemoveAll();
 
@@ -26,6 +27,7 @@ public:
 
 private:
 	std::vector<std::unique_ptr<GameObject>> m_Objects{};
+	std::vector<std::unique_ptr<GameObject>> m_RequestedObjects{};
 };
 
 } // namespace dae

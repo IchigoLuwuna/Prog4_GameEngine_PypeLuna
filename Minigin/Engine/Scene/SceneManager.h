@@ -16,6 +16,7 @@ public:
 
 	void Update();
 	void Render() const;
+	void AddRequestedObjects();
 	void CleanUpRemovableObjects();
 
 	Scene& GetScene( size_t idx ) const;

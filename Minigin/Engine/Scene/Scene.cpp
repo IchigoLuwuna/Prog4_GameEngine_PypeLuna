@@ -5,7 +5,17 @@
 void dae::Scene::Add( std::unique_ptr<GameObject> object )
 {
 	assert( object && "Cannot add a null GameObject to the scene." );
-	m_Objects.emplace_back( std::move( object ) );
+	m_RequestedObjects.push_back( std::move( object ) );
+}
+
+void dae::Scene::AddRequested()
+{
+	for ( auto& requested : m_RequestedObjects )
+	{
+		m_Objects.push_back( std::move( requested ) );
+	}
+
+	m_RequestedObjects.clear();
 }
 
 void dae::Scene::Remove( const GameObject& object )

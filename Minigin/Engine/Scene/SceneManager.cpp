@@ -20,7 +20,7 @@ void dae::SceneManager::Update()
 	{
 		if ( !scene->second )
 		{
-			return;
+			continue;
 		}
 		scene->first.Update();
 	}
@@ -32,9 +32,21 @@ void dae::SceneManager::Render() const
 	{
 		if ( !scene->second )
 		{
-			return;
+			continue;
 		}
 		scene->first.Render();
+	}
+}
+
+void dae::SceneManager::AddRequestedObjects()
+{
+	for ( auto& scene : m_Scenes )
+	{
+		if ( !scene->second )
+		{
+			continue;
+		}
+		scene->first.AddRequested();
 	}
 }
 
@@ -44,7 +56,7 @@ void dae::SceneManager::CleanUpRemovableObjects()
 	{
 		if ( !scene->second )
 		{
-			return;
+			continue;
 		}
 		scene->first.CleanUpRemovableObjects();
 	}
