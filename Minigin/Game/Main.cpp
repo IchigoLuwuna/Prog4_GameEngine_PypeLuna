@@ -7,7 +7,6 @@
 #include <Engine.h>
 
 #include "Components/PixelTextComponent.h"
-#include "Components/ScrollingBGComponent.h"
 #include "Components/ScoreComponent.h"
 #include "Components/TextAllignmentComponent.h"
 #include "Components/ScoreDisplayComponent.h"
@@ -39,9 +38,7 @@ static void load()
 
 	// Initialize objects
 	// Base
-	auto background{ std::make_unique<dae::GameObject>() };
-	background->AddComponent<dae::ScrollingBGComponent>(
-		"BG.png", 64.f, dae::ScrollingBGComponent::ScrollingDir::down );
+	auto background{ dae::functions::ui::MakeBackground() };
 	auto fps{ dae::functions::ui::MakeFpsCounter() };
 	//
 
@@ -56,15 +53,7 @@ static void load()
 	//
 
 	// Scoreboard
-	auto playerScoreBoard{ std::make_unique<dae::GameObject>() };
-	const std::string typefacePath{ "Typeface.png" };
-	const std::string typefaceMapping{ "0123456789abcdefghijklmnopqrstuvwxyz-%.!" };
-	playerScoreBoard->AddComponent<dae::PixelTextComponent>( typefacePath, typefaceMapping, glm::vec2{ 8.f, 8.f } );
-	playerScoreBoard->AddComponent<dae::ScoreDisplayComponent>().SetSubjectScore(
-		ship->GetComponent<dae::ScoreComponent>() );
-	//
-
-	// Create SceneGraph
+	auto scoreboard{ dae::functions::ui::MakeScoreboard( ship.get() ) };
 	//
 
 	// Set Starting Positions
@@ -72,8 +61,8 @@ static void load()
 	zako1->GetComponent<dae::TransformComponent>()->MoveTo( 68.f, -64.f );
 	zako2->GetComponent<dae::TransformComponent>()->MoveTo( 136.f, -64.f );
 	zako3->GetComponent<dae::TransformComponent>()->MoveTo( 204.f, -64.f );
-	playerScoreBoard->AddComponent<dae::TextAllignmentComponent>( glm::vec2{ 288.f, 0.f },
-																  dae::TextAllignmentComponent::Allignment::topRight );
+	scoreboard->AddComponent<dae::TextAllignmentComponent>( glm::vec2{ 288.f, 0.f },
+															dae::TextAllignmentComponent::Allignment::topRight );
 	//
 
 #ifndef NDEBUG
@@ -84,7 +73,7 @@ static void load()
 	zako2->AddComponent<dae::DebugComponent>( "zako" );
 	zako3->AddComponent<dae::DebugComponent>( "zako" );
 	fps->AddComponent<dae::DebugComponent>( "fps" );
-	playerScoreBoard->AddComponent<dae::DebugComponent>( "playerScoreBoard" );
+	scoreboard->AddComponent<dae::DebugComponent>( "scoreboard" );
 //
 #endif
 
@@ -95,7 +84,7 @@ static void load()
 	gameScene.Add( std::move( zako2 ) );
 	gameScene.Add( std::move( zako3 ) );
 	uiScene.Add( std::move( fps ) );
-	uiScene.Add( std::move( playerScoreBoard ) );
+	uiScene.Add( std::move( scoreboard ) );
 
 	bgScene.AddRequested();
 	gameScene.AddRequested();
@@ -103,6 +92,9 @@ static void load()
 	//
 
 #ifndef NDEBUG
+	const std::string typefacePath{ "Typeface.png" };
+	const std::string typefaceMapping{ "0123456789abcdefghijklmnopqrstuvwxyz-%.!" };
+
 	// Control for debug mode
 	auto controlHints{ std::make_unique<dae::GameObject>() };
 	controlHints->AddComponent<dae::PixelTextComponent>( typefacePath, typefaceMapping, glm::vec2{ 8.f, 8.f } )
