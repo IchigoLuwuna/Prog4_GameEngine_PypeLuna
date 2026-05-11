@@ -4,20 +4,21 @@
 #include <Components.h>
 #include <Sound.h>
 
-dae::ZakoIdlingState::ZakoIdlingState( StateMachine<ZakoState>* pParent )
-	: ZakoState( pParent )
+dae::ZakoIdlingState::ZakoIdlingState( StateMachine* pParent )
+	: State( pParent )
 {
 }
 
-void dae::ZakoIdlingState::Update( GameObject* )
+dae::State* dae::ZakoIdlingState::Update( GameObject* )
 {
 	m_RemainingStateTime -= Timer::GetInstance().GetElapsed();
 
 	if ( m_RemainingStateTime < 0.f )
 	{
-		GetParent()->SetState<ZakoDivingState>();
-		return;
+		return GetParent()->FindOrCreateState<ZakoDivingState>();
 	}
+
+	return nullptr;
 }
 
 void dae::ZakoIdlingState::Enter()
@@ -28,8 +29,8 @@ void dae::ZakoIdlingState::Exit()
 {
 }
 
-dae::ZakoDivingState::ZakoDivingState( StateMachine<ZakoState>* pParent )
-	: ZakoState( pParent )
+dae::ZakoDivingState::ZakoDivingState( StateMachine* pParent )
+	: State( pParent )
 {
 }
 
@@ -49,7 +50,7 @@ void dae::ZakoDivingState::Exit()
 	m_StartingXSet = false;
 }
 
-void dae::ZakoDivingState::Update( GameObject* pObject )
+dae::State* dae::ZakoDivingState::Update( GameObject* pObject )
 {
 	m_DivingTime += Timer::GetInstance().GetElapsed();
 
@@ -66,17 +67,18 @@ void dae::ZakoDivingState::Update( GameObject* pObject )
 	if ( transform->GetPosition().y >= 224.f )
 	{
 		transform->MoveTo( transform->GetPosition().x, -64.f );
-		GetParent()->SetState<ZakoReturningState>();
-		return;
+		return GetParent()->FindOrCreateState<ZakoReturningState>();
 	}
+
+	return nullptr;
 }
 
-dae::ZakoReturningState::ZakoReturningState( StateMachine<ZakoState>* pParent )
-	: ZakoState( pParent )
+dae::ZakoReturningState::ZakoReturningState( StateMachine* pParent )
+	: State( pParent )
 {
 }
 
-void dae::ZakoReturningState::Update( GameObject* pObject )
+dae::State* dae::ZakoReturningState::Update( GameObject* pObject )
 {
 	auto transform{ pObject->GetComponent<dae::TransformComponent>() };
 	auto movement{ glm::vec2{ 0.f, 128.f } * Timer::GetInstance().GetElapsed() };
@@ -85,9 +87,10 @@ void dae::ZakoReturningState::Update( GameObject* pObject )
 	if ( transform->GetPosition().y >= 8.f )
 	{
 		transform->MoveTo( transform->GetPosition().x, 8.f );
-		GetParent()->SetState<ZakoIdlingState>();
-		return;
+		return GetParent()->FindOrCreateState<ZakoIdlingState>();
 	}
+
+	return nullptr;
 }
 
 void dae::ZakoReturningState::Enter()

@@ -62,6 +62,8 @@ add_library(engine ${LIBRARY_TYPE}
     # Sound
         Minigin/Engine/Sound/DebugSoundService.cpp
         Minigin/Engine/Sound/SDLSoundService.cpp
+    # States
+        Minigin/Engine/States/StateMachine.cpp
 )
 target_include_directories(engine PUBLIC Minigin/Engine/.)
 set_target_properties(engine PROPERTIES PUBLIC_HEADER
@@ -100,6 +102,7 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
         Minigin/Game/Components/ScoreDisplayComponent.cpp
         Minigin/Game/Components/ScrollingBGComponent.cpp
         Minigin/Game/Components/SpriteSheetComponent.cpp
+        Minigin/Game/Components/StateComponent.cpp
         Minigin/Game/Components/TTFTextComponent.cpp
         Minigin/Game/Components/TextAllignmentComponent.cpp
         Minigin/Game/Components/TextureComponent.cpp

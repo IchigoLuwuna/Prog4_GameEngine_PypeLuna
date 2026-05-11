@@ -22,7 +22,7 @@ std::unique_ptr<dae::GameObject> dae::functions::enemy::MakeZako()
 		.AddAnimation( "anim_Idle"_hash, { 6, 7, 0.5f, dae::AnimationComponent::LoopingMode::repeat } )
 		.SetAnimation( "anim_Idle"_hash );
 	zako->AddComponent<dae::HealthComponent>( 1 );
-	zako->AddComponent<dae::StateComponent<dae::ZakoState>>().SetState<dae::ZakoReturningState>();
+	zako->AddComponent<dae::StateComponent>().SetState<dae::ZakoReturningState>();
 	zako->AddComponent<dae::ReactiveSoundComponent>().AddSound(
 		{ "e_EntityDied"_hash, zako.get(), "zako_destroy.wav" } );
 	zako->AddComponent<dae::HitboxComponent>(

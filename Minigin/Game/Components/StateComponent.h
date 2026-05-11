@@ -5,29 +5,22 @@
 
 namespace dae
 {
-template <typename StateType>
-	requires std::derived_from<StateType, State<StateType>>
 class StateComponent final : public Component
 {
 public:
-	StateComponent( GameObject* pParent )
-		: Component( pParent )
-	{
-	}
-	virtual void Update() override
-	{
-		m_State->Update( GetParent() );
-	}
+	StateComponent( GameObject* pParent );
+
+	virtual void Update() override;
 
 	template <typename NewStateType>
-		requires std::derived_from<NewStateType, StateType>
+		requires std::derived_from<NewStateType, State>
 	void SetState()
 	{
-		m_State.template SetState<NewStateType>();
+		m_State.SetState( m_State.FindOrCreateState<NewStateType>() );
 	}
 
 private:
-	StateMachine<StateType> m_State{};
+	StateMachine m_State{};
 };
 } // namespace dae
 #endif
