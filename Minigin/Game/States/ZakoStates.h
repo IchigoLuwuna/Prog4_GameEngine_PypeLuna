@@ -19,6 +19,7 @@ public:
 private:
 	float m_RemainingStateTime{};
 
+	constexpr static float m_MinStateTime{ 1.f };
 	constexpr static float m_MaxStateTime{ 10.f };
 };
 

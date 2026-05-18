@@ -3,6 +3,7 @@
 #include <Patterns.h>
 #include <Components.h>
 #include <Sound.h>
+#include <Random.h>
 
 dae::ZakoIdlingState::ZakoIdlingState( StateMachine* pParent )
 	: State( pParent )
@@ -23,7 +24,7 @@ dae::State* dae::ZakoIdlingState::Update( GameObject* )
 
 void dae::ZakoIdlingState::Enter()
 {
-	m_RemainingStateTime = static_cast<float>( rand() ) / static_cast<float>( RAND_MAX ) * m_MaxStateTime;
+	m_RemainingStateTime = dae::random::GetRand( m_MinStateTime, m_MaxStateTime );
 }
 void dae::ZakoIdlingState::Exit()
 {
