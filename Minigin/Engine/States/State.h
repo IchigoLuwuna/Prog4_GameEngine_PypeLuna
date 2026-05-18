@@ -15,7 +15,7 @@ public:
 
 	virtual void Enter() = 0;
 	virtual void Exit() = 0;
-	virtual State* Update( GameObject* pObject ) = 0;
+	virtual State* Update() = 0;
 
 	StateMachine* GetParent()
 	{

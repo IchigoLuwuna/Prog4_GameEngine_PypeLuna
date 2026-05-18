@@ -9,7 +9,7 @@ namespace dae
 class StateMachine
 {
 public:
-	StateMachine() = default;
+	StateMachine( GameObject* pParent );
 
 	template <typename SearchedStateType>
 		requires std::derived_from<SearchedStateType, State>
@@ -28,12 +28,14 @@ public:
 		return m_States.back().get();
 	}
 
-	void Update( GameObject* pObject );
+	void Update();
 	void SetState( State* pNewState );
+	GameObject* GetParent();
 
 private:
 	std::vector<std::unique_ptr<State>> m_States{};
 	State* m_CurrentState{};
+	GameObject* m_pParent{};
 };
 } // namespace dae
 #endif

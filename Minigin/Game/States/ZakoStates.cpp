@@ -10,7 +10,7 @@ dae::ZakoIdlingState::ZakoIdlingState( StateMachine* pParent )
 {
 }
 
-dae::State* dae::ZakoIdlingState::Update( GameObject* )
+dae::State* dae::ZakoIdlingState::Update()
 {
 	m_RemainingStateTime -= Timer::GetInstance().GetElapsed();
 
@@ -38,30 +38,22 @@ dae::ZakoDivingState::ZakoDivingState( StateMachine* pParent )
 void dae::ZakoDivingState::Enter()
 {
 	ServiceLocator<SoundService>::GetInstance().GetService().Play( "dive.wav", 1.f );
+	auto transform{ GetParent()->GetParent()->GetComponent<dae::TransformComponent>() };
+	m_StartingX = transform->GetPosition().x;
 }
 void dae::ZakoDivingState::Exit()
 {
-	if ( m_pParent )
-	{
-		auto transform{ m_pParent->GetComponent<dae::TransformComponent>() };
-		transform->MoveTo( m_StartingX, transform->GetPosition().y );
-	}
+	auto transform{ GetParent()->GetParent()->GetComponent<dae::TransformComponent>() };
+	transform->MoveTo( m_StartingX, transform->GetPosition().y );
 
 	m_DivingTime = 0.f;
-	m_StartingXSet = false;
 }
 
-dae::State* dae::ZakoDivingState::Update( GameObject* pObject )
+dae::State* dae::ZakoDivingState::Update()
 {
 	m_DivingTime += Timer::GetInstance().GetElapsed();
 
-	m_pParent = pObject;
-	auto transform{ pObject->GetComponent<dae::TransformComponent>() };
-	if ( !m_StartingXSet )
-	{
-		m_StartingX = transform->GetPosition().x;
-		m_StartingXSet = true;
-	}
+	auto transform{ GetParent()->GetParent()->GetComponent<dae::TransformComponent>() };
 	auto movement{ glm::vec2{ std::cos( m_DivingTime * 6.28f ) * 64.f, 128.f } * Timer::GetInstance().GetElapsed() };
 
 	transform->Move( movement );
@@ -79,9 +71,9 @@ dae::ZakoReturningState::ZakoReturningState( StateMachine* pParent )
 {
 }
 
-dae::State* dae::ZakoReturningState::Update( GameObject* pObject )
+dae::State* dae::ZakoReturningState::Update()
 {
-	auto transform{ pObject->GetComponent<dae::TransformComponent>() };
+	auto transform{ GetParent()->GetParent()->GetComponent<dae::TransformComponent>() };
 	auto movement{ glm::vec2{ 0.f, 128.f } * Timer::GetInstance().GetElapsed() };
 
 	transform->Move( movement );

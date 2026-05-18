@@ -1,8 +1,13 @@
 #include "StateMachine.h"
 
-void dae::StateMachine::Update( GameObject* pObject )
+dae::StateMachine::StateMachine( GameObject* pParent )
+	: m_pParent( pParent )
 {
-	State* pNewState{ m_CurrentState->Update( pObject ) };
+}
+
+void dae::StateMachine::Update()
+{
+	State* pNewState{ m_CurrentState->Update() };
 	if ( pNewState )
 	{
 		SetState( pNewState );
@@ -17,4 +22,9 @@ void dae::StateMachine::SetState( State* pNewState )
 	}
 	m_CurrentState = pNewState;
 	m_CurrentState->Enter();
+}
+
+dae::GameObject* dae::StateMachine::GetParent()
+{
+	return m_pParent;
 }

@@ -20,7 +20,7 @@ public:
 	}
 
 private:
-	StateMachine m_State{};
+	StateMachine m_State;
 };
 } // namespace dae
 #endif
