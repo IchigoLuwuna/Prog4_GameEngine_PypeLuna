@@ -40,13 +40,12 @@ void dae::ZakoDivingState::Enter()
 	ServiceLocator<SoundService>::GetInstance().GetService().Play( "dive.wav", 1.f );
 	auto transform{ GetParent()->GetParent()->GetComponent<dae::TransformComponent>() };
 	m_StartingX = transform->GetPosition().x;
+	m_DivingTime = 0.f;
 }
 void dae::ZakoDivingState::Exit()
 {
 	auto transform{ GetParent()->GetParent()->GetComponent<dae::TransformComponent>() };
 	transform->MoveTo( m_StartingX, transform->GetPosition().y );
-
-	m_DivingTime = 0.f;
 }
 
 dae::State* dae::ZakoDivingState::Update()
