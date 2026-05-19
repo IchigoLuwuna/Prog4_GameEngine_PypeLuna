@@ -2,11 +2,11 @@
 #define SCOREDISPLAYCOMPONENT_H
 #include <Patterns.h>
 #include <Core.h>
+#include "Game/Components/TextComponent.h"
 
 namespace dae
 {
 class ScoreComponent;
-class TextComponent;
 class ScoreDisplayComponent : public Component, public Observer
 {
 public:

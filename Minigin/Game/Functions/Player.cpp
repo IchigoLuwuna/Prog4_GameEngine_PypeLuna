@@ -15,11 +15,13 @@
 #include "Game/Components/ReactiveSoundComponent.h"
 #include "Game/Components/ScoreComponent.h"
 #include "Game/Components/SpriteSheetComponent.h"
+#include "Game/Components/ScoreDisplayComponent.h"
+
 #include "Game/Commands/DamageCommand.h"
 
 std::unique_ptr<dae::GameObject> dae::functions::player::MakePlayer()
 {
-	auto ship{ std::make_unique<GameObject>() };
+	auto ship{ std::make_unique<GameObject>( "player"_hash ) };
 	ship->AddComponent<dae::SpriteSheetComponent>( "Ship.png", dae::SpriteSheet::SpriteSheetInfo{ 8, 3 } )
 		.SetIndex( 6, 0 );
 	ship->AddComponent<dae::HealthComponent>( 1 );
@@ -52,10 +54,15 @@ std::unique_ptr<dae::GameObject> dae::functions::player::MakePlayer()
 		dae::SceneManager::GetInstance().GetScene( gameIdx ).Add( std::move( explosion ) );
 	} );
 
+#ifndef NDEBUG
+	ship->AddComponent<dae::DebugComponent>( "ship" );
+#endif
+
 	auto shipObserverRef{ ship->GetComponent<dae::ObserverComponent>() };
 	shipHealthRef->RegisterObserver( shipObserverRef );
 
 	BindInputForPlayer( ship.get() );
+	BindScoreboardForPlayer( ship.get() );
 
 	return ship;
 }
@@ -147,4 +154,16 @@ void dae::functions::player::BindInputForPlayer( GameObject* pPlayer )
 
 	dae::InputManager::GetInstance().BindCommand<dae::DamageCommand>(
 		SDL_SCANCODE_U, dae::InputManager::KeyState::down, pPlayer->GetComponent<dae::HealthComponent>(), 1 );
+}
+
+void dae::functions::player::BindScoreboardForPlayer( GameObject* pPlayer )
+{
+	auto* pScoreboard{ SceneManager::GetInstance().GetScene( uiIdx ).GetByTag( "scoreboard"_hash ) };
+	if ( !pScoreboard )
+	{
+		return;
+	}
+
+	pPlayer->GetComponent<dae::ScoreComponent>()->RegisterObserver(
+		pScoreboard->GetComponent<dae::ScoreDisplayComponent>() );
 }
