@@ -66,6 +66,7 @@ dae::SDLSoundService::Impl::~Impl()
 	m_StopSrc.request_stop();
 	m_CV.notify_all(); // Event thread is waiting for a notification, so we give it one
 
+	MIX_DestroyMixer( m_pMixer );
 	MIX_Quit();
 }
 
