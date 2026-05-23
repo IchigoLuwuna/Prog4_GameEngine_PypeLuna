@@ -2,9 +2,15 @@
 #include "Components/TransformComponent.h"
 #include "RenderComponent.h"
 
-dae::GameObject::GameObject()
+dae::GameObject::GameObject( size_t tag )
+	: m_Tag( tag )
 {
 	AddComponent<TransformComponent>(); // All GameObjects require a transform
+}
+
+dae::GameObject::GameObject()
+	: GameObject( 0 )
+{
 }
 
 dae::GameObject::~GameObject()
@@ -38,6 +44,11 @@ void dae::GameObject::Render() const
 			pRenderComponent->Render();
 		}
 	}
+}
+
+size_t dae::GameObject::GetTag() const
+{
+	return m_Tag;
 }
 
 int dae::GameObject::GetChildCount() const

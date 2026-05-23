@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <cassert>
+#include "Patterns/GameObject.h"
 #include "Scene.h"
 
 void dae::Scene::Add( std::unique_ptr<GameObject> object )
@@ -45,6 +46,26 @@ void dae::Scene::Render() const
 	{
 		object->Render();
 	}
+}
+
+dae::GameObject* dae::Scene::GetByTag( size_t tag ) const
+{
+	for ( auto& object : m_RequestedObjects )
+	{
+		if ( object->GetTag() == tag )
+		{
+			return object.get();
+		}
+	}
+	for ( auto& object : m_Objects )
+	{
+		if ( object->GetTag() == tag )
+		{
+			return object.get();
+		}
+	}
+
+	return nullptr;
 }
 
 void dae::Scene::CleanUpRemovableObjects()

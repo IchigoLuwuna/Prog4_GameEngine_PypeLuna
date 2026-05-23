@@ -7,6 +7,6 @@ namespace dae::functions::ui
 {
 std::unique_ptr<GameObject> MakeBackground();
 std::unique_ptr<GameObject> MakeFpsCounter();
-std::unique_ptr<GameObject> MakeScoreboard( GameObject* pPlayer );
+std::unique_ptr<GameObject> MakeScoreboard();
 } // namespace dae::functions::ui
 #endif

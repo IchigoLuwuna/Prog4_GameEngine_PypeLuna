@@ -18,6 +18,8 @@ public:
 	void Update();
 	void Render() const;
 
+	GameObject* GetByTag( size_t tag ) const;
+
 	void CleanUpRemovableObjects();
 
 	Scene( const Scene& other ) = delete;

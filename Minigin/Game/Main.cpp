@@ -1,5 +1,6 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
+#include "Game/Context.h"
 #if _DEBUG && __has_include( <vld.h>)
 #	include <vld.h>
 #endif
@@ -37,53 +38,38 @@ static void load()
 	// Initialize objects
 	// Base
 	auto background{ dae::functions::ui::MakeBackground() };
+	bgScene.Add( std::move( background ) );
+
 	auto fps{ dae::functions::ui::MakeFpsCounter() };
+	uiScene.Add( std::move( fps ) );
 	//
 
 	// Player Characters
 	auto ship{ dae::functions::player::MakePlayer() };
+	ship->GetComponent<dae::TransformComponent>()->MoveTo( 100.f, 200.f );
+	dae::SceneManager::GetInstance().GetScene( gameIdx ).Add( std::move( ship ) );
 	//
 
 	// Enemies
 	auto zako1{ dae::functions::enemy::MakeZako() };
 	auto zako2{ dae::functions::enemy::MakeZako() };
 	auto zako3{ dae::functions::enemy::MakeZako() };
-	//
-
-	// Scoreboard
-	auto scoreboard{ dae::functions::ui::MakeScoreboard( ship.get() ) };
-	//
-
-	// Set Starting Positions
-	ship->GetComponent<dae::TransformComponent>()->MoveTo( 100.f, 200.f );
 	zako1->GetComponent<dae::TransformComponent>()->MoveTo( 68.f, -64.f );
 	zako2->GetComponent<dae::TransformComponent>()->MoveTo( 136.f, -64.f );
 	zako3->GetComponent<dae::TransformComponent>()->MoveTo( 204.f, -64.f );
-	scoreboard->AddComponent<dae::TextAllignmentComponent>( glm::vec2{ 288.f, 0.f },
-															dae::TextAllignmentComponent::Allignment::topRight );
-	//
-
-#ifndef NDEBUG
-	//  Attach names to objects when debugging
-	background->AddComponent<dae::DebugComponent>( "background" );
-	ship->AddComponent<dae::DebugComponent>( "ship" );
-	zako1->AddComponent<dae::DebugComponent>( "zako" );
-	zako2->AddComponent<dae::DebugComponent>( "zako" );
-	zako3->AddComponent<dae::DebugComponent>( "zako" );
-	fps->AddComponent<dae::DebugComponent>( "fps" );
-	scoreboard->AddComponent<dae::DebugComponent>( "scoreboard" );
-//
-#endif
-
-	// Add to scene
-	bgScene.Add( std::move( background ) );
-	gameScene.Add( std::move( ship ) );
 	gameScene.Add( std::move( zako1 ) );
 	gameScene.Add( std::move( zako2 ) );
 	gameScene.Add( std::move( zako3 ) );
-	uiScene.Add( std::move( fps ) );
-	uiScene.Add( std::move( scoreboard ) );
+	//
 
+	// Scoreboard
+	auto scoreboard{ dae::functions::ui::MakeScoreboard() };
+	scoreboard->AddComponent<dae::TextAllignmentComponent>( glm::vec2{ 288.f, 0.f },
+															dae::TextAllignmentComponent::Allignment::topRight );
+	uiScene.Add( std::move( scoreboard ) );
+	//
+
+	// Add to scene
 	bgScene.AddRequested();
 	gameScene.AddRequested();
 	uiScene.AddRequested();

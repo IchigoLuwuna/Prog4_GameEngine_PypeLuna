@@ -12,6 +12,7 @@ class Component;
 class GameObject final
 {
 public:
+	GameObject( size_t tag );
 	GameObject();
 	~GameObject();
 	GameObject( const GameObject& other ) = delete;
@@ -21,6 +22,8 @@ public:
 
 	void Update();
 	void Render() const;
+
+	size_t GetTag() const;
 
 	int GetChildCount() const;
 	GameObject* GetChildAt( int index );
@@ -70,6 +73,7 @@ private:
 
 	std::vector<SafePtr<Component>> m_Components{};
 
+	size_t m_Tag{};
 	bool m_MarkedForRemoval{};
 
 	void AddChild( GameObject* pChild );
