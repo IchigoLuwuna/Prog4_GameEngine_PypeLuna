@@ -22,18 +22,25 @@
 std::unique_ptr<dae::GameObject> dae::functions::player::MakePlayer()
 {
 	auto ship{ std::make_unique<GameObject>( "player"_hash ) };
+
 	ship->AddComponent<dae::SpriteSheetComponent>( "Ship.png", dae::SpriteSheet::SpriteSheetInfo{ 8, 3 } )
 		.SetIndex( 6, 0 );
+
 	ship->AddComponent<dae::HealthComponent>( 1 );
 	auto shipHealthRef{ ship->GetComponent<dae::HealthComponent>() };
+
 	std::vector<std::pair<size_t, uint32_t>> shipScoreGainOnEvent{ { "e_InsectDied"_hash, 100 } };
 	ship->AddComponent<dae::ScoreComponent>( std::move( shipScoreGainOnEvent ) );
+
 	ship->AddComponent<dae::ProjectileAmmoComponent>( 2 );
+
 	ship->AddComponent<dae::ReactiveSoundComponent>().AddSound( { "e_EntityDied"_hash, ship.get(), "explosion.wav" } );
+
 	ship->AddComponent<dae::HurtboxComponent>(
 		glm::vec4{ 0.f, 0.f, 16.f, 15.f }, "target_Player"_hash, []( dae::GameObject* pParent, auto ) {
 			pParent->GetComponent<dae::HealthComponent>()->Damage( 3 );
 		} );
+
 	auto shipPosRef{ ship->GetComponent<dae::TransformComponent>() };
 	ship->AddComponent<dae::ObserverComponent>().AddCallback( "e_EntityDied"_hash, [=]( void* ) mutable {
 		if ( !shipPosRef.Validate() )
