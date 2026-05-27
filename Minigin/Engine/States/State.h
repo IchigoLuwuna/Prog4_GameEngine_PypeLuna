@@ -12,6 +12,7 @@ public:
 		: m_pParent( pParent )
 	{
 	}
+	virtual ~State() = default;
 
 	virtual void Enter() = 0;
 	virtual void Exit() = 0;
