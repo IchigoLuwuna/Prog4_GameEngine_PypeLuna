@@ -64,6 +64,7 @@ add_library(engine ${LIBRARY_TYPE}
     # Sound
         Minigin/Engine/Sound/DebugSoundService.cpp
         Minigin/Engine/Sound/SDLSoundService.cpp
+        Minigin/Engine/Sound/SDLSoundServiceNoAsync.cpp
     # States
         Minigin/Engine/States/StateMachine.cpp
 )

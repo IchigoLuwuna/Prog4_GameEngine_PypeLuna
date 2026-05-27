@@ -1,6 +1,9 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
+#include "Game/Commands/MoveCommand.h"
+#include "Game/Components/SpriteSheetComponent.h"
 #include "Game/Context.h"
+#include "Input/InputManager.h"
 #if _DEBUG && __has_include( <vld.h>)
 #	include <vld.h>
 #endif
@@ -47,7 +50,7 @@ static void load()
 	// Player Characters
 	auto ship{ dae::functions::player::MakePlayer() };
 	ship->GetComponent<dae::TransformComponent>()->MoveTo( 100.f, 200.f );
-	dae::SceneManager::GetInstance().GetScene( gameIdx ).Add( std::move( ship ) );
+	gameScene.Add( std::move( ship ) );
 	//
 
 	// Enemies
