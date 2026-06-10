@@ -2,6 +2,7 @@
 #define ZAKOSTATES_H
 #include <States.h>
 #include "Game/Components/ZakoBrainComponent.h"
+#include "Math/Bezier.h"
 
 namespace dae
 {
@@ -34,7 +35,28 @@ public:
 	virtual void Exit() override;
 
 private:
+	ReferencePtr<ZakoBrainComponent> m_BrainRef{};
+
+	math::Bezier4 m_BezierPath{};
 	float m_DivingTime{};
+	bool m_PlayerFound{};
+};
+
+class ZakoSecondDiveState final : public State
+{
+public:
+	ZakoSecondDiveState( StateMachine* pParent );
+	virtual State* Update() override;
+
+	virtual void Enter() override;
+	virtual void Exit() override;
+
+private:
+	ReferencePtr<ZakoBrainComponent> m_BrainRef{};
+
+	math::Bezier4 m_BezierPath{};
+	float m_DivingTime{};
+	bool m_PlayerFound{};
 };
 
 class ZakoReturningState final : public State
@@ -48,6 +70,9 @@ public:
 
 private:
 	ReferencePtr<ZakoBrainComponent> m_BrainRef{};
+
+	math::Bezier4 m_BezierPath{};
+	float m_ReturningTime{};
 };
 } // namespace dae
 #endif

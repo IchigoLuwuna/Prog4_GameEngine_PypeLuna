@@ -30,7 +30,7 @@ public:
 	void ClearFormationSlot( uint64_t slot );
 
 private:
-	static constexpr glm::vec2 m_FormationStartPos{ 24, 37 };
+	static constexpr glm::vec2 m_FormationStartPos{ 64.f, 16.f };
 	static constexpr glm::vec2 m_FormationSlotSize{ 16.f, 16.f };
 
 	static std::array<std::bitset<m_FormationColumns>, m_FormationRows> m_FormationFilled;

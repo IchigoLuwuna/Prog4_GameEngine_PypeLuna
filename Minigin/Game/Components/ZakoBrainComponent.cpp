@@ -15,3 +15,8 @@ glm::vec2 dae::ZakoBrainComponent::GetFormationPosition() const
 {
 	return m_HiveMind.GetFormationPosition( m_FormationSlot );
 }
+
+dae::GameObject* dae::ZakoBrainComponent::GetPlayer()
+{
+	return m_HiveMind.GetPlayer();
+}

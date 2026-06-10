@@ -48,20 +48,18 @@ static void load()
 
 	// Player Characters
 	auto ship{ dae::functions::player::MakePlayer() };
-	ship->GetComponent<dae::TransformComponent>()->MoveTo( 100.f, 200.f );
+	ship->GetComponent<dae::TransformComponent>()->MoveTo( 100.f, 192.f );
 	gameScene.Add( std::move( ship ) );
 	//
 
 	// Enemies
-	auto zako1{ dae::functions::enemy::MakeZako() };
-	auto zako2{ dae::functions::enemy::MakeZako() };
-	auto zako3{ dae::functions::enemy::MakeZako() };
-	zako1->GetComponent<dae::TransformComponent>()->MoveTo( 68.f, -64.f );
-	zako2->GetComponent<dae::TransformComponent>()->MoveTo( 136.f, -64.f );
-	zako3->GetComponent<dae::TransformComponent>()->MoveTo( 204.f, -64.f );
-	gameScene.Add( std::move( zako1 ) );
-	gameScene.Add( std::move( zako2 ) );
-	gameScene.Add( std::move( zako3 ) );
+	constexpr int zakoCount{ 20 };
+	for ( int idx{}; idx < zakoCount; ++idx )
+	{
+		auto zako{ dae::functions::enemy::MakeZako() };
+		zako->GetComponent<dae::TransformComponent>()->MoveTo( 288.f / 2.f, -64.f );
+		gameScene.Add( std::move( zako ) );
+	}
 	//
 
 	// Scoreboard

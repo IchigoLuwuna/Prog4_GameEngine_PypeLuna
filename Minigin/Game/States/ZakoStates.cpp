@@ -37,29 +37,131 @@ dae::ZakoDivingState::ZakoDivingState( StateMachine* pParent )
 
 void dae::ZakoDivingState::Enter()
 {
+	// Get Brain reference
+	if ( !m_BrainRef.Validate() )
+	{
+		m_BrainRef = GetParent()->GetParent()->GetComponent<ZakoBrainComponent>();
+		if ( !m_BrainRef.Validate() )
+		{
+			assert( false && "Could not find a brain" );
+		}
+	}
+
+	// Verify there is a player to target
+	auto pPlayer{ m_BrainRef->GetPlayer() };
+	if ( !pPlayer )
+	{
+		m_PlayerFound = false;
+		return;
+	}
+	m_PlayerFound = true;
+
 	ServiceLocator<SoundService>::GetInstance().GetService().Play( "dive.wav", 1.f );
 	auto transform{ GetParent()->GetParent()->GetComponent<dae::TransformComponent>() };
+
+	// Set Bezier Path
+	glm::vec2 a{ transform->GetPosition() };
+	glm::vec2 b{ transform->GetPosition().x + 64.f, transform->GetPosition().y - 64.f };
+	glm::vec2 c{ transform->GetPosition().x - 64.f, transform->GetPosition().y - 64.f };
+	glm::vec2 d{ pPlayer->GetComponent<dae::TransformComponent>()->GetPosition() };
+	bool RandomDivingWindingFlip{ dae::random::GetRand( 50 ) };
+	if ( RandomDivingWindingFlip )
+	{
+		std::swap( b, c );
+	}
+	m_BezierPath.controlPoints = { a, b, c, d };
 	m_DivingTime = 0.f;
 }
 void dae::ZakoDivingState::Exit()
 {
-	auto transform{ GetParent()->GetParent()->GetComponent<dae::TransformComponent>() };
-	auto center{ 288.f / 2.f };
-	transform->MoveTo( center, -64.f );
 }
-
 dae::State* dae::ZakoDivingState::Update()
 {
 	m_DivingTime += Timer::GetInstance().GetElapsed();
+	constexpr float divingTimeMax{ 2.f };
+	const float lerp{ m_DivingTime / divingTimeMax };
 
-	auto transform{ GetParent()->GetParent()->GetComponent<dae::TransformComponent>() };
-	auto movement{ glm::vec2{ std::cos( m_DivingTime * 6.28f ) * 64.f, 128.f } * Timer::GetInstance().GetElapsed() };
+	if ( m_DivingTime >= divingTimeMax + 0.5f )
+	{
+		return GetParent()->FindOrCreateState<ZakoSecondDiveState>();
+	}
 
-	transform->Move( movement );
-	if ( transform->GetPosition().y >= 224.f )
+	if ( !m_PlayerFound )
 	{
 		return GetParent()->FindOrCreateState<ZakoReturningState>();
 	}
+
+	auto transform{ GetParent()->GetParent()->GetComponent<dae::TransformComponent>() };
+
+	transform->MoveTo( m_BezierPath.Lerp( lerp ) );
+
+	return nullptr;
+}
+
+dae::ZakoSecondDiveState::ZakoSecondDiveState( StateMachine* pParent )
+	: State( pParent )
+{
+}
+void dae::ZakoSecondDiveState::Enter()
+{
+	// Get Brain reference
+	if ( !m_BrainRef.Validate() )
+	{
+		m_BrainRef = GetParent()->GetParent()->GetComponent<ZakoBrainComponent>();
+		if ( !m_BrainRef.Validate() )
+		{
+			assert( false && "Could not find a brain" );
+		}
+	}
+
+	// Verify there is a player to target
+	auto pPlayer{ m_BrainRef->GetPlayer() };
+	if ( !pPlayer )
+	{
+		m_PlayerFound = false;
+		return;
+	}
+	m_PlayerFound = true;
+
+	auto transform{ GetParent()->GetParent()->GetComponent<dae::TransformComponent>() };
+	auto playerTransform{ pPlayer->GetComponent<dae::TransformComponent>()->GetPosition() };
+
+	// Set Bezier Path
+	glm::vec2 a{ transform->GetPosition() };
+	glm::vec2 b{ playerTransform.x + 64.f, playerTransform.y - 64.f };
+	glm::vec2 c{ playerTransform.x + 64.f, playerTransform.y + 64.f };
+	glm::vec2 d{ playerTransform };
+	bool RandomDivingWindingFlip{ dae::random::GetRand( 50 ) };
+	if ( RandomDivingWindingFlip )
+	{
+		b.x = playerTransform.x - 64.f;
+		c.x = playerTransform.x - 64.f;
+	}
+	m_BezierPath.controlPoints = { a, b, c, d };
+	m_DivingTime = 0.f;
+}
+void dae::ZakoSecondDiveState::Exit()
+{
+}
+dae::State* dae::ZakoSecondDiveState::Update()
+{
+	m_DivingTime += Timer::GetInstance().GetElapsed();
+	constexpr float divingTimeMax{ 2.5f };
+	const float lerp{ m_DivingTime / divingTimeMax };
+
+	if ( m_DivingTime >= divingTimeMax + 0.5f )
+	{
+		return GetParent()->FindOrCreateState<ZakoReturningState>();
+	}
+
+	if ( !m_PlayerFound )
+	{
+		return GetParent()->FindOrCreateState<ZakoReturningState>();
+	}
+
+	auto transform{ GetParent()->GetParent()->GetComponent<dae::TransformComponent>() };
+
+	transform->MoveTo( m_BezierPath.Lerp( lerp ) );
 
 	return nullptr;
 }

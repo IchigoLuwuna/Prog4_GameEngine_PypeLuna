@@ -14,6 +14,7 @@ public:
 	virtual void Update() override { };
 
 	glm::vec2 GetFormationPosition() const;
+	GameObject* GetPlayer();
 
 private:
 	HiveMind m_HiveMind{};
