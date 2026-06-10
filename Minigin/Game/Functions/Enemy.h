@@ -6,5 +6,6 @@
 namespace dae::functions::enemy
 {
 std::unique_ptr<GameObject> MakeZako();
+std::unique_ptr<GameObject> MakeGoei();
 } // namespace dae::functions::enemy
 #endif

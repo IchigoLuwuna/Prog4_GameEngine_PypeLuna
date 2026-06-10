@@ -13,11 +13,15 @@
 #include "Game/Components/SpriteSheetComponent.h"
 #include "Game/Components/StateComponent.h"
 #include "Game/Components/BrainComponent.h"
+#include "Game/States/GoeiStates.h"
 #include "Game/States/ZakoStates.h"
 
 std::unique_ptr<dae::GameObject> dae::functions::enemy::MakeZako()
 {
 	auto zako{ std::make_unique<dae::GameObject>() };
+#ifndef NDEBUG
+	zako->AddComponent<dae::DebugComponent>( "zako" );
+#endif
 	zako->AddComponent<dae::BrainComponent>( HiveMind::HiveMindType::zako );
 	zako->AddComponent<dae::SpriteSheetComponent>( "Enemy.png", dae::SpriteSheet::SpriteSheetInfo{ 24, 3 } );
 	zako->AddComponent<dae::AnimationComponent>()
@@ -60,4 +64,54 @@ std::unique_ptr<dae::GameObject> dae::functions::enemy::MakeZako()
 		[=]() { dae::Minigin::eventManager.SendEvent( { "e_InsectDied"_hash, nullptr } ); } );
 
 	return zako;
+}
+
+std::unique_ptr<dae::GameObject> dae::functions::enemy::MakeGoei()
+{
+	auto goei{ std::make_unique<dae::GameObject>() };
+#ifndef NDEBUG
+	goei->AddComponent<dae::DebugComponent>( "goei" );
+#endif
+	goei->AddComponent<dae::BrainComponent>( HiveMind::HiveMindType::goei );
+	goei->AddComponent<dae::SpriteSheetComponent>( "Enemy.png", dae::SpriteSheet::SpriteSheetInfo{ 24, 3 } );
+	goei->AddComponent<dae::AnimationComponent>()
+		.AddAnimation( "anim_Idle"_hash, { 30, 31, 0.5f, dae::AnimationComponent::LoopingMode::repeat } )
+		.SetAnimation( "anim_Idle"_hash );
+	goei->AddComponent<dae::HealthComponent>( 1 );
+	goei->AddComponent<dae::StateComponent>().SetState<dae::GoeiReturningState>();
+	goei->AddComponent<dae::ReactiveSoundComponent>().AddSound(
+		{ "e_EntityDied"_hash, goei.get(), "goei_destroy.wav" } );
+	goei->AddComponent<dae::HitboxComponent>(
+		glm::vec4{ 2.f, 3.f, 13.f, 10.f },
+		std::vector{ "target_Player"_hash },
+		[]( dae::GameObject* pParent, dae::Hurtbox* ) { pParent->GetComponent<dae::HealthComponent>()->Damage( 1 ); } );
+	goei->AddComponent<dae::HurtboxComponent>(
+		glm::vec4{ 2.f, 3.f, 13.f, 10.f }, "target_Enemy"_hash, []( dae::GameObject* pParent, dae::Hitbox* ) {
+			pParent->GetComponent<dae::HealthComponent>()->Damage( 1 );
+		} );
+	auto zakoPosRef{ goei->GetComponent<dae::TransformComponent>() };
+	goei->AddComponent<dae::ObserverComponent>().AddCallback( "e_EntityDied"_hash, [=]( void* ) mutable {
+		if ( !zakoPosRef.Validate() )
+		{
+			assert( false && "Failed to validate ship position" );
+			return;
+		}
+
+		auto explosion{ std::make_unique<dae::GameObject>() };
+		explosion->GetComponent<dae::TransformComponent>()->MoveTo( zakoPosRef->GetPosition() - glm::vec2{ 8.f, 8.f } );
+		explosion->AddComponent<dae::SpriteSheetComponent>( "Effect32x32.png",
+															dae::SpriteSheet::SpriteSheetInfo{ 5, 2 } );
+		explosion->AddComponent<dae::AnimationComponent>()
+			.AddAnimation( "anim_EnemyExplosion"_hash,
+						   { 5, 8, 0.0666f, dae::AnimationComponent::LoopingMode::singleAndTerminate } )
+			.SetAnimation( "anim_EnemyExplosion"_hash );
+
+		dae::SceneManager::GetInstance().GetScene( gameIdx ).Add( std::move( explosion ) );
+	} );
+	auto zakoObserverRef{ goei->GetComponent<dae::ObserverComponent>() };
+	goei->GetComponent<dae::HealthComponent>()->RegisterObserver( zakoObserverRef );
+	goei->AddComponent<dae::DeathCallbackComponent>(
+		[=]() { dae::Minigin::eventManager.SendEvent( { "e_InsectDied"_hash, nullptr } ); } );
+
+	return goei;
 }

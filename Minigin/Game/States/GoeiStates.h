@@ -1,5 +1,5 @@
-#ifndef ZAKOSTATES_H
-#define ZAKOSTATES_H
+#ifndef GOEISTATES_H
+#define GOEISTATES_H
 #include <States.h>
 #include "Game/Components/BrainComponent.h"
 #include "Math/Bezier.h"
@@ -9,10 +9,10 @@ namespace dae
 // The bee guys
 class GameObject;
 
-class ZakoIdlingState final : public State
+class GoeiIdlingState final : public State
 {
 public:
-	ZakoIdlingState( StateMachine* pParent );
+	GoeiIdlingState( StateMachine* pParent );
 	virtual State* Update() override;
 
 	virtual void Enter() override;
@@ -25,10 +25,10 @@ private:
 	constexpr static float m_MaxStateTime{ 20.f };
 };
 
-class ZakoDivingState final : public State
+class GoeiDivingState final : public State
 {
 public:
-	ZakoDivingState( StateMachine* pParent );
+	GoeiDivingState( StateMachine* pParent );
 	virtual State* Update() override;
 
 	virtual void Enter() override;
@@ -42,10 +42,10 @@ private:
 	bool m_PlayerFound{};
 };
 
-class ZakoSecondDiveState final : public State
+class GoeiSecondDiveState final : public State
 {
 public:
-	ZakoSecondDiveState( StateMachine* pParent );
+	GoeiSecondDiveState( StateMachine* pParent );
 	virtual State* Update() override;
 
 	virtual void Enter() override;
@@ -59,10 +59,10 @@ private:
 	bool m_PlayerFound{};
 };
 
-class ZakoReturningState final : public State
+class GoeiReturningState final : public State
 {
 public:
-	ZakoReturningState( StateMachine* pParent );
+	GoeiReturningState( StateMachine* pParent );
 	virtual State* Update() override;
 
 	virtual void Enter() override;

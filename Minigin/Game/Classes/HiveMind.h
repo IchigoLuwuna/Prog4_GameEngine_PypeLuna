@@ -11,7 +11,7 @@ class HiveMind
 {
 public:
 	static constexpr uint32_t m_FormationRows{ 5 };
-	static constexpr uint32_t m_FormationColumns{ 10 };
+	static constexpr uint32_t m_FormationColumns{ 13 };
 
 	enum class HiveMindType
 	{
@@ -30,7 +30,7 @@ public:
 	void ClearFormationSlot( uint64_t slot );
 
 private:
-	static constexpr glm::vec2 m_FormationStartPos{ 64.f, 16.f };
+	static constexpr glm::vec2 m_FormationStartPos{ 40.f, 16.f };
 	static constexpr glm::vec2 m_FormationSlotSize{ 16.f, 16.f };
 
 	static std::array<std::bitset<m_FormationColumns>, m_FormationRows> m_FormationFilled;

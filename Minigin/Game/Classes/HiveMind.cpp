@@ -118,21 +118,36 @@ void dae::HiveMind::ClearFormationSlot( uint64_t slot )
 
 uint64_t dae::HiveMind::GetZakoSlot() const
 {
-	uint32_t currentRow{ 3 };
-	for ( uint32_t idx{}; idx < m_FormationColumns; ++idx )
+	const uint32_t topRow{ 3 };
+	const uint32_t bottomRow{ 4 };
+	int leftIdx{ m_FormationColumns / 2 };
+	uint32_t rightIdx{ m_FormationColumns / 2 };
+	while ( leftIdx > 0 || rightIdx < m_FormationColumns )
 	{
-		if ( !m_FormationFilled[currentRow].test( idx ) )
+		if ( !m_FormationFilled[topRow].test( rightIdx ) )
 		{
-			return Combine( currentRow, idx );
+			return Combine( topRow, rightIdx );
 		}
-	}
-
-	currentRow = 4;
-	for ( uint32_t idx{}; idx < m_FormationColumns; ++idx )
-	{
-		if ( !m_FormationFilled[currentRow].test( idx ) )
+		if ( !m_FormationFilled[bottomRow].test( rightIdx ) )
 		{
-			return Combine( currentRow, idx );
+			return Combine( bottomRow, rightIdx );
+		}
+		if ( !m_FormationFilled[topRow].test( leftIdx ) )
+		{
+			return Combine( topRow, leftIdx );
+		}
+		if ( !m_FormationFilled[bottomRow].test( leftIdx ) )
+		{
+			return Combine( bottomRow, leftIdx );
+		}
+
+		if ( leftIdx >= 0 )
+		{
+			--leftIdx;
+		}
+		if ( rightIdx < m_FormationColumns )
+		{
+			++rightIdx;
 		}
 	}
 
@@ -141,21 +156,36 @@ uint64_t dae::HiveMind::GetZakoSlot() const
 
 uint64_t dae::HiveMind::GetGoeiSlot() const
 {
-	uint32_t currentRow{ 1 };
-	for ( uint32_t idx{}; idx < m_FormationColumns; ++idx )
+	const uint32_t topRow{ 1 };
+	const uint32_t bottomRow{ 2 };
+	int leftIdx{ m_FormationColumns / 2 };
+	uint32_t rightIdx{ m_FormationColumns / 2 };
+	while ( leftIdx > 0 || rightIdx < m_FormationColumns )
 	{
-		if ( !m_FormationFilled[currentRow].test( idx ) )
+		if ( !m_FormationFilled[topRow].test( rightIdx ) )
 		{
-			return Combine( currentRow, idx );
+			return Combine( topRow, rightIdx );
 		}
-	}
-
-	currentRow = 2;
-	for ( uint32_t idx{}; idx < m_FormationColumns; ++idx )
-	{
-		if ( !m_FormationFilled[currentRow].test( idx ) )
+		if ( !m_FormationFilled[bottomRow].test( rightIdx ) )
 		{
-			return Combine( currentRow, idx );
+			return Combine( bottomRow, rightIdx );
+		}
+		if ( !m_FormationFilled[topRow].test( leftIdx ) )
+		{
+			return Combine( topRow, leftIdx );
+		}
+		if ( !m_FormationFilled[bottomRow].test( leftIdx ) )
+		{
+			return Combine( bottomRow, leftIdx );
+		}
+
+		if ( leftIdx >= 0 )
+		{
+			--leftIdx;
+		}
+		if ( rightIdx < m_FormationColumns )
+		{
+			++rightIdx;
 		}
 	}
 

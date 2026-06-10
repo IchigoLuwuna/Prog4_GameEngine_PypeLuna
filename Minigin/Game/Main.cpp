@@ -53,12 +53,19 @@ static void load()
 	//
 
 	// Enemies
-	constexpr int zakoCount{ 20 };
+	constexpr int zakoCount{ 26 };
 	for ( int idx{}; idx < zakoCount; ++idx )
 	{
 		auto zako{ dae::functions::enemy::MakeZako() };
 		zako->GetComponent<dae::TransformComponent>()->MoveTo( 288.f / 2.f, -64.f );
 		gameScene.Add( std::move( zako ) );
+	}
+	constexpr int goeiCount{ 18 };
+	for ( int idx{}; idx < goeiCount; ++idx )
+	{
+		auto goei{ dae::functions::enemy::MakeGoei() };
+		goei->GetComponent<dae::TransformComponent>()->MoveTo( 288.f / 2.f, -64.f );
+		gameScene.Add( std::move( goei ) );
 	}
 	//
 
