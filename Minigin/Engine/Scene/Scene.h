@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
 #include <vector>
-#include "Patterns/GameObject.h"
+#include <Patterns.h>
 
 namespace dae
 {
@@ -19,6 +19,8 @@ public:
 	void Render() const;
 
 	GameObject* GetByTag( size_t tag ) const;
+	std::vector<GameObject*> GetAllByTag( size_t tag ) const;
+	GameObject* GetByTags( size_t* begin, size_t* end );
 
 	void CleanUpRemovableObjects();
 

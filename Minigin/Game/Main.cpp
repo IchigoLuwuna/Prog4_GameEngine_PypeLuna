@@ -1,8 +1,7 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
 #include "Game/Commands/MoveCommand.h"
-#include "Game/Components/SpriteSheetComponent.h"
-#include "Game/Context.h"
+#include "Game/Classes/HiveMind.h"
 #include "Input/InputManager.h"
 #if _DEBUG && __has_include( <vld.h>)
 #	include <vld.h>

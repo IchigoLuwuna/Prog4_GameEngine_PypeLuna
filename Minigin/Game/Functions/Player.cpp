@@ -158,9 +158,6 @@ void dae::functions::player::BindInputForPlayer( GameObject* pPlayer )
 
 	dae::InputManager::GetInstance().BindCommand<dae::EventCommand>(
 		SDL_SCANCODE_Z, dae::InputManager::KeyState::down, dae::Event{ "e_InsectDied"_hash, nullptr } );
-
-	dae::InputManager::GetInstance().BindCommand<dae::DamageCommand>(
-		SDL_SCANCODE_U, dae::InputManager::KeyState::down, pPlayer->GetComponent<dae::HealthComponent>(), 1 );
 }
 
 void dae::functions::player::BindScoreboardForPlayer( GameObject* pPlayer )

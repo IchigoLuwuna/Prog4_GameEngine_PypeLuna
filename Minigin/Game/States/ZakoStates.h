@@ -1,6 +1,7 @@
 #ifndef ZAKOSTATES_H
 #define ZAKOSTATES_H
 #include <States.h>
+#include "Game/Components/ZakoBrainComponent.h"
 
 namespace dae
 {
@@ -33,7 +34,6 @@ public:
 	virtual void Exit() override;
 
 private:
-	float m_StartingX{};
 	float m_DivingTime{};
 };
 
@@ -45,6 +45,9 @@ public:
 
 	virtual void Enter() override;
 	virtual void Exit() override;
+
+private:
+	ReferencePtr<ZakoBrainComponent> m_BrainRef{};
 };
 } // namespace dae
 #endif

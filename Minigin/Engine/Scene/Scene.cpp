@@ -68,6 +68,56 @@ dae::GameObject* dae::Scene::GetByTag( size_t tag ) const
 	return nullptr;
 }
 
+std::vector<dae::GameObject*> dae::Scene::GetAllByTag( size_t tag ) const
+{
+	std::vector<GameObject*> objects( m_Objects.size() );
+
+	for ( auto& object : m_RequestedObjects )
+	{
+		if ( object->GetTag() == tag )
+		{
+			objects.push_back( object.get() );
+		}
+	}
+	for ( auto& object : m_Objects )
+	{
+		if ( object->GetTag() == tag )
+		{
+			objects.push_back( object.get() );
+		}
+	}
+
+	return objects;
+}
+
+dae::GameObject* dae::Scene::GetByTags( size_t* begin, size_t* end )
+{
+	assert( begin <= end && "Begin must be smaller than end" );
+
+	for ( auto& object : m_RequestedObjects )
+	{
+		for ( ; begin != end; ++begin )
+		{
+			if ( object->GetTag() == *begin )
+			{
+				return object.get();
+			}
+		}
+	}
+	for ( auto& object : m_Objects )
+	{
+		for ( ; begin != end; ++begin )
+		{
+			if ( object->GetTag() == *begin )
+			{
+				return object.get();
+			}
+		}
+	}
+
+	return nullptr;
+}
+
 void dae::Scene::CleanUpRemovableObjects()
 {
 	m_Objects.erase( std::remove_if( m_Objects.begin(),

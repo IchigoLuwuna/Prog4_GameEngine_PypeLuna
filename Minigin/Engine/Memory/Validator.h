@@ -8,6 +8,8 @@ namespace dae
 class Validator
 {
 public:
+	Validator() = default;
+
 	template <typename T>
 	Validator( ControlBlock<T>* pControlBlock )
 		: m_pControlBlock( reinterpret_cast<ControlBlock<uint8_t>*>( pControlBlock ) )
