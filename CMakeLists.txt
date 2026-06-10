@@ -91,6 +91,7 @@ set_target_properties(engine PROPERTIES PUBLIC_HEADER
 add_executable(${TARGET_NAME} ${TARGET_PARAM}
     # Components
         Minigin/Game/Components/AnimationComponent.cpp
+        Minigin/Game/Components/BrainComponent.cpp
         Minigin/Game/Components/FpsComponent.cpp
         Minigin/Game/Components/HealthComponent.cpp
         Minigin/Game/Components/HealthDisplayComponent.cpp
@@ -109,7 +110,6 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
         Minigin/Game/Components/TTFTextComponent.cpp
         Minigin/Game/Components/TextAllignmentComponent.cpp
         Minigin/Game/Components/TextureComponent.cpp
-        Minigin/Game/Components/ZakoBrainComponent.cpp
 
     # Classes
         Minigin/Game/Classes/HiveMind.cpp

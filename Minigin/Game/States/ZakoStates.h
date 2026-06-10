@@ -1,7 +1,7 @@
 #ifndef ZAKOSTATES_H
 #define ZAKOSTATES_H
 #include <States.h>
-#include "Game/Components/ZakoBrainComponent.h"
+#include "Game/Components/BrainComponent.h"
 #include "Math/Bezier.h"
 
 namespace dae
@@ -35,7 +35,7 @@ public:
 	virtual void Exit() override;
 
 private:
-	ReferencePtr<ZakoBrainComponent> m_BrainRef{};
+	ReferencePtr<BrainComponent> m_BrainRef{};
 
 	math::Bezier4 m_BezierPath{};
 	float m_DivingTime{};
@@ -52,7 +52,7 @@ public:
 	virtual void Exit() override;
 
 private:
-	ReferencePtr<ZakoBrainComponent> m_BrainRef{};
+	ReferencePtr<BrainComponent> m_BrainRef{};
 
 	math::Bezier4 m_BezierPath{};
 	float m_DivingTime{};
@@ -69,7 +69,7 @@ public:
 	virtual void Exit() override;
 
 private:
-	ReferencePtr<ZakoBrainComponent> m_BrainRef{};
+	ReferencePtr<BrainComponent> m_BrainRef{};
 
 	math::Bezier4 m_BezierPath{};
 	float m_ReturningTime{};

@@ -12,13 +12,13 @@
 #include "Game/Components/ReactiveSoundComponent.h"
 #include "Game/Components/SpriteSheetComponent.h"
 #include "Game/Components/StateComponent.h"
-#include "Game/Components/ZakoBrainComponent.h"
+#include "Game/Components/BrainComponent.h"
 #include "Game/States/ZakoStates.h"
 
 std::unique_ptr<dae::GameObject> dae::functions::enemy::MakeZako()
 {
 	auto zako{ std::make_unique<dae::GameObject>() };
-	zako->AddComponent<dae::ZakoBrainComponent>();
+	zako->AddComponent<dae::BrainComponent>( HiveMind::HiveMindType::zako );
 	zako->AddComponent<dae::SpriteSheetComponent>( "Enemy.png", dae::SpriteSheet::SpriteSheetInfo{ 24, 3 } );
 	zako->AddComponent<dae::AnimationComponent>()
 		.AddAnimation( "anim_Idle"_hash, { 6, 7, 0.5f, dae::AnimationComponent::LoopingMode::repeat } )

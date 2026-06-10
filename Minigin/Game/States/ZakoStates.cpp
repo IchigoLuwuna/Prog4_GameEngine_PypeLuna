@@ -40,7 +40,7 @@ void dae::ZakoDivingState::Enter()
 	// Get Brain reference
 	if ( !m_BrainRef.Validate() )
 	{
-		m_BrainRef = GetParent()->GetParent()->GetComponent<ZakoBrainComponent>();
+		m_BrainRef = GetParent()->GetParent()->GetComponent<BrainComponent>();
 		if ( !m_BrainRef.Validate() )
 		{
 			assert( false && "Could not find a brain" );
@@ -107,7 +107,7 @@ void dae::ZakoSecondDiveState::Enter()
 	// Get Brain reference
 	if ( !m_BrainRef.Validate() )
 	{
-		m_BrainRef = GetParent()->GetParent()->GetComponent<ZakoBrainComponent>();
+		m_BrainRef = GetParent()->GetParent()->GetComponent<BrainComponent>();
 		if ( !m_BrainRef.Validate() )
 		{
 			assert( false && "Could not find a brain" );
@@ -211,7 +211,7 @@ void dae::ZakoReturningState::Enter()
 {
 	if ( !m_BrainRef.Validate() )
 	{
-		m_BrainRef = GetParent()->GetParent()->GetComponent<ZakoBrainComponent>();
+		m_BrainRef = GetParent()->GetParent()->GetComponent<BrainComponent>();
 		if ( !m_BrainRef.Validate() )
 		{
 			assert( false && "Could not find a brain" );
