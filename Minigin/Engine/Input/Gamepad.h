@@ -46,8 +46,6 @@ public:
 
 private:
 	class GamepadImpl;
-	class SDLImpl;
-	class XInputImpl;
 	std::unique_ptr<GamepadImpl> m_pImpl{};
 };
 } // namespace dae

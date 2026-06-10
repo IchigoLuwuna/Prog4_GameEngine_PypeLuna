@@ -1,12 +1,6 @@
 #include "Gamepad.h"
 #include <SDL3/SDL_scancode.h>
-#ifndef _WIN32
-#	include <SDL3/SDL_gamepad.h>
-#else
-#	define WIN32_LEAN_AND_MEAN
-#	include <windows.h>
-#	include <XInput.h>
-#endif
+#include <SDL3/SDL_gamepad.h>
 
 #ifndef NDEBUG
 #	include <iostream>
@@ -29,13 +23,9 @@ public:
 	std::bitset<maskBits> GetPreviousMask();
 
 private:
-#ifndef _WIN32
 	SDL_Gamepad* m_pGamepad{};
 
 	dae::Gamepad::Button RemapButtonFromSDL( SDL_GamepadButton in );
-#else
-	int m_ControllerIndex{};
-#endif
 
 	std::bitset<maskBits> m_ButtonMask{};
 	std::bitset<maskBits> m_PreviousMask{};
@@ -47,19 +37,15 @@ dae::Gamepad::Gamepad()
 }
 dae::Gamepad::GamepadImpl::GamepadImpl()
 {
-#ifndef _WIN32
 	AddGamepad();
-#endif
 }
 
 dae::Gamepad::~Gamepad() = default;
 
 dae::Gamepad::GamepadImpl::~GamepadImpl()
 {
-#ifndef _WIN32
 	SDL_CloseGamepad( m_pGamepad );
 	m_pGamepad = nullptr;
-#endif
 }
 
 dae::Gamepad::GamepadImpl::GamepadImpl( GamepadImpl&& other )
@@ -69,12 +55,8 @@ dae::Gamepad::GamepadImpl::GamepadImpl( GamepadImpl&& other )
 		return;
 	}
 
-#ifndef _WIN32
 	m_pGamepad = other.m_pGamepad;
 	other.m_pGamepad = nullptr;
-#else
-	m_ControllerIndex = other.m_ControllerIndex;
-#endif
 
 	m_ButtonMask = other.m_ButtonMask;
 	m_PreviousMask = other.m_PreviousMask;
@@ -87,12 +69,8 @@ dae::Gamepad::GamepadImpl& dae::Gamepad::GamepadImpl::operator=( GamepadImpl&& o
 		return *this;
 	}
 
-#ifndef _WIN32
 	m_pGamepad = other.m_pGamepad;
 	other.m_pGamepad = nullptr;
-#else
-	m_ControllerIndex = other.m_ControllerIndex;
-#endif
 
 	m_ButtonMask = other.m_ButtonMask;
 	m_PreviousMask = other.m_PreviousMask;
@@ -111,16 +89,15 @@ void dae::Gamepad::AddGamepad()
 }
 void dae::Gamepad::GamepadImpl::AddGamepad()
 {
-#ifndef _WIN32
 	if ( m_pGamepad ) // If gamepad is already connected and open
 	{
 		return;
 	}
 	if ( !SDL_HasGamepad() )
 	{
-#	ifndef NDEBUG
+#ifndef NDEBUG
 		std::cout << "No gamepad detected\n";
-#	endif
+#endif
 		return;
 	}
 	int gamepadCount{};
@@ -129,9 +106,8 @@ void dae::Gamepad::GamepadImpl::AddGamepad()
 	// We just want Player 1
 	m_pGamepad = SDL_OpenGamepad( gamepads[0] );
 
-#	ifndef NDEBUG
+#ifndef NDEBUG
 	std::cout << "Connected with Gamepad: " << SDL_GetGamepadName( m_pGamepad ) << "\n";
-#	endif
 #endif
 }
 
@@ -141,13 +117,11 @@ void dae::Gamepad::RemoveGamepad()
 }
 void dae::Gamepad::GamepadImpl::RemoveGamepad()
 {
-#ifndef _WIN32
-#	ifndef NDEBUG
+#ifndef NDEBUG
 	std::cout << "Removed Gamepad: " << SDL_GetGamepadName( m_pGamepad ) << "\n";
-#	endif
+#endif
 	SDL_CloseGamepad( m_pGamepad );
 	m_pGamepad = nullptr;
-#endif
 }
 
 void dae::Gamepad::UpdateGamepad()
@@ -156,7 +130,6 @@ void dae::Gamepad::UpdateGamepad()
 }
 void dae::Gamepad::GamepadImpl::UpdateGamepad()
 {
-#ifndef _WIN32
 	if ( !m_pGamepad )
 	{
 		return;
@@ -179,14 +152,6 @@ void dae::Gamepad::GamepadImpl::UpdateGamepad()
 			}
 		}
 	}
-#else
-	XINPUT_STATE state{};
-	ZeroMemory( &state, sizeof( XINPUT_STATE ) );
-	XInputGetState( static_cast<DWORD>( m_ControllerIndex ), &state );
-
-	m_PreviousMask = m_ButtonMask;
-	m_ButtonMask = state.Gamepad.wButtons;
-#endif
 }
 
 std::bitset<dae::Gamepad::maskBits> dae::Gamepad::GetMask()
@@ -212,7 +177,6 @@ std::bitset<dae::Gamepad::maskBits> dae::Gamepad::GetMaskFromButtonID( Gamepad::
 	return static_cast<std::bitset<maskBits>>( 1ll << ( static_cast<uint64_t>( in ) ) );
 }
 
-#ifndef _WIN32
 dae::Gamepad::Button dae::Gamepad::GamepadImpl::RemapButtonFromSDL( SDL_GamepadButton in )
 {
 	switch ( in )
@@ -254,4 +218,3 @@ dae::Gamepad::Button dae::Gamepad::GamepadImpl::RemapButtonFromSDL( SDL_GamepadB
 		return Button::invalid;
 	}
 }
-#endif
