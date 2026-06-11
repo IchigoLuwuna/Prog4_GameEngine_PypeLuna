@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "Game/Components/RespawnComponent.h"
 #include "Game/Context.h"
 
 #include <Components.h>
@@ -42,13 +43,15 @@ std::unique_ptr<dae::GameObject> dae::functions::player::MakePlayer()
 		} );
 
 	auto shipPosRef{ ship->GetComponent<dae::TransformComponent>() };
+	auto scoreRef{ ship->GetComponent<dae::ScoreComponent>() };
 	ship->AddComponent<dae::ObserverComponent>().AddCallback( "e_EntityDied"_hash, [=]( void* ) mutable {
-		if ( !shipPosRef.Validate() )
+		if ( !shipPosRef.Validate() || !scoreRef.Validate() )
 		{
-			assert( false && "Failed to validate ship position" );
+			assert( false && "Failed to validate ship" );
 			return;
 		}
 
+		// Play Explosion Anim
 		auto explosion{ std::make_unique<dae::GameObject>() };
 		explosion->GetComponent<dae::TransformComponent>()->MoveTo( shipPosRef->GetPosition() - glm::vec2{ 8.f, 8.f } );
 		explosion->AddComponent<dae::SpriteSheetComponent>( "Effect32x32.png",
@@ -57,8 +60,21 @@ std::unique_ptr<dae::GameObject> dae::functions::player::MakePlayer()
 			.AddAnimation( "anim_ShipExplosion"_hash,
 						   { 0, 3, 0.15f, dae::AnimationComponent::LoopingMode::singleAndTerminate } )
 			.SetAnimation( "anim_ShipExplosion"_hash );
-
 		dae::SceneManager::GetInstance().GetScene( gameIdx ).Add( std::move( explosion ) );
+		//
+
+		// Set Respawner
+		auto transferredScore{ scoreRef->GetScore() };
+		auto respawn{ [=]() {
+			auto object{ MakePlayer() };
+			object->GetComponent<ScoreComponent>()->Accumulate( transferredScore );
+			return object;
+		} };
+		auto respawner{ std::make_unique<dae::GameObject>( "respawner"_hash ) };
+		respawner->AddComponent<dae::RespawnComponent>( respawn, glm::vec2{ 288.f / 2.f, 192.f }, 5.f );
+		auto& levelScene{ SceneManager::GetInstance().GetScene( levelIdx ) };
+		levelScene.Add( std::move( respawner ) );
+		//
 	} );
 
 #ifndef NDEBUG
@@ -140,24 +156,25 @@ void dae::functions::player::BindInputForPlayer( GameObject* pPlayer )
 	} };
 
 	// Bindings
+	const auto leftKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::left ) };
+	const auto rightKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::right ) };
+	const auto southKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::south ) };
+
 	dae::InputManager::GetInstance().BindCommand<dae::FunctionCommand>(
 		SDL_SCANCODE_A, dae::InputManager::KeyState::held, moveLeft );
 	dae::InputManager::GetInstance().BindCommand<dae::FunctionCommand>(
-		SDL_SCANCODE_LEFT, dae::InputManager::KeyState::held, moveLeft );
+		leftKey, dae::InputManager::KeyState::held, moveLeft );
 	dae::InputManager::GetInstance().BindCommand<dae::FunctionCommand>(
 		SDL_SCANCODE_D, dae::InputManager::KeyState::held, moveRight );
 	dae::InputManager::GetInstance().BindCommand<dae::FunctionCommand>(
-		SDL_SCANCODE_RIGHT, dae::InputManager::KeyState::held, moveRight );
+		rightKey, dae::InputManager::KeyState::held, moveRight );
 
-	dae::InputManager::GetInstance().BindCommand<dae::FunctionCommand>(
-		SDL_SCANCODE_SPACE, dae::InputManager::KeyState::down, shoot );
 	dae::InputManager::GetInstance().BindCommand<dae::FunctionCommand>(
 		SDL_SCANCODE_J, dae::InputManager::KeyState::down, shoot );
 	dae::InputManager::GetInstance().BindCommand<dae::FunctionCommand>(
 		SDL_SCANCODE_K, dae::InputManager::KeyState::down, shoot );
-
-	dae::InputManager::GetInstance().BindCommand<dae::EventCommand>(
-		SDL_SCANCODE_Z, dae::InputManager::KeyState::down, dae::Event{ "e_InsectDied"_hash, nullptr } );
+	dae::InputManager::GetInstance().BindCommand<dae::FunctionCommand>(
+		southKey, dae::InputManager::KeyState::down, shoot );
 }
 
 void dae::functions::player::BindScoreboardForPlayer( GameObject* pPlayer )

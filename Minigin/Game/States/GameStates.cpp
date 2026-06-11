@@ -34,8 +34,11 @@ void dae::GameStartState::Enter()
 {
 	m_StartPressed = false;
 
+	const auto startKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::start ) };
 	InputManager::GetInstance().BindCommand<FunctionCommand>(
 		SDL_SCANCODE_RETURN, InputManager::KeyState::down, [&]() mutable { m_StartPressed = true; } );
+	InputManager::GetInstance().BindCommand<FunctionCommand>(
+		startKey, InputManager::KeyState::down, [&]() mutable { m_StartPressed = true; } );
 
 	auto& uiScene{ SceneManager::GetInstance().GetScene( uiIdx ) };
 
@@ -91,7 +94,7 @@ void dae::GameEnterState::Enter()
 
 	// Player Characters
 	auto ship{ dae::functions::player::MakePlayer() };
-	ship->GetComponent<dae::TransformComponent>()->MoveTo( 100.f, 192.f );
+	ship->GetComponent<dae::TransformComponent>()->MoveTo( 288.f / 2.f, 192.f );
 	gameScene.Add( std::move( ship ) );
 	//
 
@@ -113,6 +116,7 @@ void dae::GameEnterState::Exit()
 	uiScene.GetByTag( "stageEnterText"_hash )->MarkForRemoval();
 }
 
+const std::string dae::GameStageTransitionState::m_TransitionSoundFile = "challenging_stage_start.wav";
 dae::GameStageTransitionState::GameStageTransitionState( StateMachine* pParent )
 	: State( pParent )
 {
@@ -133,6 +137,11 @@ dae::State* dae::GameStageTransitionState::Update()
 void dae::GameStageTransitionState::Enter()
 {
 	m_StateTime = 0.f;
+
+	if ( m_NextStageNr != 1 )
+	{
+		ServiceLocator<SoundService>::GetInstance().GetService().Play( m_TransitionSoundFile.c_str(), 1.f );
+	}
 
 	auto& uiScene{ dae::SceneManager::GetInstance().GetScene( uiIdx ) };
 

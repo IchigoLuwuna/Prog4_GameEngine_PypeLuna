@@ -48,7 +48,8 @@ public:
 	void SetNextStageNr( size_t nr );
 
 private:
-	static constexpr float m_TransitionLength{ 3.f };
+	static const std::string m_TransitionSoundFile;
+	static constexpr float m_TransitionLength{ 1.5f };
 	float m_StateTime{};
 	size_t m_NextStageNr{};
 };
@@ -65,10 +66,11 @@ public:
 	void SetStageNr( size_t nr );
 
 private:
-	static constexpr uint32_t m_StageCount{ 2 };
+	static constexpr uint32_t m_StageCount{ 3 };
 	std::array<std::array<uint32_t, 3>, m_StageCount> m_StageEnemyCounts{ {
-		{ 18, 14, 5 }, { 22, 18, 7 },
-		//{ 26, 22, 9 },
+		{ 18, 14, 5 },
+		{ 22, 18, 7 },
+		{ 26, 22, 9 },
 	} };
 
 	HiveMind m_HiveMind{};

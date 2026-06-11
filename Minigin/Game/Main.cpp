@@ -70,14 +70,18 @@ static void load()
 
 	dae::Validator controlHintsValidator{ controlHints->GetComponent<dae::TransformComponent>().GetControlBlock() };
 	auto* pControlHints{ controlHints.get() };
+	auto removeHelpText{ [=]() mutable {
+		if ( !controlHintsValidator.Validate() )
+		{
+			return;
+		}
+		pControlHints->MarkForRemoval();
+	} };
+	const auto selectKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::select ) };
 	dae::InputManager::GetInstance().BindCommand<dae::FunctionCommand>(
-		SDL_SCANCODE_BACKSPACE, dae::InputManager::KeyState::down, [=]() mutable {
-			if ( !controlHintsValidator.Validate() )
-			{
-				return;
-			}
-			pControlHints->MarkForRemoval();
-		} );
+		SDL_SCANCODE_BACKSPACE, dae::InputManager::KeyState::down, removeHelpText );
+	dae::InputManager::GetInstance().BindCommand<dae::FunctionCommand>(
+		selectKey, dae::InputManager::KeyState::down, removeHelpText );
 
 	uiScene.Add( std::move( controlHints ) );
 #endif
