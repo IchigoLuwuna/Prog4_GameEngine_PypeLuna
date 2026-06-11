@@ -1,6 +1,7 @@
 #ifndef GAMESTATES_H
 #define GAMESTATES_H
 #include <string>
+#include <Helpers.h>
 #include "Game/Classes/HiveMind.h"
 #include "States/State.h"
 
@@ -74,8 +75,12 @@ private:
 	} };
 
 	HiveMind m_HiveMind{};
+	Subscription m_Subscription;
 	float m_TimeSinceLastCheck{};
 	size_t m_StageNr{};
+	bool m_PlayerRanOutOfLives{};
+
+	void HandleEvent( Event& event );
 };
 
 class GameAllStagesClearState : public State
@@ -90,6 +95,19 @@ public:
 private:
 	static constexpr float m_TransitionLength{ 3.f };
 	float m_StateTime{};
+};
+
+class GameScoreboardState : public State
+{
+public:
+	GameScoreboardState( StateMachine* pParent );
+
+	virtual State* Update() override;
+	virtual void Enter() override;
+	virtual void Exit() override;
+
+private:
+	uint32_t m_PlayerScore{};
 };
 } // namespace dae
 #endif

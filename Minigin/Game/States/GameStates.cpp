@@ -7,6 +7,7 @@
 #include <Input.h>
 #include <Commands.h>
 #include "Game/Components/PixelTextComponent.h"
+#include "Game/Components/ScoreComponent.h"
 #include "Game/Components/SpriteAllignmentComponent.h"
 #include "Game/Components/SpriteSheetComponent.h"
 #include "Game/Components/TextAllignmentComponent.h"
@@ -168,6 +169,7 @@ void dae::GameStageTransitionState::SetNextStageNr( size_t nr )
 
 dae::GameStageState::GameStageState( StateMachine* pParent )
 	: State( pParent )
+	, m_Subscription( this, std::bind( &GameStageState::HandleEvent, this, std::placeholders::_1 ) )
 {
 }
 dae::State* dae::GameStageState::Update()
@@ -175,9 +177,9 @@ dae::State* dae::GameStageState::Update()
 	constexpr float checkInterval{ 1.f };
 	m_TimeSinceLastCheck += Timer::GetInstance().GetElapsed();
 
-	if ( m_StageNr == -1u )
+	if ( m_PlayerRanOutOfLives )
 	{
-		return GetParent()->FindOrCreateState<GameStartState>();
+		return GetParent()->FindOrCreateState<GameScoreboardState>();
 	}
 
 	if ( m_TimeSinceLastCheck < checkInterval )
@@ -204,6 +206,7 @@ dae::State* dae::GameStageState::Update()
 void dae::GameStageState::Enter()
 {
 	m_TimeSinceLastCheck = 0.f;
+	m_PlayerRanOutOfLives = false;
 
 	if ( m_StageNr == -1u || m_StageNr > m_StageCount )
 	{
@@ -246,6 +249,18 @@ void dae::GameStageState::SetStageNr( size_t nr )
 {
 	m_StageNr = nr;
 }
+void dae::GameStageState::HandleEvent( Event& event )
+{
+	switch ( event.eventHash )
+	{
+	case "e_ShipRanOutOfLives"_hash: {
+		m_PlayerRanOutOfLives = true;
+	}
+	default: {
+		break;
+	}
+	}
+}
 
 dae::GameAllStagesClearState::GameAllStagesClearState( StateMachine* pParent )
 	: State( pParent )
@@ -257,7 +272,7 @@ dae::State* dae::GameAllStagesClearState::Update()
 
 	if ( m_StateTime > m_TransitionLength )
 	{
-		return GetParent()->FindOrCreateState<GameStartState>();
+		return GetParent()->FindOrCreateState<GameScoreboardState>();
 	}
 
 	return nullptr;
@@ -281,10 +296,70 @@ void dae::GameAllStagesClearState::Enter()
 }
 void dae::GameAllStagesClearState::Exit()
 {
+	auto& levelScene{ SceneManager::GetInstance().GetScene( levelIdx ) };
 	auto& gameScene{ dae::SceneManager::GetInstance().GetScene( gameIdx ) };
 	auto& uiScene{ dae::SceneManager::GetInstance().GetScene( uiIdx ) };
 
-	gameScene.GetByTag( "player"_hash )->MarkForRemoval();
+	auto pPlayer{ gameScene.GetByTag( "player"_hash ) };
+	auto scoreTransferObject{ std::make_unique<GameObject>( "scoreTransferObject"_hash ) };
+	scoreTransferObject->AddComponent<ScoreComponent>( std::vector<std::pair<size_t, uint32_t>>{},
+													   pPlayer->GetComponent<ScoreComponent>()->GetScore() );
+	pPlayer->MarkForRemoval();
+	levelScene.Add( std::move( scoreTransferObject ) );
+
 	uiScene.GetByTag( "stageAllClearText"_hash )->MarkForRemoval();
 	uiScene.GetByTag( "scoreboard"_hash )->MarkForRemoval();
+}
+
+dae::GameScoreboardState::GameScoreboardState( StateMachine* pParent )
+	: State( pParent )
+{
+}
+dae::State* dae::GameScoreboardState::Update()
+{
+	return nullptr;
+}
+void dae::GameScoreboardState::Enter()
+{
+	auto& levelScene{ SceneManager::GetInstance().GetScene( levelIdx ) };
+	auto& gameScene{ SceneManager::GetInstance().GetScene( gameIdx ) };
+	auto& uiScene{ dae::SceneManager::GetInstance().GetScene( uiIdx ) };
+
+	// Clear leftover enemies
+	auto zakos{ gameScene.GetAllByTag( "zako"_hash ) };
+	auto goeis{ gameScene.GetAllByTag( "goei"_hash ) };
+	auto bosses{ gameScene.GetAllByTag( "boss"_hash ) };
+	for ( auto& zako : zakos )
+	{
+		zako->MarkForRemoval();
+	}
+	for ( auto& goei : goeis )
+	{
+		goei->MarkForRemoval();
+	}
+	for ( auto& boss : bosses )
+	{
+		boss->MarkForRemoval();
+	}
+	//
+
+	// Get transferred score
+	auto transferredScore{ levelScene.GetByTag( "scoreTransferObject"_hash ) };
+	m_PlayerScore = transferredScore->GetComponent<ScoreComponent>()->GetScore();
+	transferredScore->MarkForRemoval();
+	//
+
+	const std::string typefacePath{ "Typeface.png" };
+	const std::string typefaceMapping{ "0123456789abcdefghijklmnopqrstuvwxyz-%.!" };
+
+	auto scoreText{ std::make_unique<GameObject>( "stageAllClearText"_hash ) };
+	scoreText->AddComponent<dae::PixelTextComponent>( typefacePath, typefaceMapping, glm::vec2{ 8.f, 8.f } )
+		.SetIgnore( true )
+		.SetText( std::format( "Score - {}", m_PlayerScore ) );
+	scoreText->AddComponent<TextAllignmentComponent>( glm::vec2{ 288.f / 2.f, 224.f / 2.f },
+													  TextAllignmentComponent::Allignment::center );
+	uiScene.Add( std::move( scoreText ) );
+}
+void dae::GameScoreboardState::Exit()
+{
 }

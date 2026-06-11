@@ -67,12 +67,14 @@ std::unique_ptr<dae::GameObject> dae::functions::player::MakePlayer()
 		dae::SceneManager::GetInstance().GetScene( gameIdx ).Add( std::move( explosion ) );
 		//
 
+		auto& levelScene{ SceneManager::GetInstance().GetScene( levelIdx ) };
 		if ( shipLivesRef->GetLives() == 0 )
 		{
 			dae::Minigin::eventManager.SendEvent( { "e_ShipRanOutOfLives"_hash } );
 			auto scoreTransferObject{ std::make_unique<GameObject>( "scoreTransferObject"_hash ) };
 			scoreTransferObject->AddComponent<ScoreComponent>( std::vector<std::pair<size_t, uint32_t>>{},
 															   scoreRef->GetScore() );
+			levelScene.Add( std::move( scoreTransferObject ) );
 			return;
 		}
 
@@ -86,8 +88,7 @@ std::unique_ptr<dae::GameObject> dae::functions::player::MakePlayer()
 			return object;
 		} };
 		auto respawner{ std::make_unique<dae::GameObject>( "respawner"_hash ) };
-		respawner->AddComponent<dae::RespawnComponent>( respawn, glm::vec2{ 288.f / 2.f, 192.f }, 5.f );
-		auto& levelScene{ SceneManager::GetInstance().GetScene( levelIdx ) };
+		respawner->AddComponent<dae::RespawnComponent>( respawn, glm::vec2{ 288.f / 2.f, 192.f }, 1.f );
 		levelScene.Add( std::move( respawner ) );
 		//
 	} );
