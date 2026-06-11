@@ -39,6 +39,8 @@ private:
 
 	math::Bezier4 m_BezierPath{};
 	float m_DivingTime{};
+	float m_WiggleWidth{};
+	float m_WiggleSpeed{};
 	bool m_PlayerFound{};
 };
 

@@ -24,6 +24,8 @@ public:
 
 	bool ProcessInput();
 
+	bool PollKey( SDL_Scancode keyCode );
+
 	template <typename CommandType, typename... Args>
 		requires std::derived_from<CommandType, Command> && requires( Args... args ) { CommandType( args... ); }
 	void BindCommand( int key, KeyState state, const Args&... args )

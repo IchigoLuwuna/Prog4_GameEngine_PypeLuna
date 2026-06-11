@@ -81,6 +81,13 @@ void dae::GameEnterState::Enter()
 {
 	m_StateTime = 0.f;
 
+	auto l1{ static_cast<SDL_Scancode>( Gamepad::RemapButtonToKey( Gamepad::Button::l1 ) ) };
+	auto r1{ static_cast<SDL_Scancode>( Gamepad::RemapButtonToKey( Gamepad::Button::r1 ) ) };
+	bool activateEasterEgg{ ( dae::InputManager::GetInstance().PollKey( SDL_SCANCODE_T ) &&
+							  dae::InputManager::GetInstance().PollKey( SDL_SCANCODE_Y ) ) ||
+							( dae::InputManager::GetInstance().PollKey( l1 ) &&
+							  dae::InputManager::GetInstance().PollKey( r1 ) ) };
+
 	// Play Enter Sound
 	ServiceLocator<SoundService>::GetInstance().GetService().Play( m_StartSoundFile.c_str(), 1.f );
 
@@ -96,6 +103,10 @@ void dae::GameEnterState::Enter()
 	// Player Characters
 	auto ship{ dae::functions::player::MakePlayer() };
 	ship->GetComponent<dae::TransformComponent>()->MoveTo( 288.f / 2.f, 192.f );
+	if ( activateEasterEgg )
+	{
+		ship->GetComponent<dae::SpriteSheetComponent>()->SetIndex( 7, 1 );
+	}
 	gameScene.Add( std::move( ship ) );
 	//
 
@@ -308,7 +319,6 @@ void dae::GameAllStagesClearState::Exit()
 	levelScene.Add( std::move( scoreTransferObject ) );
 
 	uiScene.GetByTag( "stageAllClearText"_hash )->MarkForRemoval();
-	uiScene.GetByTag( "scoreboard"_hash )->MarkForRemoval();
 }
 
 dae::GameScoreboardState::GameScoreboardState( StateMachine* pParent )
@@ -346,6 +356,10 @@ void dae::GameScoreboardState::Enter()
 	{
 		boss->MarkForRemoval();
 	}
+	//
+
+	// Clear scoreboard
+	uiScene.GetByTag( "scoreboard"_hash )->MarkForRemoval();
 	//
 
 	// Get transferred score

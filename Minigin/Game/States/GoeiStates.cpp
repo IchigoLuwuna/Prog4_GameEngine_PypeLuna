@@ -70,6 +70,8 @@ void dae::GoeiDivingState::Enter()
 	}
 	m_BezierPath.controlPoints = { a, b, c, d };
 	m_DivingTime = 0.f;
+	m_WiggleWidth = dae::random::GetRand( -64.f, 64.f );
+	m_WiggleSpeed = dae::random::GetRand( 0.5f, 2.f );
 }
 void dae::GoeiDivingState::Exit()
 {
@@ -93,7 +95,7 @@ dae::State* dae::GoeiDivingState::Update()
 	auto transform{ GetParent()->GetParent()->GetComponent<dae::TransformComponent>() };
 
 	auto lerpedPos{ m_BezierPath.Lerp( lerp ) };
-	transform->MoveTo( lerpedPos.x + std::sin( m_DivingTime * 2.f ) * 32.f, lerpedPos.y );
+	transform->MoveTo( lerpedPos.x + std::sin( m_DivingTime * m_WiggleSpeed ) * m_WiggleWidth, lerpedPos.y );
 
 	return nullptr;
 }

@@ -36,6 +36,11 @@ bool dae::InputManager::ProcessInput()
 	return true;
 }
 
+bool dae::InputManager::PollKey( SDL_Scancode keyCode )
+{
+	return m_KeyStates.test( keyCode );
+}
+
 void dae::InputManager::ClearBinding( int key, KeyState state )
 {
 	m_CommandBindings[key][static_cast<int>( state )] = nullptr; // I love RAII :D
