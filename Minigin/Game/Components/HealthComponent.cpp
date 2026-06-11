@@ -3,15 +3,27 @@
 #include <Helpers.h>
 #include <algorithm>
 
-dae::HealthComponent::HealthComponent( GameObject* pGameObject, uint32_t health, uint32_t maxHealth )
+dae::HealthComponent::HealthComponent( GameObject* pGameObject,
+									   uint32_t health,
+									   uint32_t maxHealth,
+									   float invincibleTime )
 	: Component( pGameObject )
 	, m_Health( health )
 	, m_MaxHealth( maxHealth )
+	, m_InvincibleTime( invincibleTime )
 	, m_Messenger( this )
 {
 	if ( maxHealth == 0 )
 	{
 		m_MaxHealth = m_Health;
+	}
+}
+
+void dae::HealthComponent::Update()
+{
+	if ( m_InvincibleTime >= 0.f )
+	{
+		m_InvincibleTime -= Timer::GetInstance().GetElapsed();
 	}
 }
 
@@ -24,6 +36,11 @@ void dae::HealthComponent::Heal( uint32_t healing )
 }
 void dae::HealthComponent::Damage( uint32_t damage )
 {
+	if ( m_InvincibleTime > 0.f )
+	{
+		return;
+	}
+
 	int32_t newHealth{ static_cast<int32_t>( m_Health ) -
 					   static_cast<int32_t>( damage ) }; // signed to prevent underflows
 	m_Health = std::max( 0, newHealth );
@@ -52,6 +69,10 @@ void dae::HealthComponent::DecreaseMax( uint32_t decrease )
 	m_Health = std::min( m_Health, m_MaxHealth );
 
 	m_Messenger.NotifyObservers( "e_HealthChanged"_hash );
+}
+void dae::HealthComponent::SetInvincibleTime( uint32_t newInvincibleTime )
+{
+	m_InvincibleTime = newInvincibleTime;
 }
 
 uint32_t dae::HealthComponent::GetHealth() const

@@ -29,7 +29,7 @@ std::unique_ptr<dae::GameObject> dae::functions::player::MakePlayer()
 	ship->AddComponent<dae::SpriteSheetComponent>( "Ship.png", dae::SpriteSheet::SpriteSheetInfo{ 8, 3 } )
 		.SetIndex( 6, 0 );
 
-	ship->AddComponent<dae::HealthComponent>( 1 );
+	ship->AddComponent<dae::HealthComponent>( 1, 1, 3.f );
 	auto shipHealthRef{ ship->GetComponent<dae::HealthComponent>() };
 	ship->AddComponent<dae::LivesComponent>( 3 );
 	auto shipLivesRef{ ship->GetComponent<dae::LivesComponent>() };
@@ -88,7 +88,7 @@ std::unique_ptr<dae::GameObject> dae::functions::player::MakePlayer()
 			return object;
 		} };
 		auto respawner{ std::make_unique<dae::GameObject>( "respawner"_hash ) };
-		respawner->AddComponent<dae::RespawnComponent>( respawn, glm::vec2{ 288.f / 2.f, 192.f }, 1.f );
+		respawner->AddComponent<dae::RespawnComponent>( respawn, glm::vec2{ 288.f / 2.f, 192.f }, 4.f );
 		levelScene.Add( std::move( respawner ) );
 		//
 	} );

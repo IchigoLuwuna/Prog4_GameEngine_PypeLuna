@@ -317,6 +317,11 @@ dae::GameScoreboardState::GameScoreboardState( StateMachine* pParent )
 }
 dae::State* dae::GameScoreboardState::Update()
 {
+	if ( m_StartPressed )
+	{
+		return GetParent()->FindOrCreateState<GameStartState>();
+	}
+
 	return nullptr;
 }
 void dae::GameScoreboardState::Enter()
@@ -349,17 +354,41 @@ void dae::GameScoreboardState::Enter()
 	transferredScore->MarkForRemoval();
 	//
 
+	// Scoreboard
 	const std::string typefacePath{ "Typeface.png" };
 	const std::string typefaceMapping{ "0123456789abcdefghijklmnopqrstuvwxyz-%.!" };
 
-	auto scoreText{ std::make_unique<GameObject>( "stageAllClearText"_hash ) };
+	auto scoreText{ std::make_unique<GameObject>( "scoreboardObject"_hash ) };
 	scoreText->AddComponent<dae::PixelTextComponent>( typefacePath, typefaceMapping, glm::vec2{ 8.f, 8.f } )
 		.SetIgnore( true )
 		.SetText( std::format( "Score - {}", m_PlayerScore ) );
 	scoreText->AddComponent<TextAllignmentComponent>( glm::vec2{ 288.f / 2.f, 224.f / 2.f },
 													  TextAllignmentComponent::Allignment::center );
 	uiScene.Add( std::move( scoreText ) );
+	//
+
+	m_StartPressed = false;
+
+	const auto startKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::start ) };
+	InputManager::GetInstance().BindCommand<FunctionCommand>(
+		SDL_SCANCODE_RETURN, InputManager::KeyState::down, [&]() mutable { m_StartPressed = true; } );
+	InputManager::GetInstance().BindCommand<FunctionCommand>(
+		startKey, InputManager::KeyState::down, [&]() mutable { m_StartPressed = true; } );
 }
 void dae::GameScoreboardState::Exit()
 {
+	auto& levelScene{ dae::SceneManager::GetInstance().GetScene( levelIdx ) };
+	auto& uiScene{ dae::SceneManager::GetInstance().GetScene( uiIdx ) };
+
+	auto scoreTransferObjects{ levelScene.GetAllByTag( "scoreTransferObject"_hash ) };
+	for ( auto& scoreTransferObject : scoreTransferObjects )
+	{
+		scoreTransferObject->MarkForRemoval();
+	}
+
+	auto scoreboardObjects{ uiScene.GetAllByTag( "scoreboardObject"_hash ) };
+	for ( auto& scoreboardObject : scoreboardObjects )
+	{
+		scoreboardObject->MarkForRemoval();
+	}
 }

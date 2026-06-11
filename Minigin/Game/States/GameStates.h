@@ -108,6 +108,7 @@ public:
 
 private:
 	uint32_t m_PlayerScore{};
+	bool m_StartPressed{};
 };
 } // namespace dae
 #endif
