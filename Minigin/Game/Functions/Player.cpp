@@ -1,5 +1,6 @@
 #include "Player.h"
 #include <Core.h>
+#include "Game/Components/GamepadControlComponent.h"
 #include "Game/Components/LivesComponent.h"
 #include "Game/Components/RespawnComponent.h"
 #include "Game/Context.h"
@@ -108,6 +109,8 @@ std::unique_ptr<dae::GameObject> dae::functions::player::MakePlayer()
 
 void dae::functions::player::BindInputForPlayer( GameObject* pPlayer )
 {
+	pPlayer->AddComponent<dae::GamepadControlComponent>( 96.f );
+
 	auto shipPosRef{ pPlayer->GetComponent<dae::TransformComponent>() };
 	auto shipAmmoRef{ pPlayer->GetComponent<dae::ProjectileAmmoComponent>() };
 

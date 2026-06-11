@@ -94,6 +94,7 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
         Minigin/Game/Components/BrainComponent.cpp
         Minigin/Game/Components/FpsComponent.cpp
         Minigin/Game/Components/GameStateHandlerComponent.cpp
+        Minigin/Game/Components/GamepadControlComponent.cpp
         Minigin/Game/Components/HealthComponent.cpp
         Minigin/Game/Components/HealthDisplayComponent.cpp
         Minigin/Game/Components/ImGuiComponents.cpp
