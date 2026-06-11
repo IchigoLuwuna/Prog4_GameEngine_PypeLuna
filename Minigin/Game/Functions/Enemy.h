@@ -7,5 +7,6 @@ namespace dae::functions::enemy
 {
 std::unique_ptr<GameObject> MakeZako();
 std::unique_ptr<GameObject> MakeGoei();
+std::unique_ptr<GameObject> MakeBoss();
 } // namespace dae::functions::enemy
 #endif

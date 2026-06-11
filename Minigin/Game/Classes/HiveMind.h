@@ -17,7 +17,7 @@ public:
 	{
 		zako,
 		goei,
-		galaga,
+		boss,
 	};
 
 	HiveMind() = default;

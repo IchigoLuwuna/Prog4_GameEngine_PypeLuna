@@ -13,12 +13,14 @@
 #include "Game/Components/SpriteSheetComponent.h"
 #include "Game/Components/StateComponent.h"
 #include "Game/Components/BrainComponent.h"
+#include "Game/States/BossStates.h"
 #include "Game/States/GoeiStates.h"
 #include "Game/States/ZakoStates.h"
+#include "Sound/SoundService.h"
 
 std::unique_ptr<dae::GameObject> dae::functions::enemy::MakeZako()
 {
-	auto zako{ std::make_unique<dae::GameObject>() };
+	auto zako{ std::make_unique<dae::GameObject>( "zako"_hash ) };
 #ifndef NDEBUG
 	zako->AddComponent<dae::DebugComponent>( "zako" );
 #endif
@@ -68,7 +70,7 @@ std::unique_ptr<dae::GameObject> dae::functions::enemy::MakeZako()
 
 std::unique_ptr<dae::GameObject> dae::functions::enemy::MakeGoei()
 {
-	auto goei{ std::make_unique<dae::GameObject>() };
+	auto goei{ std::make_unique<dae::GameObject>( "goei"_hash ) };
 #ifndef NDEBUG
 	goei->AddComponent<dae::DebugComponent>( "goei" );
 #endif
@@ -114,4 +116,72 @@ std::unique_ptr<dae::GameObject> dae::functions::enemy::MakeGoei()
 		[=]() { dae::Minigin::eventManager.SendEvent( { "e_InsectDied"_hash, nullptr } ); } );
 
 	return goei;
+}
+
+std::unique_ptr<dae::GameObject> dae::functions::enemy::MakeBoss()
+{
+	auto boss{ std::make_unique<dae::GameObject>( "boss"_hash ) };
+#ifndef NDEBUG
+	boss->AddComponent<dae::DebugComponent>( "boss" );
+#endif
+	boss->AddComponent<dae::BrainComponent>( HiveMind::HiveMindType::boss );
+	boss->AddComponent<dae::SpriteSheetComponent>( "Enemy.png", dae::SpriteSheet::SpriteSheetInfo{ 24, 3 } );
+	boss->AddComponent<dae::AnimationComponent>()
+		.AddAnimation( "anim_Idle_Healthy"_hash, { 54, 55, 0.5f, dae::AnimationComponent::LoopingMode::repeat } )
+		.AddAnimation( "anim_Idle_Damaged"_hash, { 70, 71, 0.5f, dae::AnimationComponent::LoopingMode::repeat } )
+		.SetAnimation( "anim_Idle_Healthy"_hash );
+	boss->AddComponent<dae::HealthComponent>( 2 );
+	boss->AddComponent<dae::StateComponent>().SetState<dae::BossReturningState>();
+	boss->AddComponent<dae::ReactiveSoundComponent>().AddSound(
+		{ "e_EntityDied"_hash, boss.get(), "boss_destroy.wav" } );
+	boss->AddComponent<dae::HitboxComponent>(
+		glm::vec4{ 2.f, 3.f, 13.f, 10.f },
+		std::vector{ "target_Player"_hash },
+		[]( dae::GameObject* pParent, dae::Hurtbox* ) { pParent->GetComponent<dae::HealthComponent>()->Damage( 1 ); } );
+	boss->AddComponent<dae::HurtboxComponent>(
+		glm::vec4{ 2.f, 3.f, 13.f, 10.f }, "target_Enemy"_hash, []( dae::GameObject* pParent, dae::Hitbox* ) {
+			pParent->GetComponent<dae::HealthComponent>()->Damage( 1 );
+		} );
+	auto bossPosRef{ boss->GetComponent<dae::TransformComponent>() };
+	auto bossAnimRef{ boss->GetComponent<dae::AnimationComponent>() };
+	boss->AddComponent<dae::ObserverComponent>()
+		.AddCallback(
+			"e_EntityDied"_hash,
+			[=]( void* ) mutable {
+				if ( !bossPosRef.Validate() )
+				{
+					assert( false && "Failed to validate ship position" );
+					return;
+				}
+
+				auto explosion{ std::make_unique<dae::GameObject>() };
+				explosion->GetComponent<dae::TransformComponent>()->MoveTo( bossPosRef->GetPosition() -
+																			glm::vec2{ 8.f, 8.f } );
+				explosion->AddComponent<dae::SpriteSheetComponent>( "Effect32x32.png",
+																	dae::SpriteSheet::SpriteSheetInfo{ 5, 2 } );
+				explosion->AddComponent<dae::AnimationComponent>()
+					.AddAnimation( "anim_EnemyExplosion"_hash,
+								   { 5, 8, 0.0666f, dae::AnimationComponent::LoopingMode::singleAndTerminate } )
+					.SetAnimation( "anim_EnemyExplosion"_hash );
+
+				dae::SceneManager::GetInstance().GetScene( gameIdx ).Add( std::move( explosion ) );
+			} )
+		.AddCallback( "e_HealthChanged"_hash, [=]( void* health ) mutable {
+			if ( !bossAnimRef.Validate() )
+			{
+				assert( false && "Failed to validate ship animation component" );
+				return;
+			}
+
+			auto pHealth{ reinterpret_cast<dae::HealthComponent*>( health ) };
+			if ( pHealth->GetHealth() == 1 )
+			{
+				dae::ServiceLocator<dae::SoundService>::GetInstance().GetService().Play( "boss_damage.wav", 1.f );
+				bossAnimRef->SetAnimation( "anim_Idle_Damaged"_hash );
+			}
+		} );
+	auto bossObserverRef{ boss->GetComponent<dae::ObserverComponent>() };
+	boss->GetComponent<dae::HealthComponent>()->RegisterObserver( bossObserverRef );
+
+	return boss;
 }

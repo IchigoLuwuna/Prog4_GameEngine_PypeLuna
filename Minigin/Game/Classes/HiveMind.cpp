@@ -12,9 +12,9 @@ dae::GameObject* dae::HiveMind::m_pPlayer{};
 dae::GameObject* dae::HiveMind::GetPlayer()
 {
 	// If player ptr is set -> early return (optimal)
-	// If player ptr is clear -> search for it every 0.5f seconds
-	// If player ptr is clear, but 0.5f seconds have not elapsed -> return nullptr
-	// If player ptr is clear, but no player is found -> return nullptr and wait another 0.5f secs
+	// If player ptr is clear -> search for it every 1.f seconds
+	// If player ptr is clear, but 1.f seconds have not elapsed -> return nullptr
+	// If player ptr is clear, but no player is found -> return nullptr and wait another 1.f secs
 	// This alleviates slowdown from repeated searches in the hot code path
 
 	static Validator m_PlayerValidator{};
@@ -23,7 +23,7 @@ dae::GameObject* dae::HiveMind::GetPlayer()
 	{
 		return m_pPlayer;
 	}
-	constexpr float interval{ 0.5f };
+	constexpr float interval{ 1.f };
 	static float lastPlayerRequest{ dae::Timer::GetInstance().GetTotalElapsed() - interval };
 
 	if ( dae::Timer::GetInstance().GetTotalElapsed() < lastPlayerRequest + interval )
@@ -72,7 +72,7 @@ uint64_t dae::HiveMind::GetFormationSlot( HiveMindType type )
 		return openSlot;
 		break;
 	}
-	case HiveMindType::galaga: {
+	case HiveMindType::boss: {
 		auto openSlot{ GetGalagaSlot() };
 		if ( openSlot == -1u )
 		{
@@ -194,12 +194,27 @@ uint64_t dae::HiveMind::GetGoeiSlot() const
 
 uint64_t dae::HiveMind::GetGalagaSlot() const
 {
-	uint32_t currentRow{ 0 };
-	for ( uint32_t idx{}; idx < m_FormationColumns; ++idx )
+	const uint32_t bossRow{ 0 };
+	int leftIdx{ m_FormationColumns / 2 };
+	uint32_t rightIdx{ m_FormationColumns / 2 };
+	while ( leftIdx > 0 || rightIdx < m_FormationColumns )
 	{
-		if ( !m_FormationFilled[currentRow].test( idx ) )
+		if ( !m_FormationFilled[bossRow].test( rightIdx ) )
 		{
-			return Combine( currentRow, idx );
+			return Combine( bossRow, rightIdx );
+		}
+		if ( !m_FormationFilled[bossRow].test( leftIdx ) )
+		{
+			return Combine( bossRow, leftIdx );
+		}
+
+		if ( leftIdx >= 0 )
+		{
+			--leftIdx;
+		}
+		if ( rightIdx < m_FormationColumns )
+		{
+			++rightIdx;
 		}
 	}
 

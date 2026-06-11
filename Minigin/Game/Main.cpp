@@ -1,8 +1,8 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
 #include "Game/Commands/MoveCommand.h"
-#include "Game/Classes/HiveMind.h"
 #include "Input/InputManager.h"
+#include "Random/Random.h"
 #if _DEBUG && __has_include( <vld.h>)
 #	include <vld.h>
 #endif
@@ -53,19 +53,26 @@ static void load()
 	//
 
 	// Enemies
-	constexpr int zakoCount{ 26 };
+	constexpr int zakoCount{ 18 };
 	for ( int idx{}; idx < zakoCount; ++idx )
 	{
 		auto zako{ dae::functions::enemy::MakeZako() };
-		zako->GetComponent<dae::TransformComponent>()->MoveTo( 288.f / 2.f, -64.f );
+		zako->GetComponent<dae::TransformComponent>()->MoveTo( dae::random::GetRand( 0.f, 288.f - 16.f ), -64.f );
 		gameScene.Add( std::move( zako ) );
 	}
-	constexpr int goeiCount{ 18 };
+	constexpr int goeiCount{ 14 };
 	for ( int idx{}; idx < goeiCount; ++idx )
 	{
 		auto goei{ dae::functions::enemy::MakeGoei() };
-		goei->GetComponent<dae::TransformComponent>()->MoveTo( 288.f / 2.f, -64.f );
+		goei->GetComponent<dae::TransformComponent>()->MoveTo( dae::random::GetRand( 0.f, 288.f - 16.f ), -64.f );
 		gameScene.Add( std::move( goei ) );
+	}
+	constexpr int bossCount{ 5 };
+	for ( int idx{}; idx < bossCount; ++idx )
+	{
+		auto boss{ dae::functions::enemy::MakeBoss() };
+		boss->GetComponent<dae::TransformComponent>()->MoveTo( dae::random::GetRand( 0.f, 288.f - 16.f ), -64.f );
+		gameScene.Add( std::move( boss ) );
 	}
 	//
 

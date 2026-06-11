@@ -124,6 +124,7 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
         Minigin/Game/Functions/UI.cpp
 
     # States
+        Minigin/Game/States/BossStates.cpp
         Minigin/Game/States/GoeiStates.cpp
         Minigin/Game/States/ZakoStates.cpp
 
