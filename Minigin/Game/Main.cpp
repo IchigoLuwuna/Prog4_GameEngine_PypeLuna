@@ -13,7 +13,6 @@
 
 #include "Components/PixelTextComponent.h"
 
-#include "Functions/Enemy.h"
 #include "Game/Functions/UI.h"
 
 #include "States/ZakoStates.h"

@@ -25,6 +25,7 @@ public:
 	bool ProcessInput();
 
 	bool PollKey( SDL_Scancode keyCode );
+	bool PollButton( Gamepad::Button button );
 
 	template <typename CommandType, typename... Args>
 		requires std::derived_from<CommandType, Command> && requires( Args... args ) { CommandType( args... ); }

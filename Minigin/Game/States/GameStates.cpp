@@ -81,12 +81,10 @@ void dae::GameEnterState::Enter()
 {
 	m_StateTime = 0.f;
 
-	auto l1{ static_cast<SDL_Scancode>( Gamepad::RemapButtonToKey( Gamepad::Button::l1 ) ) };
-	auto r1{ static_cast<SDL_Scancode>( Gamepad::RemapButtonToKey( Gamepad::Button::r1 ) ) };
 	bool activateEasterEgg{ ( dae::InputManager::GetInstance().PollKey( SDL_SCANCODE_T ) &&
 							  dae::InputManager::GetInstance().PollKey( SDL_SCANCODE_Y ) ) ||
-							( dae::InputManager::GetInstance().PollKey( l1 ) &&
-							  dae::InputManager::GetInstance().PollKey( r1 ) ) };
+							( dae::InputManager::GetInstance().PollButton( Gamepad::Button::l3 ) &&
+							  dae::InputManager::GetInstance().PollButton( Gamepad::Button::r3 ) ) };
 
 	// Play Enter Sound
 	ServiceLocator<SoundService>::GetInstance().GetService().Play( m_StartSoundFile.c_str(), 1.f );
