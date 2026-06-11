@@ -26,6 +26,7 @@ public:
 
 	bool PollKey( SDL_Scancode keyCode );
 	bool PollButton( Gamepad::Button button );
+	std::pair<int16_t, int16_t> PollAxis( Gamepad::Axis axis );
 
 	template <typename CommandType, typename... Args>
 		requires std::derived_from<CommandType, Command> && requires( Args... args ) { CommandType( args... ); }

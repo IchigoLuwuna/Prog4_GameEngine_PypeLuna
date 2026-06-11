@@ -1,5 +1,6 @@
 #ifndef GAMEPAD_H
 #define GAMEPAD_H
+#include <cstdint>
 #include <memory>
 #include <bitset>
 
@@ -28,6 +29,14 @@ public:
 		north, // (XBox Y; Nintendo X; PS Triangle)
 		count,
 	};
+
+	enum class Axis : int16_t
+	{
+		invalid = -1,
+		lStick,
+		rStick,
+		triggers,
+	};
 	// a bit easier to read & work with than constantly having to static cast
 	static constexpr int maskBits{ static_cast<int>( Gamepad::Button::count ) };
 
@@ -36,6 +45,8 @@ public:
 
 	void AddGamepad();
 	void RemoveGamepad();
+
+	std::pair<int16_t, int16_t> PollAxis( Axis axis );
 
 	void UpdateGamepad();
 	std::bitset<maskBits> GetMask();

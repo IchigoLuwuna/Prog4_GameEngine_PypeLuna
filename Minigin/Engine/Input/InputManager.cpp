@@ -45,6 +45,10 @@ bool dae::InputManager::PollButton( Gamepad::Button button )
 {
 	return ( m_Gamepad.GetMask() & Gamepad::GetMaskFromButtonID( button ) ).any();
 }
+std::pair<int16_t, int16_t> dae::InputManager::PollAxis( Gamepad::Axis axis )
+{
+	return m_Gamepad.PollAxis( axis );
+}
 
 void dae::InputManager::ClearBinding( int key, KeyState state )
 {

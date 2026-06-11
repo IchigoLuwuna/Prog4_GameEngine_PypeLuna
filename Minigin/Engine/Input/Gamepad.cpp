@@ -18,6 +18,9 @@ public:
 
 	void AddGamepad();
 	void RemoveGamepad();
+
+	std::pair<int16_t, int16_t> PollAxis( Gamepad::Axis axis );
+
 	void UpdateGamepad();
 	std::bitset<maskBits> GetMask();
 	std::bitset<maskBits> GetPreviousMask();
@@ -25,10 +28,10 @@ public:
 private:
 	SDL_Gamepad* m_pGamepad{};
 
-	dae::Gamepad::Button RemapButtonFromSDL( SDL_GamepadButton in );
-
 	std::bitset<maskBits> m_ButtonMask{};
 	std::bitset<maskBits> m_PreviousMask{};
+
+	dae::Gamepad::Button RemapButtonFromSDL( SDL_GamepadButton in );
 };
 
 dae::Gamepad::Gamepad()
@@ -122,6 +125,42 @@ void dae::Gamepad::GamepadImpl::RemoveGamepad()
 #endif
 	SDL_CloseGamepad( m_pGamepad );
 	m_pGamepad = nullptr;
+}
+
+std::pair<int16_t, int16_t> dae::Gamepad::PollAxis( Axis axis )
+{
+	return m_pImpl->PollAxis( axis );
+}
+std::pair<int16_t, int16_t> dae::Gamepad::GamepadImpl::PollAxis( Gamepad::Axis axis )
+{
+	SDL_GamepadAxis axisX{};
+	SDL_GamepadAxis axisY{};
+
+	switch ( axis )
+	{
+	case Axis::lStick: {
+		axisX = SDL_GAMEPAD_AXIS_LEFTX;
+		axisY = SDL_GAMEPAD_AXIS_LEFTY;
+		break;
+	}
+	case Axis::rStick: {
+		axisX = SDL_GAMEPAD_AXIS_RIGHTX;
+		axisY = SDL_GAMEPAD_AXIS_RIGHTY;
+		break;
+	}
+	case Axis::triggers: {
+		axisX = SDL_GAMEPAD_AXIS_LEFT_TRIGGER;
+		axisY = SDL_GAMEPAD_AXIS_RIGHT_TRIGGER;
+		break;
+	}
+	default: {
+		return {};
+	}
+	}
+
+	int16_t x{ SDL_GetGamepadAxis( m_pGamepad, axisX ) };
+	int16_t y{ SDL_GetGamepadAxis( m_pGamepad, axisY ) };
+	return { x, y };
 }
 
 void dae::Gamepad::UpdateGamepad()
