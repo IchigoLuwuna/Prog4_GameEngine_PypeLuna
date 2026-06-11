@@ -1,4 +1,6 @@
 #include "Player.h"
+#include <Core.h>
+#include "Game/Components/LivesComponent.h"
 #include "Game/Components/RespawnComponent.h"
 #include "Game/Context.h"
 
@@ -29,6 +31,8 @@ std::unique_ptr<dae::GameObject> dae::functions::player::MakePlayer()
 
 	ship->AddComponent<dae::HealthComponent>( 1 );
 	auto shipHealthRef{ ship->GetComponent<dae::HealthComponent>() };
+	ship->AddComponent<dae::LivesComponent>( 3 );
+	auto shipLivesRef{ ship->GetComponent<dae::LivesComponent>() };
 
 	std::vector<std::pair<size_t, uint32_t>> shipScoreGainOnEvent{ { "e_InsectDied"_hash, 100 } };
 	ship->AddComponent<dae::ScoreComponent>( std::move( shipScoreGainOnEvent ) );
@@ -45,7 +49,7 @@ std::unique_ptr<dae::GameObject> dae::functions::player::MakePlayer()
 	auto shipPosRef{ ship->GetComponent<dae::TransformComponent>() };
 	auto scoreRef{ ship->GetComponent<dae::ScoreComponent>() };
 	ship->AddComponent<dae::ObserverComponent>().AddCallback( "e_EntityDied"_hash, [=]( void* ) mutable {
-		if ( !shipPosRef.Validate() || !scoreRef.Validate() )
+		if ( !shipPosRef.Validate() || !shipLivesRef.Validate() || !scoreRef.Validate() )
 		{
 			assert( false && "Failed to validate ship" );
 			return;
@@ -63,11 +67,22 @@ std::unique_ptr<dae::GameObject> dae::functions::player::MakePlayer()
 		dae::SceneManager::GetInstance().GetScene( gameIdx ).Add( std::move( explosion ) );
 		//
 
+		if ( shipLivesRef->GetLives() == 0 )
+		{
+			dae::Minigin::eventManager.SendEvent( { "e_ShipRanOutOfLives"_hash } );
+			auto scoreTransferObject{ std::make_unique<GameObject>( "scoreTransferObject"_hash ) };
+			scoreTransferObject->AddComponent<ScoreComponent>( std::vector<std::pair<size_t, uint32_t>>{},
+															   scoreRef->GetScore() );
+			return;
+		}
+
 		// Set Respawner
 		auto transferredScore{ scoreRef->GetScore() };
+		auto transferredLives{ shipLivesRef->GetLives() - 1 };
 		auto respawn{ [=]() {
 			auto object{ MakePlayer() };
 			object->GetComponent<ScoreComponent>()->Accumulate( transferredScore );
+			object->GetComponent<LivesComponent>()->SetLives( transferredLives );
 			return object;
 		} };
 		auto respawner{ std::make_unique<dae::GameObject>( "respawner"_hash ) };
