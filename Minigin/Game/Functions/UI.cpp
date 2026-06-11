@@ -12,7 +12,7 @@
 
 std::unique_ptr<dae::GameObject> dae::functions::ui::MakeBackground()
 {
-	auto background{ std::make_unique<dae::GameObject>() };
+	auto background{ std::make_unique<dae::GameObject>( "bg"_hash ) };
 
 	background->AddComponent<dae::ScrollingBGComponent>(
 		"BG.png", 64.f, dae::ScrollingBGComponent::ScrollingDir::down );
@@ -26,7 +26,7 @@ std::unique_ptr<dae::GameObject> dae::functions::ui::MakeBackground()
 
 std::unique_ptr<dae::GameObject> dae::functions::ui::MakeFpsCounter()
 {
-	auto fps{ std::make_unique<dae::GameObject>() };
+	auto fps{ std::make_unique<dae::GameObject>( "fps"_hash ) };
 
 	const std::string typefacePath{ "Typeface.png" };
 	const std::string typefaceMapping{ "0123456789abcdefghijklmnopqrstuvwxyz-%.!" };

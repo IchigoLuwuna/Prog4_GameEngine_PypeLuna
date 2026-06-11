@@ -116,6 +116,17 @@ void dae::HiveMind::ClearFormationSlot( uint64_t slot )
 	m_FormationFilled[split.first].set( split.second, false );
 }
 
+bool dae::HiveMind::IsFormationClear()
+{
+	bool any{};
+	for ( auto& row : m_FormationFilled )
+	{
+		any |= row.any();
+	}
+
+	return !any;
+}
+
 uint64_t dae::HiveMind::GetZakoSlot() const
 {
 	const uint32_t topRow{ 3 };

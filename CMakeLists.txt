@@ -93,6 +93,7 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
         Minigin/Game/Components/AnimationComponent.cpp
         Minigin/Game/Components/BrainComponent.cpp
         Minigin/Game/Components/FpsComponent.cpp
+        Minigin/Game/Components/GameStateHandlerComponent.cpp
         Minigin/Game/Components/HealthComponent.cpp
         Minigin/Game/Components/HealthDisplayComponent.cpp
         Minigin/Game/Components/ImGuiComponents.cpp
@@ -105,6 +106,7 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
         Minigin/Game/Components/ScoreComponent.cpp
         Minigin/Game/Components/ScoreDisplayComponent.cpp
         Minigin/Game/Components/ScrollingBGComponent.cpp
+        Minigin/Game/Components/SpriteAllignmentComponent.cpp
         Minigin/Game/Components/SpriteSheetComponent.cpp
         Minigin/Game/Components/StateComponent.cpp
         Minigin/Game/Components/TTFTextComponent.cpp
@@ -125,6 +127,7 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
 
     # States
         Minigin/Game/States/BossStates.cpp
+        Minigin/Game/States/GameStates.cpp
         Minigin/Game/States/GoeiStates.cpp
         Minigin/Game/States/ZakoStates.cpp
 

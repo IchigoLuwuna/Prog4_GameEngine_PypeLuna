@@ -16,6 +16,9 @@ public:
 	void SetIndex( uint32_t index );
 	void SetIndex( uint32_t column, uint32_t row );
 
+	glm::vec2 GetSpriteSize() const;
+	glm::vec2 GetSheetSize() const;
+
 private:
 	SpriteSheet m_Sheet;
 };

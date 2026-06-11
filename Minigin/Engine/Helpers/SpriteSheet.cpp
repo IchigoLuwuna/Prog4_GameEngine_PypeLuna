@@ -42,3 +42,15 @@ void dae::SpriteSheet::SetIndex( uint32_t column, uint32_t row )
 	assert( newIdx < m_Info.columns * m_Info.rows && "Index is larger than sheet dimensions" );
 	m_Index = newIdx;
 }
+
+glm::vec2 dae::SpriteSheet::GetSpriteSize() const
+{
+	glm::vec2 size{ m_Sheet->GetSize() };
+	size.x /= m_Info.columns;
+	size.y /= m_Info.rows;
+	return size;
+}
+glm::vec2 dae::SpriteSheet::GetSheetSize() const
+{
+	return m_Sheet->GetSize();
+}

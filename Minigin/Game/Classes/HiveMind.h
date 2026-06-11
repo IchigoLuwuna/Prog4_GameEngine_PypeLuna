@@ -29,6 +29,8 @@ public:
 
 	void ClearFormationSlot( uint64_t slot );
 
+	bool IsFormationClear();
+
 private:
 	static constexpr glm::vec2 m_FormationStartPos{ 40.f, 16.f };
 	static constexpr glm::vec2 m_FormationSlotSize{ 16.f, 16.f };

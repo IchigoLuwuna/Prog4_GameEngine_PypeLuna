@@ -19,6 +19,13 @@ void dae::TextAllignmentComponent::Update()
 
 	switch ( m_Allignment )
 	{
+	case Allignment::center: {
+		const glm::vec2 textSize{ m_TextRef->GetSize() };
+		const glm::vec2 offset{ -textSize / 2.f };
+		const glm::vec2 moveToPos{ m_Origin + offset };
+		GetParent()->GetComponent<dae::TransformComponent>()->MoveTo( moveToPos );
+		break;
+	}
 	case Allignment::topLeft: {
 		// Dummy, no allignment needed
 		break;

@@ -71,6 +71,7 @@ dae::GameObject* dae::Scene::GetByTag( size_t tag ) const
 std::vector<dae::GameObject*> dae::Scene::GetAllByTag( size_t tag ) const
 {
 	std::vector<GameObject*> objects( m_Objects.size() );
+	objects.clear();
 
 	for ( auto& object : m_RequestedObjects )
 	{
