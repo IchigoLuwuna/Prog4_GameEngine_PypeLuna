@@ -2,8 +2,8 @@
 
 ## Quick Links
 
-[![View this repository on Github](https://github.com/IchigoLuwuna/Prog4_GameEngine_PypeLuna)]
-[![About Galaga (Wikipedia)](https://en.wikipedia.org/wiki/Galaga)]
+[View this repository on GitHub](https://github.com/IchigoLuwuna/Prog4_GameEngine_PypeLuna)
+[About Galaga (Wikipedia)](https://en.wikipedia.org/wiki/Galaga)
 
 ## Controls
 
