@@ -56,6 +56,20 @@ static void load()
 	uiScene.AddRequested();
 	//
 
+	dae::InputManager::GetInstance().BindCommand<dae::FunctionCommand>(
+		SDL_SCANCODE_F2, dae::InputManager::KeyState::down, []() {
+			static bool mute{};
+			mute = !mute;
+			if ( mute )
+			{
+				dae::ServiceLocator<dae::SoundService>::GetInstance().GetService().Mute();
+			}
+			else
+			{
+				dae::ServiceLocator<dae::SoundService>::GetInstance().GetService().UnMute();
+			}
+		} );
+
 #ifndef NDEBUG
 	const std::string typefacePath{ "Typeface.png" };
 	const std::string typefaceMapping{ "0123456789abcdefghijklmnopqrstuvwxyz-%.!" };

@@ -17,3 +17,14 @@ void dae::DebugSoundService::StopAll()
 	std::cout << "Stopping all sounds\n";
 	m_pUnderlyingService->StopAll();
 }
+
+void dae::DebugSoundService::Mute()
+{
+	std::cout << "Muted audio\n";
+	m_pUnderlyingService->Mute();
+}
+void dae::DebugSoundService::UnMute()
+{
+	std::cout << "Unmuted audio\n";
+	m_pUnderlyingService->UnMute();
+}

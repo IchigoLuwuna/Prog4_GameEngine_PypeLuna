@@ -197,14 +197,14 @@ dae::State* dae::GameStageState::Update()
 		return nullptr;
 	}
 
-	if ( m_TimeSinceLastCheck < checkInterval )
+	if ( m_TimeSinceLastCheck < checkInterval && !m_F1Pressed )
 	{
 		return nullptr;
 	}
 
 	m_TimeSinceLastCheck = 0.f;
 
-	if ( !m_HiveMind.IsFormationClear() )
+	if ( !m_HiveMind.IsFormationClear() && !m_F1Pressed )
 	{
 		return nullptr;
 	}
@@ -223,6 +223,7 @@ void dae::GameStageState::Enter()
 	m_TimeSinceLastCheck = 0.f;
 	m_GameOverTime = 3.f;
 	m_PlayerRanOutOfLives = false;
+	m_F1Pressed = false;
 
 	if ( m_StageNr == -1u || m_StageNr > m_StageCount )
 	{
@@ -257,9 +258,32 @@ void dae::GameStageState::Enter()
 		gameScene.Add( std::move( boss ) );
 	}
 	//
+
+	InputManager::GetInstance().BindCommand<FunctionCommand>(
+		SDL_SCANCODE_F1, InputManager::KeyState::down, [&]() { m_F1Pressed = true; } );
 }
 void dae::GameStageState::Exit()
 {
+	auto& gameScene{ SceneManager::GetInstance().GetScene( gameIdx ) };
+
+	// Remove any leftovers
+	auto zakos{ gameScene.GetAllByTag( "zako"_hash ) };
+	auto goeis{ gameScene.GetAllByTag( "goei"_hash ) };
+	auto bosses{ gameScene.GetAllByTag( "boss"_hash ) };
+	for ( auto& zako : zakos )
+	{
+		zako->MarkForRemoval();
+	}
+	for ( auto& goei : goeis )
+	{
+		goei->MarkForRemoval();
+	}
+	for ( auto& boss : bosses )
+	{
+		boss->MarkForRemoval();
+	}
+
+	InputManager::GetInstance().ClearBinding( SDL_SCANCODE_F1, InputManager::KeyState::down );
 }
 void dae::GameStageState::SetStageNr( size_t nr )
 {

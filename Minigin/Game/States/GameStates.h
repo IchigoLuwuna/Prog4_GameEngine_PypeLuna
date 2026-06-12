@@ -81,6 +81,7 @@ private:
 	float m_GameOverTime{};
 	size_t m_StageNr{};
 	bool m_PlayerRanOutOfLives{};
+	bool m_F1Pressed{};
 
 	void HandleEvent( Event& event );
 };

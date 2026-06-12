@@ -22,10 +22,14 @@ public:
 	void Play( const char* path, float volume );
 	void StopAll();
 
+	void Mute();
+	void UnMute();
+
 private:
 	MIX_Mixer* m_pMixer{};
 	std::queue<std::pair<const char*, float>> m_RequestQueue{};
 	std::unordered_map<size_t, MIX_Audio*> m_AudioSamples{};
+	bool m_Muted{};
 
 	// Threading
 	std::jthread m_EventHandlerThread{};
@@ -77,6 +81,11 @@ void dae::SDLSoundService::Play( const char* path, const float volume )
 }
 void dae::SDLSoundService::Impl::Play( const char* path, const float volume )
 {
+	if ( m_Muted )
+	{
+		return;
+	}
+
 	std::unique_lock lock{ m_EventQueueMutex };
 	m_RequestQueue.push( { path, volume } );
 	m_CV.notify_all();
@@ -89,6 +98,25 @@ void dae::SDLSoundService::StopAll()
 void dae::SDLSoundService::Impl::StopAll()
 {
 	MIX_StopAllTracks( m_pMixer, 50 );
+}
+
+void dae::SDLSoundService::Mute()
+{
+	m_pImpl->Mute();
+}
+void dae::SDLSoundService::Impl::Mute()
+{
+	StopAll();
+	m_Muted = true;
+}
+
+void dae::SDLSoundService::UnMute()
+{
+	m_pImpl->UnMute();
+}
+void dae::SDLSoundService::Impl::UnMute()
+{
+	m_Muted = false;
 }
 
 void dae::SDLSoundService::Impl::HandleRequests( std::stop_token stopToken )

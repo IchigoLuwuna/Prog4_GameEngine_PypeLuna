@@ -13,6 +13,9 @@ public:
 	virtual void Play( const char* path, float volume ) override;
 	virtual void StopAll() override;
 
+	virtual void Mute() override;
+	virtual void UnMute() override;
+
 private:
 	std::unique_ptr<SoundService> m_pUnderlyingService{};
 };
