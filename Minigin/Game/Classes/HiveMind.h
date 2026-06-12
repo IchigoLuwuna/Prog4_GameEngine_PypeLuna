@@ -1,6 +1,7 @@
 #ifndef HIVEMIND_H
 #define HIVEMIND_H
 #include <bitset>
+#include <array>
 #include <Patterns.h>
 #include <glm/glm.hpp>
 

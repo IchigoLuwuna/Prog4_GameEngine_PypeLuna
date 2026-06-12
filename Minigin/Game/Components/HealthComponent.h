@@ -17,7 +17,7 @@ public:
 	void Damage( uint32_t damage );
 	void IncreaseMax( uint32_t increase );
 	void DecreaseMax( uint32_t decrease );
-	void SetInvincibleTime( uint32_t newInvincibleTime );
+	void SetInvincibleTime( float newInvincibleTime );
 
 	uint32_t GetHealth() const;
 	uint32_t GetMaxHealth() const;

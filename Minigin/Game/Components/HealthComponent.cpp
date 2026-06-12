@@ -70,7 +70,7 @@ void dae::HealthComponent::DecreaseMax( uint32_t decrease )
 
 	m_Messenger.NotifyObservers( "e_HealthChanged"_hash );
 }
-void dae::HealthComponent::SetInvincibleTime( uint32_t newInvincibleTime )
+void dae::HealthComponent::SetInvincibleTime( float newInvincibleTime )
 {
 	m_InvincibleTime = newInvincibleTime;
 }

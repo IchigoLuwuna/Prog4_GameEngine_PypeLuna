@@ -53,7 +53,7 @@ uint64_t dae::HiveMind::GetFormationSlot( HiveMindType type )
 	{
 	case HiveMindType::zako: {
 		auto openSlot{ GetZakoSlot() };
-		if ( openSlot == -1u )
+		if ( openSlot == std::numeric_limits<uint32_t>::max() )
 		{
 			return openSlot;
 		}
@@ -64,7 +64,7 @@ uint64_t dae::HiveMind::GetFormationSlot( HiveMindType type )
 	}
 	case HiveMindType::goei: {
 		auto openSlot{ GetGoeiSlot() };
-		if ( openSlot == -1u )
+		if ( openSlot == std::numeric_limits<uint32_t>::max() )
 		{
 			return openSlot;
 		}
@@ -75,7 +75,7 @@ uint64_t dae::HiveMind::GetFormationSlot( HiveMindType type )
 	}
 	case HiveMindType::boss: {
 		auto openSlot{ GetGalagaSlot() };
-		if ( openSlot == -1u )
+		if ( openSlot == std::numeric_limits<uint32_t>::max() )
 		{
 			return openSlot;
 		}
@@ -89,7 +89,7 @@ uint64_t dae::HiveMind::GetFormationSlot( HiveMindType type )
 	}
 	}
 
-	return -1u;
+	return std::numeric_limits<uint32_t>::max();
 }
 
 glm::vec2 dae::HiveMind::GetFormationPosition( uint64_t slot ) const
@@ -108,7 +108,7 @@ glm::vec2 dae::HiveMind::GetFormationPosition( uint64_t slot ) const
 
 void dae::HiveMind::ClearFormationSlot( uint64_t slot )
 {
-	if ( slot == -1u )
+	if ( slot == std::numeric_limits<uint32_t>::max() )
 	{
 		return;
 	}
@@ -176,7 +176,7 @@ uint64_t dae::HiveMind::GetZakoSlot() const
 		}
 	}
 
-	return -1u;
+	return std::numeric_limits<uint32_t>::max();
 }
 
 uint64_t dae::HiveMind::GetGoeiSlot() const
@@ -214,7 +214,7 @@ uint64_t dae::HiveMind::GetGoeiSlot() const
 		}
 	}
 
-	return -1u;
+	return std::numeric_limits<uint32_t>::max();
 }
 
 uint64_t dae::HiveMind::GetGalagaSlot() const
@@ -243,7 +243,7 @@ uint64_t dae::HiveMind::GetGalagaSlot() const
 		}
 	}
 
-	return -1u;
+	return std::numeric_limits<uint32_t>::max();
 }
 
 constexpr uint64_t dae::HiveMind::Combine( uint32_t first, uint32_t second ) const

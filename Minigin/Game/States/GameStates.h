@@ -32,7 +32,7 @@ public:
 	virtual void Exit() override;
 
 private:
-	static constexpr std::string m_StartSoundFile{ "start.wav" };
+	const std::string m_StartSoundFile{ "start.wav" };
 	static constexpr float m_StartSoundLength{ 6.361f };
 
 	float m_StateTime{};

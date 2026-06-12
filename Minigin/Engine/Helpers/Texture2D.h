@@ -20,13 +20,13 @@ public:
 	glm::vec2 GetSize() const;
 
 	Texture2D( const Texture2D& ) = delete;
-	Texture2D( Texture2D&& other )
+	Texture2D( Texture2D&& other ) noexcept
 	{
 		m_Texture = other.m_Texture;
 		other.m_Texture = nullptr;
 	}
 	Texture2D& operator=( const Texture2D& ) = delete;
-	Texture2D& operator=( Texture2D&& other )
+	Texture2D& operator=( Texture2D&& other ) noexcept
 	{
 		if ( &other == this )
 		{

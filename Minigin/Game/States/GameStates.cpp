@@ -225,9 +225,9 @@ void dae::GameStageState::Enter()
 	m_PlayerRanOutOfLives = false;
 	m_F1Pressed = false;
 
-	if ( m_StageNr == -1u || m_StageNr > m_StageCount )
+	if ( m_StageNr == std::numeric_limits<uint32_t>::max() || m_StageNr > m_StageCount )
 	{
-		m_StageNr = -1u;
+		m_StageNr = std::numeric_limits<uint32_t>::max();
 		return;
 	}
 
@@ -295,6 +295,7 @@ void dae::GameStageState::HandleEvent( Event& event )
 	{
 	case "e_ShipRanOutOfLives"_hash: {
 		m_PlayerRanOutOfLives = true;
+		break;
 	}
 	default: {
 		break;
@@ -633,8 +634,8 @@ void dae::GameNameEntryState::Enter()
 			return;
 		}
 
-		auto currentChar{ m_Name[m_CurrentChar] };
-		auto newChar{ currentChar + 1 };
+		char currentChar{ m_Name[m_CurrentChar] };
+		char newChar{ static_cast<char>( currentChar + 1 ) };
 		if ( currentChar == ' ' )
 		{
 			newChar = 'a';
@@ -651,8 +652,8 @@ void dae::GameNameEntryState::Enter()
 			return;
 		}
 
-		auto currentChar{ m_Name[m_CurrentChar] };
-		auto newChar{ currentChar - 1 };
+		char currentChar{ m_Name[m_CurrentChar] };
+		char newChar{ static_cast<char>( currentChar - 1 ) };
 		if ( currentChar == 'a' )
 		{
 			newChar = ' ';

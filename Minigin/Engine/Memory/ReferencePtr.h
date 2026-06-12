@@ -68,7 +68,7 @@ public:
 		m_pControlBlock = other.m_pControlBlock;
 		other.m_pControlBlock = nullptr;
 	}
-	ReferencePtr& operator=( ReferencePtr&& other )
+	ReferencePtr& operator=( ReferencePtr&& other ) noexcept
 	{
 		if ( &other == this )
 		{

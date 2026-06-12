@@ -32,7 +32,7 @@ std::unique_ptr<dae::GameObject> dae::functions::player::MakePlayer()
 
 	ship->AddComponent<dae::HealthComponent>( 1, 1, 3.f );
 	auto shipHealthRef{ ship->GetComponent<dae::HealthComponent>() };
-	ship->AddComponent<dae::LivesComponent>( 1 );
+	ship->AddComponent<dae::LivesComponent>( 3 );
 	auto shipLivesRef{ ship->GetComponent<dae::LivesComponent>() };
 
 	std::vector<std::pair<size_t, uint32_t>> shipScoreGainOnEvent{ { "e_InsectDied"_hash, 100 } };

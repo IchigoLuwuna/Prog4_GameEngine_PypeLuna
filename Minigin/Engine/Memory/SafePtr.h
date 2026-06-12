@@ -35,7 +35,7 @@ public:
 		pOtherAsBase->m_pControlBlock = nullptr;
 	}
 
-	SafePtr( SafePtr&& other )
+	SafePtr( SafePtr&& other ) noexcept
 	{
 		m_pControlBlock = other.m_pControlBlock;
 		other.m_pControlBlock = nullptr;
