@@ -12,6 +12,7 @@ public:
 	enum class Allignment
 	{
 		center,
+		centerTop,
 		topLeft,
 		topRight,
 		bottomLeft,

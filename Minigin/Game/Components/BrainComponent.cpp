@@ -20,3 +20,16 @@ dae::GameObject* dae::BrainComponent::GetPlayer()
 {
 	return m_HiveMind.GetPlayer();
 }
+
+void dae::BrainComponent::SetTractoring()
+{
+	m_HiveMind.SetTractoring();
+}
+void dae::BrainComponent::ClearTractoring()
+{
+	m_HiveMind.ClearTractoring();
+}
+bool dae::BrainComponent::IsTractoring()
+{
+	return m_HiveMind.IsTractoring();
+}

@@ -11,3 +11,9 @@ void dae::DebugSoundService::Play( const char* path, float volume )
 	std::cout << "Playing sound " << path << " at " << volume << "x volume\n";
 	m_pUnderlyingService->Play( path, volume );
 }
+
+void dae::DebugSoundService::StopAll()
+{
+	std::cout << "Stopping all sounds\n";
+	m_pUnderlyingService->StopAll();
+}

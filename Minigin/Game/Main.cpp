@@ -2,6 +2,7 @@
 #include <SDL3/SDL_main.h>
 #include "Game/Commands/MoveCommand.h"
 #include "Game/Components/GameStateHandlerComponent.h"
+#include "Game/Components/TextAllignmentComponent.h"
 #include "Game/States/GameStates.h"
 #include <Input.h>
 #include <Random.h>
@@ -64,7 +65,8 @@ static void load()
 		.SetIgnore( true )
 		.SetText( "A and D for movement\nJ or K for shooting\nBACK to hide this message" );
 
-	controlHints->GetComponent<dae::TransformComponent>()->MoveTo( glm::vec2{ 0.f, 8.f } );
+	controlHints->AddComponent<dae::TextAllignmentComponent>( glm::vec2{ 288.f / 2.f, 224.f / 2.f + 64.f },
+															  dae::TextAllignmentComponent::Allignment::center );
 	controlHints->AddComponent<dae::DebugComponent>( "controlHints" );
 
 	dae::Validator controlHintsValidator{ controlHints->GetComponent<dae::TransformComponent>().GetControlBlock() };

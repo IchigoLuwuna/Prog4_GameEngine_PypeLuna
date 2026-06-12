@@ -12,6 +12,7 @@ public:
 	~SDLSoundService();
 
 	virtual void Play( const char* path, float volume ) override;
+	virtual void StopAll() override;
 
 private:
 	class Impl;

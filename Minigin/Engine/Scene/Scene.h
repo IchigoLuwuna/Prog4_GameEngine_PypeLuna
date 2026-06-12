@@ -22,6 +22,7 @@ public:
 	std::vector<GameObject*> GetAllByTag( size_t tag ) const;
 	GameObject* GetByTags( size_t* begin, size_t* end );
 
+	void MarkAllAsRemovable();
 	void CleanUpRemovableObjects();
 
 	Scene( const Scene& other ) = delete;

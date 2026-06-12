@@ -73,7 +73,6 @@ public:
 private:
 	ReferencePtr<BrainComponent> m_BrainRef{};
 
-	math::Bezier4 m_BezierPath{};
 	float m_ReturningTime{};
 };
 } // namespace dae

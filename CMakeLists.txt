@@ -115,6 +115,7 @@ add_executable(${TARGET_NAME} ${TARGET_PARAM}
         Minigin/Game/Components/TTFTextComponent.cpp
         Minigin/Game/Components/TextAllignmentComponent.cpp
         Minigin/Game/Components/TextureComponent.cpp
+        Minigin/Game/Components/TractorComponent.cpp
 
     # Classes
         Minigin/Game/Classes/HiveMind.cpp

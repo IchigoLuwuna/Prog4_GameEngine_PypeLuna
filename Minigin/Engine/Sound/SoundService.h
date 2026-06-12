@@ -13,6 +13,10 @@ public:
 	{
 		assert( false && "Attempted to play sound on null service" );
 	};
+	virtual void StopAll()
+	{
+		assert( false && "Attempted to stop all on null service" );
+	}
 };
 } // namespace dae
 #endif

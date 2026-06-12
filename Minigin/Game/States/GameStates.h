@@ -77,10 +77,26 @@ private:
 	HiveMind m_HiveMind{};
 	Subscription m_Subscription;
 	float m_TimeSinceLastCheck{};
+	float m_GameOverTime{};
 	size_t m_StageNr{};
 	bool m_PlayerRanOutOfLives{};
 
 	void HandleEvent( Event& event );
+};
+
+class GameGameOverState : public State
+{
+public:
+	GameGameOverState( StateMachine* pParent );
+
+	virtual State* Update() override;
+	virtual void Enter() override;
+	virtual void Exit() override;
+
+private:
+	static constexpr float m_TransitionLength{ 4.5f };
+	float m_StateTime{};
+	bool m_SoundPlayed{};
 };
 
 class GameAllStagesClearState : public State
@@ -93,7 +109,7 @@ public:
 	virtual void Exit() override;
 
 private:
-	static constexpr float m_TransitionLength{ 3.f };
+	static constexpr float m_TransitionLength{ 6.5f };
 	float m_StateTime{};
 };
 

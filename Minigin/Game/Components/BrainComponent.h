@@ -16,6 +16,10 @@ public:
 	glm::vec2 GetFormationPosition() const;
 	GameObject* GetPlayer();
 
+	void SetTractoring();
+	void ClearTractoring();
+	bool IsTractoring();
+
 private:
 	HiveMind m_HiveMind{};
 	uint64_t m_FormationSlot{};

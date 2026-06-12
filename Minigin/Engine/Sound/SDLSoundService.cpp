@@ -20,6 +20,7 @@ public:
 	~Impl();
 
 	void Play( const char* path, float volume );
+	void StopAll();
 
 private:
 	MIX_Mixer* m_pMixer{};
@@ -79,6 +80,15 @@ void dae::SDLSoundService::Impl::Play( const char* path, const float volume )
 	std::unique_lock lock{ m_EventQueueMutex };
 	m_RequestQueue.push( { path, volume } );
 	m_CV.notify_all();
+}
+
+void dae::SDLSoundService::StopAll()
+{
+	m_pImpl->StopAll();
+}
+void dae::SDLSoundService::Impl::StopAll()
+{
+	MIX_StopAllTracks( m_pMixer, 50 );
 }
 
 void dae::SDLSoundService::Impl::HandleRequests( std::stop_token stopToken )

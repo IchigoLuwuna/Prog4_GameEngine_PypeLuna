@@ -10,6 +10,10 @@ class StateMachine
 {
 public:
 	StateMachine( GameObject* pParent );
+	~StateMachine()
+	{
+		m_CurrentState->Exit();
+	}
 
 	template <typename SearchedStateType>
 		requires std::derived_from<SearchedStateType, State>

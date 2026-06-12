@@ -28,6 +28,14 @@ void dae::SpriteAllignmentComponent::Update()
 		GetParent()->GetComponent<dae::TransformComponent>()->MoveTo( moveToPos );
 		break;
 	}
+	case Allignment::centerTop: {
+		const glm::vec2 size{ m_SpritesheetRef->GetSpriteSize() };
+		const glm::vec2 offset{ -size.x / 2.f, size.y };
+		const glm::vec2 moveToPos{ m_Origin + offset };
+		GetParent()->GetComponent<dae::TransformComponent>()->MoveTo( moveToPos );
+		break;
+		break;
+	}
 	case Allignment::topLeft: {
 		// No allignment needed
 		GetParent()->GetComponent<dae::TransformComponent>()->MoveTo( m_Origin );

@@ -15,6 +15,8 @@ public:
 
 	virtual void Update() override;
 
+	void SetHitbox( const glm::vec4& newBox );
+
 private:
 	Hitbox m_Hitbox{};
 	glm::vec4 m_BaseRect{};

@@ -31,6 +31,10 @@ public:
 
 	bool IsFormationClear();
 
+	void SetTractoring();
+	void ClearTractoring();
+	bool IsTractoring();
+
 private:
 	static constexpr glm::vec2 m_FormationStartPos{ 40.f, 16.f };
 	static constexpr glm::vec2 m_FormationSlotSize{ 16.f, 16.f };
@@ -38,6 +42,8 @@ private:
 	static std::array<std::bitset<m_FormationColumns>, m_FormationRows> m_FormationFilled;
 	static glm::vec2 m_FormationOffset;
 	static GameObject* m_pPlayer;
+
+	static bool m_IsTractoring;
 
 	uint64_t GetZakoSlot() const;
 	uint64_t GetGoeiSlot() const;

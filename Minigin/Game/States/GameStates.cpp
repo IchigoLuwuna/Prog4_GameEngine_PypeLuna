@@ -188,7 +188,12 @@ dae::State* dae::GameStageState::Update()
 
 	if ( m_PlayerRanOutOfLives )
 	{
-		return GetParent()->FindOrCreateState<GameScoreboardState>();
+		if ( m_GameOverTime <= 0.f )
+		{
+			return GetParent()->FindOrCreateState<GameGameOverState>();
+		}
+		m_GameOverTime -= Timer::GetInstance().GetElapsed();
+		return nullptr;
 	}
 
 	if ( m_TimeSinceLastCheck < checkInterval )
@@ -215,6 +220,7 @@ dae::State* dae::GameStageState::Update()
 void dae::GameStageState::Enter()
 {
 	m_TimeSinceLastCheck = 0.f;
+	m_GameOverTime = 3.f;
 	m_PlayerRanOutOfLives = false;
 
 	if ( m_StageNr == -1u || m_StageNr > m_StageCount )
@@ -271,6 +277,59 @@ void dae::GameStageState::HandleEvent( Event& event )
 	}
 }
 
+dae::GameGameOverState::GameGameOverState( StateMachine* pParent )
+	: State( pParent )
+{
+}
+dae::GameGameOverState::State* dae::GameGameOverState::Update()
+{
+	m_StateTime += Timer::GetInstance().GetElapsed();
+
+	if ( m_StateTime > m_TransitionLength )
+	{
+		return GetParent()->FindOrCreateState<GameScoreboardState>();
+	}
+
+	constexpr float fadeoutTime{ 0.05f };
+	if ( !m_SoundPlayed && m_StateTime > fadeoutTime )
+	{
+		ServiceLocator<SoundService>::GetInstance().GetService().Play( "fighter_captured.wav", 1.f );
+		m_SoundPlayed = true;
+	}
+
+	return nullptr;
+}
+void dae::GameGameOverState::Enter()
+{
+	m_StateTime = 0.f;
+	m_SoundPlayed = false;
+
+	// Flush game
+	auto& gameScene{ dae::SceneManager::GetInstance().GetScene( gameIdx ) };
+	gameScene.MarkAllAsRemovable();
+
+	ServiceLocator<SoundService>::GetInstance().GetService().StopAll();
+
+	auto& uiScene{ dae::SceneManager::GetInstance().GetScene( uiIdx ) };
+
+	const std::string typefacePath{ "Typeface.png" };
+	const std::string typefaceMapping{ "0123456789abcdefghijklmnopqrstuvwxyz-%.!" };
+
+	auto enterText{ std::make_unique<GameObject>( "gameOverText"_hash ) };
+	enterText->AddComponent<dae::PixelTextComponent>( typefacePath, typefaceMapping, glm::vec2{ 8.f, 8.f } )
+		.SetIgnore( true )
+		.SetText( "Game Over" );
+	enterText->AddComponent<TextAllignmentComponent>( glm::vec2{ 288.f / 2.f, 224.f / 2.f },
+													  TextAllignmentComponent::Allignment::center );
+	uiScene.Add( std::move( enterText ) );
+}
+void dae::GameGameOverState::Exit()
+{
+	auto& uiScene{ dae::SceneManager::GetInstance().GetScene( uiIdx ) };
+
+	uiScene.GetByTag( "gameOverText"_hash )->MarkForRemoval();
+}
+
 dae::GameAllStagesClearState::GameAllStagesClearState( StateMachine* pParent )
 	: State( pParent )
 {
@@ -289,6 +348,8 @@ dae::State* dae::GameAllStagesClearState::Update()
 void dae::GameAllStagesClearState::Enter()
 {
 	m_StateTime = 0.f;
+
+	ServiceLocator<SoundService>::GetInstance().GetService().Play( "challenging_stage_perfect.wav", 1.f );
 
 	auto& uiScene{ dae::SceneManager::GetInstance().GetScene( uiIdx ) };
 
@@ -317,6 +378,9 @@ void dae::GameAllStagesClearState::Exit()
 	levelScene.Add( std::move( scoreTransferObject ) );
 
 	uiScene.GetByTag( "stageAllClearText"_hash )->MarkForRemoval();
+
+	// Flush game
+	gameScene.MarkAllAsRemovable();
 }
 
 dae::GameScoreboardState::GameScoreboardState( StateMachine* pParent )
@@ -334,6 +398,8 @@ dae::State* dae::GameScoreboardState::Update()
 }
 void dae::GameScoreboardState::Enter()
 {
+	ServiceLocator<SoundService>::GetInstance().GetService().Play( "challenging_stage_results.wav", 1.f );
+
 	auto& levelScene{ SceneManager::GetInstance().GetScene( levelIdx ) };
 	auto& gameScene{ SceneManager::GetInstance().GetScene( gameIdx ) };
 	auto& uiScene{ dae::SceneManager::GetInstance().GetScene( uiIdx ) };

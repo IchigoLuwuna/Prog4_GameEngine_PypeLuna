@@ -8,6 +8,7 @@
 std::array<std::bitset<dae::HiveMind::m_FormationColumns>, dae::HiveMind::m_FormationRows>
 	dae::HiveMind::m_FormationFilled{};
 dae::GameObject* dae::HiveMind::m_pPlayer{};
+bool dae::HiveMind::m_IsTractoring{ false };
 
 dae::GameObject* dae::HiveMind::GetPlayer()
 {
@@ -125,6 +126,19 @@ bool dae::HiveMind::IsFormationClear()
 	}
 
 	return !any;
+}
+
+void dae::HiveMind::SetTractoring()
+{
+	m_IsTractoring = true;
+}
+void dae::HiveMind::ClearTractoring()
+{
+	m_IsTractoring = false;
+}
+bool dae::HiveMind::IsTractoring()
+{
+	return m_IsTractoring;
 }
 
 uint64_t dae::HiveMind::GetZakoSlot() const

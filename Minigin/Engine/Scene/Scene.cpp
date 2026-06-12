@@ -52,6 +52,10 @@ dae::GameObject* dae::Scene::GetByTag( size_t tag ) const
 {
 	for ( auto& object : m_RequestedObjects )
 	{
+		if ( !object.get() )
+		{
+			continue;
+		}
 		if ( object->GetTag() == tag )
 		{
 			return object.get();
@@ -59,6 +63,10 @@ dae::GameObject* dae::Scene::GetByTag( size_t tag ) const
 	}
 	for ( auto& object : m_Objects )
 	{
+		if ( !object.get() )
+		{
+			continue;
+		}
 		if ( object->GetTag() == tag )
 		{
 			return object.get();
@@ -75,6 +83,10 @@ std::vector<dae::GameObject*> dae::Scene::GetAllByTag( size_t tag ) const
 
 	for ( auto& object : m_RequestedObjects )
 	{
+		if ( !object.get() )
+		{
+			continue;
+		}
 		if ( object->GetTag() == tag )
 		{
 			objects.push_back( object.get() );
@@ -82,6 +94,10 @@ std::vector<dae::GameObject*> dae::Scene::GetAllByTag( size_t tag ) const
 	}
 	for ( auto& object : m_Objects )
 	{
+		if ( !object.get() )
+		{
+			continue;
+		}
 		if ( object->GetTag() == tag )
 		{
 			objects.push_back( object.get() );
@@ -97,6 +113,10 @@ dae::GameObject* dae::Scene::GetByTags( size_t* begin, size_t* end )
 
 	for ( auto& object : m_RequestedObjects )
 	{
+		if ( !object.get() )
+		{
+			continue;
+		}
 		for ( ; begin != end; ++begin )
 		{
 			if ( object->GetTag() == *begin )
@@ -107,6 +127,10 @@ dae::GameObject* dae::Scene::GetByTags( size_t* begin, size_t* end )
 	}
 	for ( auto& object : m_Objects )
 	{
+		if ( !object.get() )
+		{
+			continue;
+		}
 		for ( ; begin != end; ++begin )
 		{
 			if ( object->GetTag() == *begin )
@@ -119,10 +143,23 @@ dae::GameObject* dae::Scene::GetByTags( size_t* begin, size_t* end )
 	return nullptr;
 }
 
+void dae::Scene::MarkAllAsRemovable()
+{
+	for ( auto& object : m_RequestedObjects )
+	{
+		object->MarkForRemoval();
+	}
+	for ( auto& object : m_Objects )
+	{
+		object->MarkForRemoval();
+	}
+}
+
 void dae::Scene::CleanUpRemovableObjects()
 {
-	m_Objects.erase( std::remove_if( m_Objects.begin(),
-									 m_Objects.end(),
-									 []( auto& object ) { return object->IsMarkedForRemoval(); } ),
-					 m_Objects.end() );
+	m_Objects.erase(
+		std::remove_if( m_Objects.begin(),
+						m_Objects.end(),
+						[]( auto& object ) { return object.get() == nullptr || object->IsMarkedForRemoval(); } ),
+		m_Objects.end() );
 }
