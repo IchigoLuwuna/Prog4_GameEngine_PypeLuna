@@ -11,6 +11,7 @@ class TextAllignmentComponent : public Component
 public:
 	enum class Allignment
 	{
+		center,
 		topLeft,
 		topRight,
 		bottomLeft,

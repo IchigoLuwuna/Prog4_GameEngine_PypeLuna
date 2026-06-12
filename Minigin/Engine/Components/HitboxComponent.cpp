@@ -24,3 +24,8 @@ void dae::HitboxComponent::Update()
 
 	m_Hitbox.m_Rectangle = rect;
 }
+
+void dae::HitboxComponent::SetHitbox( const glm::vec4& newBox )
+{
+	m_BaseRect = newBox;
+}

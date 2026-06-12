@@ -18,8 +18,6 @@ public:
 private:
 	ReferencePtr<HealthComponent> m_pBoundHealth{};
 	uint32_t m_Damage{};
-
-	void HandleEvent( Event& event );
 };
 } // namespace dae
 #endif

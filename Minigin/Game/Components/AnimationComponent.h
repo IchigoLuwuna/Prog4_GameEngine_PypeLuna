@@ -9,17 +9,26 @@ namespace dae
 class AnimationComponent final : public Component
 {
 public:
+	enum class LoopingMode : uint8_t
+	{
+		repeat,
+		single,
+		singleAndTerminate
+	};
+
 	struct AnimationInfo
 	{
 		uint32_t startIdx{};
 		uint32_t endIdx{};
 		float timePerFrame{};
-		bool repeat{};
+		LoopingMode loopingMode{};
 	};
 
 	AnimationComponent( GameObject* pParent );
 
 	virtual void Update() override;
+
+	bool IsAtEnd() const;
 
 	AnimationComponent& AddAnimation( size_t animationHash, const AnimationInfo& info );
 	AnimationComponent& SetAnimation( size_t animationHash );

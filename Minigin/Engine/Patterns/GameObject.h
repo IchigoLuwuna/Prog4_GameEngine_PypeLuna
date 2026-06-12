@@ -12,6 +12,7 @@ class Component;
 class GameObject final
 {
 public:
+	GameObject( size_t tag );
 	GameObject();
 	~GameObject();
 	GameObject( const GameObject& other ) = delete;
@@ -21,6 +22,8 @@ public:
 
 	void Update();
 	void Render() const;
+
+	size_t GetTag() const;
 
 	int GetChildCount() const;
 	GameObject* GetChildAt( int index );
@@ -46,19 +49,28 @@ public:
 		m_Components.push_back( std::move( pComponent ) );
 	}
 
-	template <typename T>
-	ReferencePtr<T> GetComponent() const
+	template <typename ComponentType>
+		requires std::derived_from<ComponentType, Component>
+	void RemoveComponent()
+	{
+		std::erase_if( m_Components,
+					   []( auto& component ) { return dynamic_cast<ComponentType*>( component.Get() ) != nullptr; } );
+	}
+
+	template <typename ComponentType>
+		requires std::derived_from<ComponentType, Component>
+	ReferencePtr<ComponentType> GetComponent() const
 	{
 		for ( auto& component : m_Components )
 		{
-			T* pComponent{ dynamic_cast<T*>( component.Get() ) };
+			ComponentType* pComponent{ dynamic_cast<ComponentType*>( component.Get() ) };
 			if ( pComponent )
 			{
-				return ReferencePtr<T>( component );
+				return ReferencePtr<ComponentType>( component );
 			}
 		}
 
-		return ReferencePtr<T>();
+		return ReferencePtr<ComponentType>();
 	}
 
 	void MarkForRemoval();
@@ -70,6 +82,7 @@ private:
 
 	std::vector<SafePtr<Component>> m_Components{};
 
+	size_t m_Tag{};
 	bool m_MarkedForRemoval{};
 
 	void AddChild( GameObject* pChild );

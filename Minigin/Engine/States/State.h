@@ -2,28 +2,29 @@
 #define STATE_H
 namespace dae
 {
-template <typename DerivedState>
 class StateMachine;
+class GameObject;
 
-template <typename DerivedState>
 class State
 {
 public:
-	State( StateMachine<DerivedState>* pParent )
+	State( StateMachine* pParent )
 		: m_pParent( pParent )
 	{
 	}
+	virtual ~State() = default;
 
 	virtual void Enter() = 0;
 	virtual void Exit() = 0;
+	virtual State* Update() = 0;
 
-	StateMachine<DerivedState>* GetParent()
+	StateMachine* GetParent()
 	{
 		return m_pParent;
 	}
 
 private:
-	StateMachine<DerivedState>* m_pParent{};
+	StateMachine* m_pParent{};
 };
 } // namespace dae
 #endif

@@ -2,44 +2,22 @@
 #define STATEMACHINE_H
 #include <vector>
 #include <memory>
+#include "States/State.h"
 
 namespace dae
 {
-template <typename BaseState>
 class StateMachine
 {
 public:
-	StateMachine() = default;
-
-	template <typename NewState>
-		requires std::derived_from<NewState, BaseState>
-	void SetState()
+	StateMachine( GameObject* pParent );
+	~StateMachine()
 	{
-		if ( m_CurrentState )
-		{
-			m_CurrentState->Exit();
-		}
-		m_CurrentState = FindState<NewState>();
-		if ( !m_CurrentState )
-		{
-			m_States.push_back( std::make_unique<NewState>( this ) );
-			m_CurrentState = m_States.back().get();
-		}
-		m_CurrentState->Enter();
+		m_CurrentState->Exit();
 	}
-
-	BaseState* operator->()
-	{
-		return m_CurrentState;
-	}
-
-private:
-	std::vector<std::unique_ptr<BaseState>> m_States{};
-	BaseState* m_CurrentState{};
 
 	template <typename SearchedStateType>
-		requires std::derived_from<SearchedStateType, BaseState>
-	BaseState* FindState()
+		requires std::derived_from<SearchedStateType, State>
+	State* FindOrCreateState()
 	{
 		for ( auto& state : m_States )
 		{
@@ -50,8 +28,18 @@ private:
 			}
 		}
 
-		return nullptr;
+		m_States.push_back( std::make_unique<SearchedStateType>( this ) );
+		return m_States.back().get();
 	}
+
+	void Update();
+	void SetState( State* pNewState );
+	GameObject* GetParent();
+
+private:
+	std::vector<std::unique_ptr<State>> m_States{};
+	State* m_CurrentState{};
+	GameObject* m_pParent{};
 };
 } // namespace dae
 #endif

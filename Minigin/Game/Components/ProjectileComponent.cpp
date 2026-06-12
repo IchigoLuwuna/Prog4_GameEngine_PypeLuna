@@ -28,7 +28,7 @@ void dae::ProjectileComponent::Update()
 	transform->Move( m_Velocity * Timer::GetInstance().GetElapsed() );
 }
 
-void dae::ProjectileComponent::RemoveObserver( Observer<ProjectileComponent>* pObserver )
+void dae::ProjectileComponent::RemoveObserver( Observer* pObserver )
 {
 	m_Messenger.RemoveObserver( pObserver );
 }

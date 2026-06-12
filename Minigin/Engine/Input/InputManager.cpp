@@ -36,6 +36,20 @@ bool dae::InputManager::ProcessInput()
 	return true;
 }
 
+bool dae::InputManager::PollKey( SDL_Scancode keyCode )
+{
+	return m_KeyStates.test( keyCode );
+}
+
+bool dae::InputManager::PollButton( Gamepad::Button button )
+{
+	return ( m_Gamepad.GetMask() & Gamepad::GetMaskFromButtonID( button ) ).any();
+}
+std::pair<int16_t, int16_t> dae::InputManager::PollAxis( Gamepad::Axis axis )
+{
+	return m_Gamepad.PollAxis( axis );
+}
+
 void dae::InputManager::ClearBinding( int key, KeyState state )
 {
 	m_CommandBindings[key][static_cast<int>( state )] = nullptr; // I love RAII :D

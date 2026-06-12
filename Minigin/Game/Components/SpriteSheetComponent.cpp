@@ -22,3 +22,12 @@ void dae::SpriteSheetComponent::SetIndex( uint32_t column, uint32_t row )
 {
 	m_Sheet.SetIndex( column, row );
 }
+
+glm::vec2 dae::SpriteSheetComponent::GetSpriteSize() const
+{
+	return m_Sheet.GetSpriteSize();
+}
+glm::vec2 dae::SpriteSheetComponent::GetSheetSize() const
+{
+	return m_Sheet.GetSheetSize();
+}

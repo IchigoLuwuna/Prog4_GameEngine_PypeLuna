@@ -166,6 +166,7 @@ void dae::Minigin::RunOneFrame()
 #if USE_STEAMWORKS
 	SteamAPI_RunCallbacks();
 #endif
+	SceneManager::GetInstance().AddRequestedObjects();
 	SceneManager::GetInstance().Update();
 	HitboxRegistry::GetInstance().DoCollisions();
 	eventManager.ProcessEvents();

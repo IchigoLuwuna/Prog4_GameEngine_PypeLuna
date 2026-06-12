@@ -14,9 +14,24 @@ void dae::AnimationComponent::Update()
 	const float totalAnimationTime{ totalFrames * currentAnimationInfo.timePerFrame };
 
 	m_AnimationTime += Timer::GetInstance().GetElapsed();
-	if ( currentAnimationInfo.repeat && m_AnimationTime >= totalAnimationTime )
+
+	if ( m_AnimationTime >= totalAnimationTime )
 	{
-		m_AnimationTime = std::fmod( m_AnimationTime, totalAnimationTime );
+		switch ( currentAnimationInfo.loopingMode )
+		{
+		case LoopingMode::repeat: {
+			m_AnimationTime = std::fmod( m_AnimationTime, totalAnimationTime );
+			break;
+		}
+		case LoopingMode::singleAndTerminate: {
+			GetParent()->MarkForRemoval();
+			break;
+		}
+		default: {
+			return;
+			break;
+		}
+		}
 	}
 
 	uint32_t currentIdx{ static_cast<uint32_t>( std::floor( m_AnimationTime / totalAnimationTime * totalFrames ) ) +
@@ -29,6 +44,15 @@ void dae::AnimationComponent::Update()
 	}
 
 	m_SpriteSheetRef->SetIndex( currentIdx );
+}
+
+bool dae::AnimationComponent::IsAtEnd() const
+{
+	const AnimationInfo& currentAnimationInfo{ m_AnimationInfos.at( m_CurrentAnimation ) };
+	const uint32_t totalFrames{ currentAnimationInfo.endIdx - currentAnimationInfo.startIdx + 1 };
+	const float totalAnimationTime{ totalFrames * currentAnimationInfo.timePerFrame };
+
+	return !( currentAnimationInfo.loopingMode == LoopingMode::repeat ) && m_AnimationTime >= totalAnimationTime;
 }
 
 dae::AnimationComponent& dae::AnimationComponent::AddAnimation( size_t animationHash, const AnimationInfo& info )

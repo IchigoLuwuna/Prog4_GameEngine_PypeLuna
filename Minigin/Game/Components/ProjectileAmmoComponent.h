@@ -5,7 +5,7 @@
 namespace dae
 {
 class ProjectileComponent;
-class ProjectileAmmoComponent : public Component, public Observer<ProjectileComponent>
+class ProjectileAmmoComponent : public Component, public Observer
 {
 public:
 	ProjectileAmmoComponent( GameObject* pParent, uint32_t ammo );
@@ -16,7 +16,7 @@ public:
 	void DecreaseAmmo();
 
 	virtual void Update() override { };
-	virtual void Notify( size_t eventHash, ProjectileComponent* pSubject ) override;
+	virtual void Notify( size_t eventHash, void* pSubject ) override;
 
 private:
 	uint32_t m_Count{};
