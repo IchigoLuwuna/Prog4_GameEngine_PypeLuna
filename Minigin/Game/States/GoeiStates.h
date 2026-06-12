@@ -2,7 +2,7 @@
 #define GOEISTATES_H
 #include <States.h>
 #include "Game/Components/BrainComponent.h"
-#include "Math/Bezier.h"
+#include <Maths.h>
 
 namespace dae
 {

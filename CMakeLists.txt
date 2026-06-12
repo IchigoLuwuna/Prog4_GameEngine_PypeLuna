@@ -271,9 +271,9 @@ add_library(imgui ${LIBRARY_TYPE}
 # enable c++20 features
 target_compile_features(imgui PUBLIC cxx_std_20)
 target_include_directories(imgui PUBLIC ${imgui_SOURCE_DIR})
-target_link_libraries(imgui PRIVATE SDL3::SDL3)
+target_link_libraries(imgui PUBLIC SDL3::SDL3)
 
-target_link_libraries(engine PRIVATE
+target_link_libraries(engine PUBLIC
     SDL3::SDL3
     SDL3_ttf::SDL3_ttf
     SDL3_mixer::SDL3_mixer

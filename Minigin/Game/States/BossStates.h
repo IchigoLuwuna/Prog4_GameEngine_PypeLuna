@@ -1,7 +1,7 @@
 #ifndef BOSSSTATES_H
 #define BOSSSTATES_H
 #include "Game/Components/BrainComponent.h"
-#include "Math/Bezier.h"
+#include <Maths.h>
 #include "States/State.h"
 
 namespace dae

@@ -2,6 +2,7 @@
 #define BEZIER_H
 #include <array>
 #include <glm/glm.hpp>
+#include <cmath>
 
 namespace dae::math
 {
