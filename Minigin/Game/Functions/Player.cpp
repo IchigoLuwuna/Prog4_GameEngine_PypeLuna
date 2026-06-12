@@ -178,6 +178,9 @@ void dae::functions::player::BindInputForPlayer( GameObject* pPlayer )
 	const auto leftKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::left ) };
 	const auto rightKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::right ) };
 	const auto southKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::south ) };
+	const auto eastKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::east ) };
+	const auto westKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::west ) };
+	const auto northKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::north ) };
 
 	dae::InputManager::GetInstance().BindCommand<dae::FunctionCommand>(
 		SDL_SCANCODE_A, dae::InputManager::KeyState::held, moveLeft );
@@ -194,6 +197,12 @@ void dae::functions::player::BindInputForPlayer( GameObject* pPlayer )
 		SDL_SCANCODE_K, dae::InputManager::KeyState::down, shoot );
 	dae::InputManager::GetInstance().BindCommand<dae::FunctionCommand>(
 		southKey, dae::InputManager::KeyState::down, shoot );
+	dae::InputManager::GetInstance().BindCommand<dae::FunctionCommand>(
+		eastKey, dae::InputManager::KeyState::down, shoot );
+	dae::InputManager::GetInstance().BindCommand<dae::FunctionCommand>(
+		westKey, dae::InputManager::KeyState::down, shoot );
+	dae::InputManager::GetInstance().BindCommand<dae::FunctionCommand>(
+		northKey, dae::InputManager::KeyState::down, shoot );
 }
 
 void dae::functions::player::BindScoreboardForPlayer( GameObject* pPlayer )
