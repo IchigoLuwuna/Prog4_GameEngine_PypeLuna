@@ -1,6 +1,5 @@
 #include "TractorComponent.h"
 #include <Helpers.h>
-#include "Sound/SoundService.h"
 
 dae::TractorComponent::TractorComponent( GameObject* pParent )
 	: Component( pParent )
@@ -9,7 +8,6 @@ dae::TractorComponent::TractorComponent( GameObject* pParent )
 
 dae::TractorComponent::~TractorComponent()
 {
-	ServiceLocator<SoundService>::GetInstance().GetService().StopAll();
 }
 
 void dae::TractorComponent::Update()

@@ -3,6 +3,7 @@
 #include "Game/Commands/MoveCommand.h"
 #include "Game/Components/GameStateHandlerComponent.h"
 #include "Game/Components/TextAllignmentComponent.h"
+#include "Game/Functions/Score.h"
 #include "Game/States/GameStates.h"
 #include <Input.h>
 #include <Random.h>

@@ -13,6 +13,7 @@
 #include "Game/Components/TextAllignmentComponent.h"
 #include "Game/Functions/Enemy.h"
 #include "Game/Functions/Player.h"
+#include "Game/Functions/Score.h"
 #include "Game/Functions/UI.h"
 #include "Scene/SceneManager.h"
 #include "Game/Context.h"
@@ -349,6 +350,7 @@ void dae::GameAllStagesClearState::Enter()
 {
 	m_StateTime = 0.f;
 
+	ServiceLocator<SoundService>::GetInstance().GetService().StopAll();
 	ServiceLocator<SoundService>::GetInstance().GetService().Play( "challenging_stage_perfect.wav", 1.f );
 
 	auto& uiScene{ dae::SceneManager::GetInstance().GetScene( uiIdx ) };
@@ -389,16 +391,30 @@ dae::GameScoreboardState::GameScoreboardState( StateMachine* pParent )
 }
 dae::State* dae::GameScoreboardState::Update()
 {
-	if ( m_StartPressed )
+	if ( !m_StartPressed )
 	{
-		return GetParent()->FindOrCreateState<GameStartState>();
+		return nullptr;
 	}
 
-	return nullptr;
+	if ( m_PlayerScore > m_HighScore )
+	{
+		auto newState{ GetParent()->FindOrCreateState<GameNameEntryState>() };
+		reinterpret_cast<GameNameEntryState*>( newState )->SetNewHighScore( m_PlayerScore );
+		return newState;
+	}
+
+	return GetParent()->FindOrCreateState<GameStartState>();
 }
 void dae::GameScoreboardState::Enter()
 {
 	ServiceLocator<SoundService>::GetInstance().GetService().Play( "challenging_stage_results.wav", 1.f );
+
+	auto highScore{ functions::GetHighScore() };
+	m_HighScore = highScore.first;
+	for ( size_t idx{}; idx < 8; ++idx )
+	{
+		m_HighName[idx] = highScore.second[idx];
+	}
 
 	auto& levelScene{ SceneManager::GetInstance().GetScene( levelIdx ) };
 	auto& gameScene{ SceneManager::GetInstance().GetScene( gameIdx ) };
@@ -440,9 +456,36 @@ void dae::GameScoreboardState::Enter()
 	scoreText->AddComponent<dae::PixelTextComponent>( typefacePath, typefaceMapping, glm::vec2{ 8.f, 8.f } )
 		.SetIgnore( true )
 		.SetText( std::format( "Score - {}", m_PlayerScore ) );
-	scoreText->AddComponent<TextAllignmentComponent>( glm::vec2{ 288.f / 2.f, 224.f / 2.f },
+	scoreText->AddComponent<TextAllignmentComponent>( glm::vec2{ 288.f / 2.f, 224.f / 2.f - 12.f },
 													  TextAllignmentComponent::Allignment::center );
 	uiScene.Add( std::move( scoreText ) );
+
+	if ( m_HighScore != 0 )
+	{
+		auto highNameText{ std::make_unique<GameObject>( "scoreboardObject"_hash ) };
+		auto& textRef{
+			highNameText->AddComponent<dae::PixelTextComponent>( typefacePath, typefaceMapping, glm::vec2{ 8.f, 8.f } )
+				.SetIgnore( true )
+		};
+		if ( m_PlayerScore > m_HighScore )
+		{
+			textRef.SetText( std::format( "Previous High - {}", m_HighName.data() ) );
+		}
+		else
+		{
+			textRef.SetText( std::format( "High Score - {}", m_HighName.data() ) );
+		}
+		highNameText->AddComponent<TextAllignmentComponent>( glm::vec2{ 288.f / 2.f, 224.f / 2.f + 12.f },
+															 TextAllignmentComponent::Allignment::center );
+		uiScene.Add( std::move( highNameText ) );
+		auto highScoreText{ std::make_unique<GameObject>( "scoreboardObject"_hash ) };
+		highScoreText->AddComponent<dae::PixelTextComponent>( typefacePath, typefaceMapping, glm::vec2{ 8.f, 8.f } )
+			.SetIgnore( true )
+			.SetText( std::format( "{}", m_HighScore ) );
+		highScoreText->AddComponent<TextAllignmentComponent>( glm::vec2{ 288.f / 2.f, 224.f / 2.f + 20.f },
+															  TextAllignmentComponent::Allignment::center );
+		uiScene.Add( std::move( highScoreText ) );
+	}
 	//
 
 	m_StartPressed = false;
@@ -469,4 +512,200 @@ void dae::GameScoreboardState::Exit()
 	{
 		scoreboardObject->MarkForRemoval();
 	}
+}
+
+dae::GameNameEntryState::GameNameEntryState( StateMachine* pParent )
+	: State( pParent )
+{
+}
+dae::State* dae::GameNameEntryState::Update()
+{
+	if ( m_StartPressed )
+	{
+		return GetParent()->FindOrCreateState<GameStartState>();
+	}
+
+	if ( !m_NameEntrySelector.Validate() || !m_NameEntryText.Validate() )
+	{
+		return nullptr;
+	}
+
+	m_NameEntryText->SetText( std::format( "{}", m_Name.data() ) );
+
+	std::array selectorText{
+		' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '\0',
+	};
+	selectorText[m_CurrentChar] = 'v';
+	m_NameEntrySelector->SetText( selectorText.data() );
+
+	return nullptr;
+}
+void dae::GameNameEntryState::Enter()
+{
+	m_CurrentChar = 0;
+	m_Name = {
+		' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '\0',
+	};
+	m_StartPressed = false;
+
+	auto& uiScene{ SceneManager::GetInstance().GetScene( uiIdx ) };
+
+	const std::string typefacePath{ "Typeface.png" };
+	const std::string typefaceMapping{ "0123456789abcdefghijklmnopqrstuvwxyz-%.!" };
+
+	auto nameEntryTitle{ std::make_unique<GameObject>( "nameEntryObject"_hash ) };
+	nameEntryTitle->AddComponent<dae::PixelTextComponent>( typefacePath, typefaceMapping, glm::vec2{ 8.f, 8.f } )
+		.SetIgnore( true )
+		.SetText( "Enter Name" );
+	nameEntryTitle->AddComponent<TextAllignmentComponent>( glm::vec2{ 288.f / 2.f, 224.f / 2.f - 24.f },
+														   TextAllignmentComponent::Allignment::center );
+	uiScene.Add( std::move( nameEntryTitle ) );
+
+	auto nameEntrySelector{ std::make_unique<GameObject>( "nameEntryObject"_hash ) };
+	nameEntrySelector->AddComponent<dae::PixelTextComponent>( typefacePath, typefaceMapping, glm::vec2{ 8.f, 8.f } )
+		.SetIgnore( true )
+		.SetText( "v       " );
+	m_NameEntrySelector = nameEntrySelector->GetComponent<PixelTextComponent>();
+	nameEntrySelector->AddComponent<TextAllignmentComponent>( glm::vec2{ 288.f / 2.f, 224.f / 2.f - 8.f },
+															  TextAllignmentComponent::Allignment::center );
+	uiScene.Add( std::move( nameEntrySelector ) );
+
+	auto nameEntry{ std::make_unique<GameObject>( "nameEntryObject"_hash ) };
+	nameEntry->AddComponent<dae::PixelTextComponent>( typefacePath, typefaceMapping, glm::vec2{ 8.f, 8.f } )
+		.SetIgnore( true );
+	m_NameEntryText = nameEntry->GetComponent<PixelTextComponent>();
+	nameEntry->AddComponent<TextAllignmentComponent>( glm::vec2{ 288.f / 2.f, 224.f / 2.f },
+													  TextAllignmentComponent::Allignment::center );
+	uiScene.Add( std::move( nameEntry ) );
+
+	Validator validator{ m_NameEntrySelector.GetControlBlock() };
+	auto moveCursorLeft{ [&, validator]() mutable {
+		if ( !validator.Validate() )
+		{
+			return;
+		}
+
+		--m_CurrentChar;
+		if ( m_CurrentChar > 7 )
+		{
+			m_CurrentChar = 7;
+		}
+	} };
+	auto moveCursorRight{ [&, validator]() mutable {
+		if ( !validator.Validate() )
+		{
+			return;
+		}
+
+		++m_CurrentChar;
+		if ( m_CurrentChar > 7 )
+		{
+			m_CurrentChar = 0;
+		}
+	} };
+	auto incrementCurrentChar{ [&, validator]() mutable {
+		if ( !validator.Validate() )
+		{
+			return;
+		}
+
+		auto currentChar{ m_Name[m_CurrentChar] };
+		auto newChar{ currentChar + 1 };
+		if ( currentChar == ' ' )
+		{
+			newChar = 'a';
+		}
+		if ( newChar == 'z' + 1 )
+		{
+			newChar = ' ';
+		}
+		m_Name[m_CurrentChar] = newChar;
+	} };
+	auto decrementCurrentChar{ [&, validator]() mutable {
+		if ( !validator.Validate() )
+		{
+			return;
+		}
+
+		auto currentChar{ m_Name[m_CurrentChar] };
+		auto newChar{ currentChar - 1 };
+		if ( currentChar == 'a' )
+		{
+			newChar = ' ';
+		}
+		if ( newChar == ' ' - 1 )
+		{
+			newChar = 'z';
+		}
+		m_Name[m_CurrentChar] = newChar;
+	} };
+	auto backSpace{ [&, validator]() mutable {
+		if ( !validator.Validate() )
+		{
+			return;
+		}
+
+		m_Name[m_CurrentChar] = ' ';
+		if ( m_CurrentChar > 0 )
+		{
+			--m_CurrentChar;
+		}
+	} };
+
+	const auto leftKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::left ) };
+	const auto rightKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::right ) };
+	const auto downKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::down ) };
+	const auto upKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::up ) };
+	const auto l1Key{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::l1 ) };
+	const auto r1Key{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::r1 ) };
+	const auto startKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::start ) };
+	const auto eastKey{ dae::Gamepad::RemapButtonToKey( dae::Gamepad::Button::east ) };
+
+	InputManager::GetInstance().BindCommand<FunctionCommand>(
+		SDL_SCANCODE_A, InputManager::KeyState::down, moveCursorLeft );
+	InputManager::GetInstance().BindCommand<FunctionCommand>( leftKey, InputManager::KeyState::down, moveCursorLeft );
+	InputManager::GetInstance().BindCommand<FunctionCommand>(
+		SDL_SCANCODE_D, InputManager::KeyState::down, moveCursorRight );
+	InputManager::GetInstance().BindCommand<FunctionCommand>( rightKey, InputManager::KeyState::down, moveCursorRight );
+	InputManager::GetInstance().BindCommand<FunctionCommand>(
+		SDL_SCANCODE_S, InputManager::KeyState::down, incrementCurrentChar );
+	InputManager::GetInstance().BindCommand<FunctionCommand>(
+		downKey, InputManager::KeyState::down, incrementCurrentChar );
+	InputManager::GetInstance().BindCommand<FunctionCommand>(
+		r1Key, InputManager::KeyState::held, incrementCurrentChar );
+	InputManager::GetInstance().BindCommand<FunctionCommand>(
+		SDL_SCANCODE_W, InputManager::KeyState::down, decrementCurrentChar );
+	InputManager::GetInstance().BindCommand<FunctionCommand>(
+		upKey, InputManager::KeyState::down, decrementCurrentChar );
+	InputManager::GetInstance().BindCommand<FunctionCommand>(
+		l1Key, InputManager::KeyState::held, decrementCurrentChar );
+
+	InputManager::GetInstance().BindCommand<FunctionCommand>(
+		SDL_SCANCODE_RETURN, InputManager::KeyState::down, [&]() mutable { m_StartPressed = true; } );
+	InputManager::GetInstance().BindCommand<FunctionCommand>(
+		startKey, InputManager::KeyState::down, [&]() mutable { m_StartPressed = true; } );
+
+	InputManager::GetInstance().BindCommand<FunctionCommand>(
+		SDL_SCANCODE_BACKSPACE, InputManager::KeyState::down, backSpace );
+	InputManager::GetInstance().BindCommand<FunctionCommand>( eastKey, InputManager::KeyState::down, backSpace );
+}
+void dae::GameNameEntryState::Exit()
+{
+	std::array<char, 8> nameData{};
+	for ( size_t idx{}; idx < nameData.size(); ++idx )
+	{
+		nameData[idx] = m_Name[idx];
+	}
+	functions::SetHighScore( m_Score, nameData );
+
+	auto& uiScene{ SceneManager::GetInstance().GetScene( uiIdx ) };
+	auto nameEntryObjects{ uiScene.GetAllByTag( "nameEntryObject"_hash ) };
+	for ( auto& object : nameEntryObjects )
+	{
+		object->MarkForRemoval();
+	}
+}
+void dae::GameNameEntryState::SetNewHighScore( uint32_t score )
+{
+	m_Score = score;
 }

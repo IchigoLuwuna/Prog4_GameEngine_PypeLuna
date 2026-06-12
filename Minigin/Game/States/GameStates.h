@@ -3,6 +3,7 @@
 #include <string>
 #include <Helpers.h>
 #include "Game/Classes/HiveMind.h"
+#include "Game/Components/PixelTextComponent.h"
 #include "States/State.h"
 
 namespace dae
@@ -124,6 +125,28 @@ public:
 
 private:
 	uint32_t m_PlayerScore{};
+	uint32_t m_HighScore{};
+	std::array<char, 9> m_HighName{};
+	bool m_StartPressed{};
+};
+
+class GameNameEntryState : public State
+{
+public:
+	GameNameEntryState( StateMachine* pParent );
+
+	virtual State* Update() override;
+	virtual void Enter() override;
+	virtual void Exit() override;
+
+	void SetNewHighScore( uint32_t score );
+
+private:
+	ReferencePtr<PixelTextComponent> m_NameEntrySelector{};
+	ReferencePtr<PixelTextComponent> m_NameEntryText{};
+	uint32_t m_Score{};
+	uint32_t m_CurrentChar{};
+	std::array<char, 9> m_Name{};
 	bool m_StartPressed{};
 };
 } // namespace dae
