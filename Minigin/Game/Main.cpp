@@ -122,7 +122,7 @@ int main( int, char*[] )
 #endif
 
 	// https://www.arcade-museum.com/tech-center/machine/galaga
-	dae::Minigin engine( { "Galaga", { 1388, 1080 }, { 288, 224 } }, data_location );
+	dae::Minigin engine( { "Galaga", { 926, 720 }, { 288, 224 } }, data_location );
 	engine.Run( load );
 
 	return 0;
